@@ -18,6 +18,14 @@ draft: false
 const greeting = (name: string) => `你好, ${name}`
 ```
 
+## 嵌入图片
+
+图片放在 `src/assets/images/`，在 Markdown 里用**相对路径**引用（相对于本 md 文件）。Astro 构建时会自动压缩、转成 WebP、注入宽高，产物自托管在 `/_astro/` 下，无外部 CDN：
+
+![蓝色湖面示例图](../../assets/images/demo-lake.png)
+
+外链图片不推荐（有网络可达性问题）；如确需引用远程图，要在 `astro.config.mjs` 的 `image.domains` 里配置域名。
+
 ## 写作发布流程
 
 1. 运行 `pnpm new post "文章标题"` 生成带 frontmatter 的模板；
