@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  tags: CollectionEntry<'posts'>['data']['tags']
+}
+const { tags } = Astro.props
+---
+
+{
+  tags.length > 0 && (
+    <ul class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <li>
+          <a href={`/tags/${tag}/`} class="tag-chip">
+            #{tag}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

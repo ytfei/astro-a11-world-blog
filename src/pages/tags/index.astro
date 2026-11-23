@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const published = (await Promise.all([getCollection('posts'), getCollection('dialogues')]))
+  .flat()
+  .filter((e) => !e.data.draft)
+
+const tagMap = new Map<string, { title: string; collection: string; pubDate: Date }[]>()
+for (const entry of published) {
+  for (const tag of entry.data.tags) {
+    if (!tagMap.has(tag)) tagMap.set(tag, [])
+    tagMap.get(tag)!.push({
+      title: entry.data.title,
+      collection: entry.collection,
+      pubDate: entry.data.pubDate,
+    })
+  }
+}
+const tags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].length)
+---
+
+<BaseLayout title="标签">
+  <h1 class="mb-8 text-3xl font-bold tracking-tight">标签</h1>
+  <ul class="flex flex-wrap gap-3">
+    {
+      tags.map(([tag, entries]) => (
+        <li>
+          <a href={`/tags/${tag}/`} class="tag-chip !px-3 !py-1 !text-sm">
+            #{tag} <span class="opacity-60">({entries.length})</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

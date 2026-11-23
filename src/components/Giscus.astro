@@ -1,0 +1,34 @@
+---
+import { GISCUS } from '../consts'
+
+const configured = GISCUS.repo !== 'your-github-name/your-repo-name' && GISCUS.repoId && GISCUS.categoryId
+
+const src = `https://giscus.app/client.js`
+const params = {
+  'data-repo': GISCUS.repo,
+  'data-repo-id': GISCUS.repoId,
+  'data-category': GISCUS.category,
+  'data-category-id': GISCUS.categoryId,
+  'data-mapping': GISCUS.mapping,
+  'data-reactions-enabled': GISCUS.reactionsEnabled,
+  'data-emit-metadata': GISCUS.emitMetadata,
+  'data-input-position': GISCUS.inputPosition,
+  'data-theme': GISCUS.theme,
+  'data-lang': GISCUS.lang,
+  crossorigin: 'anonymous',
+  async: '',
+}
+---
+
+{
+  configured ? (
+    <section class="mt-12 border-t border-neutral-200 pt-8 dark:border-neutral-800">
+      <script is:inline src={src} {...params} />
+      <div class="giscus" />
+    </section>
+  ) : (
+    <p class="mt-12 border-t border-neutral-200 pt-8 text-sm text-neutral-400 dark:border-neutral-800 dark:text-neutral-600">
+      评论区未启用：请在 src/consts.ts 中填入 giscus 配置（见 https://giscus.app）。
+    </p>
+  )
+}

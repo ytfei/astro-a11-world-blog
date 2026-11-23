@@ -1,0 +1,27 @@
+---
+import { SITE_TITLE } from '../consts'
+const year = new Date().getFullYear()
+---
+
+<footer class="border-t border-neutral-200 py-6 dark:border-neutral-800">
+  <div
+    class="mx-auto flex max-w-3xl flex-col items-center gap-2 px-4 text-sm text-neutral-500 dark:text-neutral-400"
+  >
+    <p>© {year} {SITE_TITLE}</p>
+    <p>
+      <a
+        href="/rss.xml"
+        class="underline hover:text-neutral-800 dark:hover:text-neutral-200">RSS</a
+      >
+      <span class="mx-2">·</span>
+      由 <a
+        href="https://astro.build"
+        class="underline hover:text-neutral-800 dark:hover:text-neutral-200">Astro</a
+      > 构建，托管在
+      <a
+        href="https://pages.cloudflare.com"
+        class="underline hover:text-neutral-800 dark:hover:text-neutral-200">Cloudflare Pages</a
+      >
+    </p>
+  </div>
+</footer>

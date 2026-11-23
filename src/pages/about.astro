@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { SITE_AUTHOR } from '../consts'
+---
+
+<BaseLayout title="关于" description={`关于 ${SITE_AUTHOR} 和这个博客`}>
+  <h1 class="mb-8 text-3xl font-bold tracking-tight">关于</h1>
+  <div class="prose prose-neutral dark:prose-invert max-w-none">
+    <p>你好，我是 {SITE_AUTHOR}。</p>
+    <p>
+      这个博客记录两类内容：
+    </p>
+    <ul>
+      <li><strong>文章</strong>：自己的思考与分析；</li>
+      <li>
+        <strong>问答</strong>：与 AI 对话后，把有价值的问答整理成结构化笔记——背景、关键问答、结论。
+      </li>
+    </ul>
+    <p>编辑 src/pages/about.astro 替换这段自我介绍。</p>
+  </div>
+</BaseLayout>
