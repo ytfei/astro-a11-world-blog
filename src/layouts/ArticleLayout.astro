@@ -4,6 +4,7 @@ import FormattedDate from '../components/FormattedDate.astro'
 import TagList from '../components/TagList.astro'
 import Giscus from '../components/Giscus.astro'
 import type { CollectionEntry } from 'astro:content'
+import 'katex/dist/katex.min.css'
 
 interface Props {
   entry: CollectionEntry<'posts'> | CollectionEntry<'dialogues'>
