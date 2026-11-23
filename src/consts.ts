@@ -17,14 +17,14 @@ export const COLLECTION_LABELS: Record<string, string> = {
 // 2. 开启仓库的 Discussions
 // 3. 在 giscus.app 上生成配置，替换下面占位值
 export const GISCUS = {
-  repo: 'your-github-name/your-repo-name', // TODO
-  repoId: '', // TODO
-  category: 'Announcements', // TODO
-  categoryId: '', // TODO
+  repo: 'ytfei/astro-a11-world-blog',
+  repoId: 'R_kgDOV4TCpw',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOV4TCp84DL0yl',
   mapping: 'pathname',
   reactionsEnabled: '1',
   emitMetadata: '0',
-  inputPosition: 'top',
-  theme: 'preferred_color_scheme',
+  inputPosition: 'bottom',
+  theme: 'light',
   lang: 'zh-CN',
 }
