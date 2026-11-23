@@ -1,0 +1,10 @@
+{
+  // Workers 静态资产部署：构建产物 dist/ 直接托管，无服务端代码
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "astro-a11-world-blog",
+  "compatibility_date": "2026-11-19",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash"
+  }
+}
