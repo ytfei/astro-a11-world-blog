@@ -3,7 +3,7 @@ title: 示例：一篇普通的思考文章
 description: 这是文章摘要，会显示在首页列表和 RSS 里。
 pubDate: 2026-11-23
 tags: [示例, 随笔]
-draft: false
+draft: true
 ---
 
 这里写正文。删除这篇文章，开始写你自己的内容。
