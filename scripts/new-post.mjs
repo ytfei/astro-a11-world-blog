@@ -18,12 +18,22 @@ if (!title || !['post', 'dialogue', 'wechat'].includes(type)) {
 
 const dirMap = { post: 'posts', dialogue: 'dialogues', wechat: 'wechat' }
 const dir = join(root, 'src/content', dirMap[type])
+
+const now = new Date()
+const pad = (n) => String(n).padStart(2, '0')
+const offsetMin = -now.getTimezoneOffset()
+const offset = `${offsetMin >= 0 ? '+' : '-'}${pad(Math.floor(Math.abs(offsetMin) / 60))}:${pad(Math.abs(offsetMin) % 60)}`
+// 本地日期，如 2026-11-24，用于文件名前缀
+const datePrefix = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+// 带时区的本地时间戳，如 2026-11-23T21:30:05+08:00
+const timestamp = `${datePrefix}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}${offset}`
+
 const slug =
   title
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, '-')
     .replace(/^-+|-+$/g, '') || `untitled-${Date.now()}`
-const filePath = join(dir, `${slug}.md`)
+const filePath = join(dir, `${datePrefix}-${slug}.md`)
 
 if (existsSync(filePath)) {
   console.error(`已存在：${filePath}`)
@@ -31,12 +41,6 @@ if (existsSync(filePath)) {
 }
 mkdirSync(dir, { recursive: true })
 
-const today = new Date()
-const pad = (n) => String(n).padStart(2, '0')
-const offsetMin = -today.getTimezoneOffset()
-const offset = `${offsetMin >= 0 ? '+' : '-'}${pad(Math.floor(Math.abs(offsetMin) / 60))}:${pad(Math.abs(offsetMin) % 60)}`
-// 带时区的本地时间戳，如 2026-11-23T21:30:05+08:00
-const timestamp = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}T${pad(today.getHours())}:${pad(today.getMinutes())}:${pad(today.getSeconds())}${offset}`
 const frontmatter =
   type === 'dialogue'
     ? `---
