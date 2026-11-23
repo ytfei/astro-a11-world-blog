@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // 用法：pnpm new post "标题"   → 生成文章草稿
 //       pnpm new dialogue "标题" → 生成问答草稿
+//       pnpm new wechat "标题" → 生成公众号草稿
 import { writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -9,13 +10,14 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const [type, ...titleParts] = process.argv.slice(2)
 const title = titleParts.join(' ').trim()
 
-const usage = '用法：pnpm new post|dialogue "标题"'
-if (!title || !['post', 'dialogue'].includes(type)) {
+const usage = '用法：pnpm new post|dialogue|wechat "标题"'
+if (!title || !['post', 'dialogue', 'wechat'].includes(type)) {
   console.error(usage)
   process.exit(1)
 }
 
-const dir = join(root, 'src/content', type === 'post' ? 'posts' : 'dialogues')
+const dirMap = { post: 'posts', dialogue: 'dialogues', wechat: 'wechat' }
+const dir = join(root, 'src/content', dirMap[type])
 const slug =
   title
     .toLowerCase()
@@ -29,32 +31,36 @@ if (existsSync(filePath)) {
 }
 mkdirSync(dir, { recursive: true })
 
-const today = new Date().toISOString().slice(0, 10)
+const today = new Date()
+const pad = (n) => String(n).padStart(2, '0')
+const offsetMin = -today.getTimezoneOffset()
+const offset = `${offsetMin >= 0 ? '+' : '-'}${pad(Math.floor(Math.abs(offsetMin) / 60))}:${pad(Math.abs(offsetMin) % 60)}`
+// 带时区的本地时间戳，如 2026-11-23T21:30:05+08:00
+const timestamp = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}T${pad(today.getHours())}:${pad(today.getMinutes())}:${pad(today.getSeconds())}${offset}`
 const frontmatter =
-  type === 'post'
+  type === 'dialogue'
     ? `---
 title: "${title}"
 description: ""
-pubDate: ${today}
-tags: []
-draft: true
----
-`
-    : `---
-title: "${title}"
-description: ""
-pubDate: ${today}
+pubDate: ${timestamp}
 tags: []
 draft: true
 topic: ""
 model: ""
 ---
 `
+    : `---
+title: "${title}"
+description: ""
+pubDate: ${timestamp}
+tags: []
+draft: true
+---
+`
 
 const body =
-  type === 'post'
-    ? '\n在这里写正文。\n'
-    : `
+  type === 'dialogue'
+    ? `
 :::question
 问题一
 :::
@@ -67,6 +73,7 @@ const body =
 你的总结。
 :::
 `
+    : '\n在这里写正文。\n'
 
 writeFileSync(filePath, frontmatter + body)
 console.log(`已创建：${filePath}\n下一步：编辑内容，发布时把 draft 改为 false。`)

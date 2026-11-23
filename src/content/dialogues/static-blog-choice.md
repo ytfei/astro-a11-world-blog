@@ -1,7 +1,7 @@
 ---
 title: 示例：与 AI 讨论如何选静态博客方案
 description: 展示问答整理格式：背景 → 关键问答 → 总结。
-pubDate: 2026-11-23
+pubDate: 2026-11-23T09:00:00+08:00
 tags: [示例, AI]
 draft: true
 topic: 静态博客方案选型

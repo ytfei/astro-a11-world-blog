@@ -4,6 +4,13 @@ export const SITE_DESCRIPTION =
   '记录思考、分析，以及与 AI 对话后整理出的问答笔记'
 export const SITE_AUTHOR = 'Mason'
 
+// 各内容集合的展示名称
+export const COLLECTION_LABELS: Record<string, string> = {
+  posts: '文章',
+  dialogues: '问答',
+  wechat: '公众号',
+}
+
 // giscus 评论配置（免费，基于 GitHub Discussions）
 // 前置步骤见 https://giscus.app/zh-CN ：
 // 1. 把本仓库设为 Public，并安装 giscus App

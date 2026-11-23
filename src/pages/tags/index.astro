@@ -2,7 +2,9 @@
 import { getCollection } from 'astro:content'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 
-const published = (await Promise.all([getCollection('posts'), getCollection('dialogues')]))
+const published = (
+  await Promise.all([getCollection('posts'), getCollection('dialogues'), getCollection('wechat')])
+)
   .flat()
   .filter((e) => !e.data.draft)
 

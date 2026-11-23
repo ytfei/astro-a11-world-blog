@@ -7,12 +7,13 @@ import type { CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 interface Props {
-  entry: CollectionEntry<'posts'> | CollectionEntry<'dialogues'>
+  entry: CollectionEntry<'posts'> | CollectionEntry<'dialogues'> | CollectionEntry<'wechat'>
 }
 
 const { entry } = Astro.props
 const { title, description, pubDate, updatedDate, tags, model } = entry.data
 const isDialogue = entry.collection === 'dialogues'
+const isWechat = entry.collection === 'wechat'
 ---
 
 <BaseLayout title={title} description={description}>
@@ -23,6 +24,11 @@ const isDialogue = entry.collection === 'dialogues'
           <p class="mb-2 text-sm text-sky-600 dark:text-sky-400">
             AI 问答{model && ` · ${model}`}
           </p>
+        )
+      }
+      {
+        isWechat && (
+          <p class="mb-2 text-sm text-emerald-600 dark:text-emerald-400">公众号文章</p>
         )
       }
       <h1 class="text-3xl font-bold tracking-tight">{title}</h1>

@@ -4,7 +4,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 import type { APIContext } from 'astro'
 
 export async function GET(context: APIContext) {
-  const published = (await Promise.all([getCollection('posts'), getCollection('dialogues')]))
+  const published = (
+    await Promise.all([getCollection('posts'), getCollection('dialogues'), getCollection('wechat')])
+  )
     .flat()
     .filter((e) => !e.data.draft)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

@@ -1,7 +1,7 @@
 ---
 title: 示例：一篇普通的思考文章
 description: 这是文章摘要，会显示在首页列表和 RSS 里。
-pubDate: 2026-11-23
+pubDate: 2026-11-23T09:00:00+08:00
 tags: [示例, 随笔]
 draft: true
 ---
