@@ -1,12 +1,24 @@
 ---
+import { Image } from 'astro:assets'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { SITE_AUTHOR } from '../consts'
+import wechatQr from '../assets/images/wechat_qr.jpg'
 ---
 
 <BaseLayout title="关于" description={`关于 ${SITE_AUTHOR} 和这个博客`}>
   <h1 class="mb-8 text-3xl font-bold tracking-tight">关于</h1>
   <div class="prose prose-neutral dark:prose-invert max-w-none">
     <p>你好，我是 {SITE_AUTHOR}。</p>
+    <p>
+      我拥有 15 年的软件架构经验，先后深耕金融、电商、互联网等行业，在大数据、分布式系统与人工智能（AI）领域积累了丰富的架构设计与落地实践经验。从高并发的交易系统到海量数据的处理平台，从技术选型到团队协作，我习惯从业务本质出发，用工程化的思维解决真实问题。
+    </p>
+    <p>目前我的工作与研究方向主要聚焦在：</p>
+    <ul>
+      <li><strong>量化交易</strong>：策略研究与交易系统的架构实现；</li>
+      <li><strong>宏观分析</strong>：结合数据与模型，理解经济周期的运行逻辑；</li>
+      <li><strong>FDE 行业解决方案</strong>：面向金融数据与工程的端到端方案设计；</li>
+      <li><strong>定制化软件开发</strong>：为企业提供从咨询到交付的软件定制服务。</li>
+    </ul>
     <p>
       这个博客记录两类内容：
     </p>
@@ -16,6 +28,19 @@ import { SITE_AUTHOR } from '../consts'
         <strong>问答</strong>：与 AI 对话后，把有价值的问答整理成结构化笔记——背景、关键问答、结论。
       </li>
     </ul>
-    <p>编辑 src/pages/about.astro 替换这段自我介绍。</p>
+    <p>
+      如果你对我的工作感兴趣，或有相关合作与咨询需求，欢迎通过邮箱联系我：
+      <a href="mailto:mason@a11.world">mason@a11.world</a>。
+    </p>
+    <h2>微信公众号</h2>
+    <p>
+      我运营着公众号 <strong>懒回顾文</strong>（ID：<code>sayhi2fin</code>），分享市场观察与投资思考，欢迎扫码关注。
+    </p>
+    <Image
+      src={wechatQr}
+      alt="公众号「懒回顾文」二维码"
+      width={260}
+      class="my-4"
+    />
   </div>
 </BaseLayout>
