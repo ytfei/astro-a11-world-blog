@@ -7,11 +7,23 @@ description: 把一篇现成的文章（链接或全文）自动整理并发布�
 
 本技能封装了 astro-a11-world-blog 仓库的全部内容发布能力。给定一篇文章（URL 或全文），你可以自动完成：归类、提炼元信息、格式排版、写入仓库、构建验证、提交与部署。
 
-## 前提
+## 前提：定位博客仓库
 
-- 博客仓库已克隆到本地。仓库位置按以下顺序确定：用户指定的路径 → 环境变量 `BLOG_REPO` → 当前目录就是仓库 → 询问用户。
+本技能操作的目标仓库是 **ytfei/astro-a11-world-blog**（GitHub: `git@github.com:ytfei/astro-a11-world-blog.git`，HTTPS: `https://github.com/ytfei/astro-a11-world-blog.git`）。按以下顺序定位，找到即停：
+
+1. **用户指定的路径**：用户在对话中直接给出的目录；
+2. **环境变量 `BLOG_REPO`**：若已设置，其值即仓库根目录；
+3. **本机已知路径**：`/Users/mason/codebase/NexTech/astro-a11-world-blog`（作者的默认克隆位置）；
+4. **快速搜索**：在用户主目录下按目录名 `astro-a11-world-blog` 搜索一层（如 `~/codebase/**/astro-a11-world-blog`），确认其含 `src/content/` 与 `astro.config.mjs`；
+5. **克隆**：以上都没有时，询问用户克隆到哪个目录，默认建议 `~/codebase/astro-a11-world-blog`，然后 `git clone git@github.com:ytfei/astro-a11-world-blog.git`；
+6. 仍然无法确定时，**停下来问用户**，不要猜测路径。
+
+后续所有命令都在该仓库根目录执行。
+
+## 环境要求
+
 - 包管理器为 pnpm（Node ≥ 20）。
-- 部署方式：push 到 GitHub 后 Cloudflare Pages 自动构建；本地也可 `pnpm deploy`（build + wrangler deploy）。
+- 部署方式：push 到 GitHub 后 Cloudflare Pages 自动构建；本地也可 `pnpm deploy`（build + wrangler deploy，需要 Cloudflare 凭证）。
 
 ## 仓库结构速查
 
