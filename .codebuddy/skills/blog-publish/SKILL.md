@@ -1,6 +1,6 @@
 ---
 name: blog-publish
-description: 把一篇现成的文章（链接或全文）自动整理并发布到 astro-a11-world-blog 博客：判断内容集合、提炼标题/摘要/标签、按规范命名和排版、构建验证、提交并部署。当用户说"发到博客"、"把这篇文章加进博客"、"公众号文章转博客"等时使用。
+description: 把一篇现成的文章（链接或全文）自动整理并发布到 astro-a11-world-blog 博客：判断内容集合、提炼标题/摘要/标签、按规范命名和排版、构建验证、提交并部署。触发词：发到博客、发布博客、发博客、加进博客、加入博客、迁移文章、导入文章、公众号文章转博客、文章入库、同步到博客、publish to blog、add to blog、blog publish。用户提到把一篇文章（链接或全文）放进 astro-a11-world-blog 时使用。
 ---
 
 # 博客发布技能（astro-a11-world-blog）
