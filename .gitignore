@@ -18,3 +18,6 @@ pnpm-debug.log*
 
 # wrangler
 .wrangler/
+
+# playwright-cli
+.playwright-cli/
