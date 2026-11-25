@@ -1,52 +1,55 @@
 ---
-import { getCollection } from 'astro:content'
-import { COLLECTION_LABELS } from '../consts'
-import BaseLayout from '../layouts/BaseLayout.astro'
-import FormattedDate from '../components/FormattedDate.astro'
+import { getCollection } from "astro:content";
+import { COLLECTION_LABELS } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
 
 const published = (
-  await Promise.all([getCollection('posts'), getCollection('dialogues'), getCollection('wechat')])
+    await Promise.all([
+        getCollection("posts"),
+        getCollection("dialogues"),
+        getCollection("wechat"),
+    ])
 )
-  .flat()
-  .filter((e) => !e.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .flat()
+    .filter((e) => !e.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <BaseLayout>
-  <section class="mb-12">
-    <h1 class="text-3xl font-bold tracking-tight">思考与对话</h1>
-    <p class="mt-2 text-neutral-600 dark:text-neutral-400">
-      记录思考与分析，以及与 AI 对话后整理出的问答笔记。
-    </p>
-  </section>
+    <section class="mb-12">
+        <h1 class="text-3xl font-bold tracking-tight">思考与对话</h1>
+        <p class="mt-2 text-neutral-600 dark:text-neutral-400">
+            记录思考、分析。信息丰沛的时代，选择即品味。
+        </p>
+    </section>
 
-  <ul class="space-y-8">
-    {
-      published.map((entry) => (
-        <li>
-          <article>
-            <h2 class="text-xl font-semibold">
-              <a
-                href={`/${entry.collection}/${entry.id}/`}
-                class="hover:underline"
-              >
-                {entry.data.title}
-              </a>
-            </h2>
-            {entry.data.description && (
-              <p class="mt-1 text-neutral-600 dark:text-neutral-400">
-                {entry.data.description}
-              </p>
-            )}
-            <p class="mt-1.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-              <FormattedDate date={entry.data.pubDate} />
-              <span class="rounded bg-neutral-200 px-2 py-0.5 text-xs dark:bg-neutral-800">
-                {COLLECTION_LABELS[entry.collection] ?? entry.collection}
-              </span>
-            </p>
-          </article>
-        </li>
-      ))
-    }
-  </ul>
+    <ul class="space-y-8">
+        {published.map((entry) => (
+            <li>
+                <article>
+                    <h2 class="text-xl font-semibold">
+                        <a
+                            href={`/${entry.collection}/${entry.id}/`}
+                            class="hover:underline"
+                        >
+                            {entry.data.title}
+                        </a>
+                    </h2>
+                    {entry.data.description && (
+                        <p class="mt-1 text-neutral-600 dark:text-neutral-400">
+                            {entry.data.description}
+                        </p>
+                    )}
+                    <p class="mt-1.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+                        <FormattedDate date={entry.data.pubDate} />
+                        <span class="rounded bg-neutral-200 px-2 py-0.5 text-xs dark:bg-neutral-800">
+                            {COLLECTION_LABELS[entry.collection] ??
+                                entry.collection}
+                        </span>
+                    </p>
+                </article>
+            </li>
+        ))}
+    </ul>
 </BaseLayout>
