@@ -7,7 +7,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 // 构建总是从仓库根目录执行，用 process.cwd() 定位
 const dir = join(process.cwd(), 'public', 'reports')
 
-type Report = { slug: string; title: string }
+type Report = { slug: string; title: string; date: string }
 const reports: Report[] = []
 
 if (existsSync(dir)) {
@@ -15,7 +15,9 @@ if (existsSync(dir)) {
     if (!file.endsWith('.html')) continue
     const html = readFileSync(join(dir, file), 'utf8')
     const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || file.replace(/\.html$/, '')
-    reports.push({ slug: file.replace(/\.html$/, ''), title })
+    // 从文件名的 YYYY-MM-DD- 前缀提取日期
+    const date = file.match(/^(\d{4}-\d{2}-\d{2})-/)?.[1] ?? ''
+    reports.push({ slug: file.replace(/\.html$/, ''), title, date })
   }
   reports.sort((a, b) => b.slug.localeCompare(a.slug))
 }
@@ -34,6 +36,7 @@ if (existsSync(dir)) {
           {reports.map((r) => (
             <li>
               <a href={`/reports/${r.slug}.html`}>{r.title}</a>
+              {r.date && <span class="ml-2 text-sm text-neutral-500 dark:text-neutral-400">{r.date}</span>}
             </li>
           ))}
         </ul>
