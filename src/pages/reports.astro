@@ -1,0 +1,43 @@
+---
+import { readdirSync, readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+// 构建时扫描 public/reports/ 下的 HTML 报告，提取 <title> 作为索引
+// 构建总是从仓库根目录执行，用 process.cwd() 定位
+const dir = join(process.cwd(), 'public', 'reports')
+
+type Report = { slug: string; title: string }
+const reports: Report[] = []
+
+if (existsSync(dir)) {
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith('.html')) continue
+    const html = readFileSync(join(dir, file), 'utf8')
+    const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || file.replace(/\.html$/, '')
+    reports.push({ slug: file.replace(/\.html$/, ''), title })
+  }
+  reports.sort((a, b) => b.slug.localeCompare(a.slug))
+}
+---
+
+<BaseLayout title="报告" description="整理好的行业与数据报告">
+  <h1 class="mb-8 text-3xl font-bold tracking-tight">报告</h1>
+  <div class="prose prose-neutral dark:prose-invert max-w-none">
+    {
+      reports.length === 0 ? (
+        <p class="text-neutral-500 dark:text-neutral-400">
+          暂无报告。在仓库根目录执行 <code>pnpm report &lt;html文件路径&gt;</code> 即可添加。
+        </p>
+      ) : (
+        <ul>
+          {reports.map((r) => (
+            <li>
+              <a href={`/reports/${r.slug}.html`}>{r.title}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</BaseLayout>

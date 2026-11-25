@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 时代高文档密度中小企业「流程降本与托管」商业战略全景报告</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '"PingFang SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            paper: '#F8FAFC',
+            ink: '#0F172A',
+            emeraldBrand: '#059669',
+            amberBrand: '#D97706',
+            roseBrand: '#E11D48',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 基础出版物排版微调与数字等宽 */
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 导航激活态 */
+    .nav-link.active {
+      background-color: #0F172A;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    .nav-link.active .nav-dot {
+      background-color: #34D399;
+    }
+
+    /* 系统动力因果图交互过渡 */
+    .cld-node, .cld-edge, .cld-badge {
+      transition: opacity 0.28s ease, transform 0.28s ease, filter 0.28s ease;
+    }
+    .cld-dimmed {
+      opacity: 0.14 !important;
+    }
+    .cld-highlighted {
+      opacity: 1 !important;
+      filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.12));
+    }
+
+    /* 自定义范围滑块（现代简约风） */
+    input[type="range"].strategy-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 9999px;
+      background: #E2E8F0;
+      outline: none;
+    }
+    input[type="range"].strategy-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #0F172A;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+    input[type="range"].strategy-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+      background: #059669;
+    }
+
+    /* 打印与 PDF 导出优雅分页样式 */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+      body {
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-full {
+        margin-left: 0 !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+      section {
+        break-inside: avoid-page;
+      }
+      .avoid-break {
+        break-inside: avoid;
+      }
+      .page-break-before {
+        break-before: page;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- 顶部阅读进度条 -->
+  <div class="fixed top-0 left-0 right-0 h-1 bg-slate-200/70 z-50 no-print">
+    <div id="reading-progress" class="h-full bg-gradient-to-r from-slate-900 via-emerald-600 to-amber-500 w-0 transition-all duration-150"></div>
+  </div>
+
+  <!-- Toast 轻提示容器（替代 alert） -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <!-- 移动端顶部栏 -->
+  <header class="lg:hidden sticky top-1 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between no-print">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+      <span class="font-bold text-slate-900 text-sm truncate">AI 流程降本与托管 · 战略报告</span>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button onclick="window.print()" class="px-2.5 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg transition">
+        打印 PDF
+      </button>
+      <button id="mobile-menu-btn" aria-label="打开目录" class="p-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端折叠抽屉菜单 -->
+  <div id="mobile-drawer" class="fixed inset-0 z-50 hidden lg:hidden no-print">
+    <div id="mobile-drawer-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+    <nav class="relative w-72 max-w-[85vw] h-full bg-white shadow-2xl p-5 overflow-y-auto flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-widest text-emerald-700">STRATEGIC REPORT</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">目录导航</div>
+          </div>
+          <button id="mobile-close-btn" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div id="mobile-nav-links" class="space-y-1"></div>
+      </div>
+      <div class="pt-4 mt-6 border-t border-slate-100 text-xs text-slate-400">
+        AI 流程降本与托管商业规划书
+      </div>
+    </nav>
+  </div>
+
+  <!-- 页面主布局 -->
+  <div class="min-h-screen flex">
+
+    <!-- 左侧固定目录导航栏（桌面端） -->
+    <aside class="hidden lg:flex lg:flex-col lg:w-72 lg:fixed lg:inset-y-0 lg:left-0 bg-white border-r border-slate-200/90 z-30 no-print">
+      <div class="px-6 pt-7 pb-5 border-b border-slate-100">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 text-white text-[10px] font-semibold tracking-wider uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          Strategy Blueprint
+        </div>
+        <h2 class="mt-3 text-base font-extrabold text-slate-900 leading-snug">
+          AI 流程降本与托管<br/>商业战略全景报告
+        </h2>
+        <p class="mt-1 text-xs text-slate-500">面向高文档密度中小企业 · 执行与融资参考</p>
+      </div>
+
+      <nav id="desktop-nav" class="flex-1 px-4 py-5 overflow-y-auto space-y-5 text-sm">
+        <div>
+          <div class="px-3 mb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">总览</div>
+          <a href="#executive-summary" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+            <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+            <span class="truncate">执行摘要与核心指标</span>
+          </a>
+        </div>
+
+        <div>
+          <div class="px-3 mb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">第一篇 · 业务与运营规划</div>
+          <div class="space-y-1">
+            <a href="#sec-1a" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">1(a) 商业闭环与系统动力图</span>
+            </a>
+            <a href="#sec-1b" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">1(b) 业务可行性与护城河</span>
+            </a>
+            <a href="#sec-1c" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">1(c) 精准获客与公域破圈</span>
+            </a>
+            <a href="#sec-1d" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">1(d) 定价、账本与天花板</span>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="px-3 mb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">第二篇 · 合作与融资沟通</div>
+          <div class="space-y-1">
+            <a href="#sec-2a" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">2(a) 合作方洽谈与利润分成</span>
+            </a>
+            <a href="#sec-2b" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">2(b) 投资人推介与逻辑论证</span>
+            </a>
+            <a href="#sec-2c" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+              <span class="nav-dot w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0"></span>
+              <span class="truncate">2(c) 未来发展四大演进曲线</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="p-4 border-t border-slate-100 bg-slate-50/70">
+        <button onclick="window.print()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+          </svg>
+          打印 / 导出 PDF 报告
+        </button>
+      </div>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="flex-1 lg:ml-72 print-full">
+      <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-16">
+
+        <!-- ==================== 封面与执行摘要 ==================== -->
+        <section id="executive-summary" class="scroll-mt-16">
+          <div class="bg-slate-900 text-white rounded-3xl p-7 sm:p-10 lg:p-12 shadow-xl relative overflow-hidden">
+            <!-- 微妙背景几何装饰 -->
+            <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-20 w-72 h-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10">
+              <div class="flex flex-wrap items-center gap-2.5 text-xs font-semibold tracking-wider uppercase text-emerald-400">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30">Strategic &amp; Operations Blueprint</span>
+                <span class="text-slate-400">·</span>
+                <span class="text-slate-300">AI-Native Service-as-Software</span>
+              </div>
+
+              <h1 class="mt-5 text-2xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight leading-[1.2]">
+                AI 时代高文档密度中小企业<br/>
+                <span class="text-emerald-400">「流程降本与托管」</span>商业战略全景报告
+              </h1>
+
+              <p class="mt-5 text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+                <strong class="text-white">核心战略命题：</strong>AI 编码成本暴跌与大模型攻克非结构化脏数据，彻底改写了 B 端长尾非标需求的经济账。本业务不再售卖单薄的通用 SaaS 管理工具，而是通过第一性原理的流程重构，跃迁为 <strong class="text-emerald-300">Service-as-Software（用软件直接替代高昂的初级人力成本）</strong>——以高毛利轻定制切入，凭借「三级火箭」模型沉淀 80% 标准化底座与存量复利，构建可持续变现的中小企业外部 AI 托管服务商（AI MSP）。
+              </p>
+
+              <!-- 顶部 4 张核心战略 KPI 卡片 -->
+              <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
+                  <div class="text-xs text-slate-400 font-medium">单客首单甜蜜区</div>
+                  <div class="mt-1.5 text-2xl font-extrabold text-white tabular-nums">4~6 <span class="text-sm font-semibold text-emerald-400">万元</span></div>
+                  <div class="mt-1 text-[11px] text-slate-400">全区间 3~8 万 · 守住 2.5 万底线</div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
+                  <div class="text-xs text-slate-400 font-medium">轻资产财务毛利率</div>
+                  <div class="mt-1.5 text-2xl font-extrabold text-emerald-400 tabular-nums">80%~90%</div>
+                  <div class="mt-1 text-[11px] text-slate-400">单兵/3人铁三角 · 商业API云端架构</div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
+                  <div class="text-xs text-slate-400 font-medium">客户 ROI 回本周期</div>
+                  <div class="mt-1.5 text-2xl font-extrabold text-amber-400 tabular-nums">3~6 <span class="text-sm font-semibold text-amber-300">个月</span></div>
+                  <div class="mt-1 text-[11px] text-slate-400">直接替代 10~15 万/年初级助理成本</div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
+                  <div class="text-xs text-slate-400 font-medium">2 年单客 LTV 扩张</div>
+                  <div class="mt-1.5 text-2xl font-extrabold text-white tabular-nums">5万 → <span class="text-emerald-400">15万+</span></div>
+                  <div class="mt-1 text-[11px] text-slate-400">运维年费 + 额度包 + 内训与多部门Agent</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 第一篇 标题分隔 ==================== -->
+        <div class="flex items-center gap-4 pt-2">
+          <div class="px-3.5 py-1 rounded-full bg-slate-900 text-white text-xs font-bold tracking-wider">PART 01</div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">业务与运营规划</h2>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+
+        <!-- ==================== 1(a) 商业闭环逻辑与系统动力因果图 ==================== -->
+        <section id="sec-1a" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 1(a) · Business Closed-Loop &amp; System Dynamics</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">商业闭环逻辑与系统动力因果图</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              中国中小企业老板对「IT 管理工具」的付费意愿极低（买套 5,000 元的通用 SaaS 往往反复权衡），但对「省人 / 扩产」极其务实——因为<strong>人力成本预算（HR Budget）的盘子是 IT 软件预算的 10~20 倍</strong>。一二线城市一名初级业务助理的年均综合成本高达 10~15 万元，且伴随招聘、培训与离职损耗。我们的底层闭环，正是用 3~8 万元的轻量化 AI 流程改造，精准切入老板最肉疼的 HR 替代预算，再通过「三级火箭」实现从单次交付到持续复利的跃迁。
+            </p>
+          </div>
+
+          <!-- 「三级火箭」商业模型可视化卡片 -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 avoid-break">
+            <!-- 一级火箭 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:shadow-md transition relative overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1.5 bg-slate-900"></div>
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 text-xs font-bold">一级火箭 · 破冰钩子</span>
+                <span class="text-xs font-semibold text-emerald-700">首单 3~8 万</span>
+              </div>
+              <h4 class="mt-4 text-lg font-bold text-slate-900">高痛点流程轻定制</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                直击文档解析、异构数据入表、批量合规文书/单证生成等最耗人力的核心环节，以「48h 免费真数据 Demo」零阻力破冰签约。
+              </p>
+              <div class="mt-4 pt-4 border-t border-slate-100 space-y-1.5 text-xs text-slate-700">
+                <div class="flex items-start gap-2"><span class="text-emerald-600 font-bold">▸</span> <span><strong>工程目标：</strong>沉淀「80% 标准化底座 + 20% 轻定制」乐高管线</span></div>
+                <div class="flex items-start gap-2"><span class="text-emerald-600 font-bold">▸</span> <span><strong>商业作用：</strong>盈利性获客，拿现金流并打穿老板信任壁垒</span></div>
+              </div>
+            </div>
+
+            <!-- 二级火箭 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:shadow-md transition relative overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1.5 bg-emerald-600"></div>
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-bold">二级火箭 · 管道复利</span>
+                <span class="text-xs font-semibold text-emerald-700">毛利 70%+</span>
+              </div>
+              <h4 class="mt-4 text-lg font-bold text-slate-900">托管运维 + 业务额度包</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                系统嵌入日常生产后，绑定年度运维费（首单 15%~20%）；拒绝直接卖透明 Token，将其与 OCR 封装为「按份计费的文档智能处理额度包」，同时集成电子签章等第三方生态赚取分润。
+              </p>
+              <div class="mt-4 pt-4 border-t border-slate-100 space-y-1.5 text-xs text-slate-700">
+                <div class="flex items-start gap-2"><span class="text-emerald-600 font-bold">▸</span> <span><strong>定价升维：</strong>从卷 15% 毛利的 Token 差价跃迁至 70%+ 业务包</span></div>
+                <div class="flex items-start gap-2"><span class="text-emerald-600 font-bold">▸</span> <span><strong>商业作用：</strong>构建稳定的年度经常性收入（ARR）现金牛</span></div>
+              </div>
+            </div>
+
+            <!-- 三级火箭 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:shadow-md transition relative overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1.5 bg-amber-500"></div>
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 text-xs font-bold">三级火箭 · 全员扩面</span>
+                <span class="text-xs font-semibold text-amber-700">LTV 5万→15万+</span>
+              </div>
+              <h4 class="mt-4 text-lg font-bold text-slate-900">AI 内训 + 知识库 + 多部门 Agent</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                依托零获客成本的存量信任池，以 1~2 万元的「企业 AI 实战内训」作为绝佳的“付费售前”，在培训现场自然挖出其他部门痛点，延伸私有知识库与岗位级 Agent。
+              </p>
+              <div class="mt-4 pt-4 border-t border-slate-100 space-y-1.5 text-xs text-slate-700">
+                <div class="flex items-start gap-2"><span class="text-amber-600 font-bold">▸</span> <span><strong>单客扩张：</strong>2 年综合产值提升 3 倍，NRR 突破 130%~150%</span></div>
+                <div class="flex items-start gap-2"><span class="text-amber-600 font-bold">▸</span> <span><strong>长期演进：</strong>自然孵化垂直行业标准微 SaaS 与 RaaS</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 核心可视化 1：交互式系统动力因果回路图 (System Dynamics CLD) -->
+          <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-7 avoid-break">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-900 text-white text-xs font-bold">图1</span>
+                  <h4 class="text-base sm:text-lg font-bold text-slate-900">系统动力因果回路图（飞轮增强与约束调节机制）</h4>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">点击下方回路按钮高亮对应的因果路径，查看正向增强飞轮（R1~R3）与系统制约边界（B1~B2）的深层机制。</p>
+              </div>
+              <!-- 图例 -->
+              <div class="flex flex-wrap items-center gap-3 text-[11px] font-medium text-slate-600 shrink-0">
+                <span class="inline-flex items-center gap-1"><span class="w-3 h-1 rounded bg-emerald-600"></span>正向增强 (R)</span>
+                <span class="inline-flex items-center gap-1"><span class="w-3 h-1 rounded bg-rose-600"></span>制约调节 (B)</span>
+                <span class="inline-flex items-center gap-1"><span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">+</span>同向</span>
+                <span class="inline-flex items-center gap-1"><span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 font-bold">−</span>反向</span>
+              </div>
+            </div>
+
+            <!-- 交互过滤按钮组 -->
+            <div id="cld-controls" class="mt-4 flex flex-wrap gap-2 no-print">
+              <button data-loop="all" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white shadow-sm transition">全部视图</button>
+              <button data-loop="R1" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition">R1 工程复利飞轮</button>
+              <button data-loop="R2" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition">R2 存量增购飞轮</button>
+              <button data-loop="R3" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition">R3 渠道口碑飞轮</button>
+              <button data-loop="B1" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200 transition">B1 非代码摩擦约束</button>
+              <button data-loop="B2" class="cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200 transition">B2 盲目扩招陷阱</button>
+            </div>
+
+            <!-- 精细手绘级内联 SVG 系统动力因果图 -->
+            <div class="mt-5 w-full overflow-x-auto rounded-2xl bg-slate-50/80 border border-slate-200/70 p-2 sm:p-4">
+              <svg id="cld-svg" viewBox="0 0 1120 615" class="w-full min-w-[780px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <!-- 箭头定义 -->
+                  <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#059669"/>
+                  </marker>
+                  <marker id="arrow-rose" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#E11D48"/>
+                  </marker>
+                  <marker id="arrow-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#D97706"/>
+                  </marker>
+                  <marker id="arrow-slate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#0F172A"/>
+                  </marker>
+                </defs>
+
+                <!-- 柔和分区底框 -->
+                <rect x="130" y="16" width="480" height="278" rx="20" fill="#ECFDF5" fill-opacity="0.45" stroke="#A7F3D0" stroke-dasharray="5 5"/>
+                <rect x="630" y="16" width="468" height="278" rx="20" fill="#ECFDF5" fill-opacity="0.38" stroke="#A7F3D0" stroke-dasharray="5 5"/>
+                <rect x="398" y="310" width="452" height="290" rx="20" fill="#F0FDF4" fill-opacity="0.55" stroke="#86EFAC" stroke-dasharray="5 5"/>
+                <rect x="12" y="226" width="368" height="305" rx="20" fill="#FFF1F2" fill-opacity="0.55" stroke="#FECDD3" stroke-dasharray="5 5"/>
+                <rect x="878" y="310" width="228" height="290" rx="20" fill="#FFF1F2" fill-opacity="0.55" stroke="#FECDD3" stroke-dasharray="5 5"/>
+
+                <!-- ==================== 因果连接路径 (EDGES) ==================== -->
+
+                <!-- R1 工程复利回路边 -->
+                <g class="cld-edge" data-loops="R1">
+                  <!-- N_SIGN -> R1_1 -->
+                  <path d="M 425 248 Q 275 248 225 186" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="305" cy="233" r="9.5" fill="#059669"/>
+                  <text x="305" y="237" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R1_1 -> R1_2 -->
+                  <path d="M 218 135 L 218 86" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="202" cy="111" r="9.5" fill="#059669"/>
+                  <text x="202" y="115" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R1_2 -> R1_3 -->
+                  <path d="M 332 58 L 404 58" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="368" cy="44" r="9.5" fill="#059669"/>
+                  <text x="368" y="48" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R1_3 -> R1_4 -->
+                  <path d="M 502 81 L 502 130" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="518" cy="105" r="9.5" fill="#059669"/>
+                  <text x="518" y="109" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R1_4 -> N_SIGN -->
+                  <path d="M 502 181 L 502 227" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="518" cy="204" r="9.5" fill="#059669"/>
+                  <text x="518" y="208" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+                </g>
+
+                <!-- R3 渠道口碑回路边 -->
+                <g class="cld-edge" data-loops="R3">
+                  <!-- N_SIGN -> R3_1 -->
+                  <path d="M 580 242 Q 665 190 715 86" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="662" cy="166" r="9.5" fill="#059669"/>
+                  <text x="662" y="170" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R3_1 -> R3_2 -->
+                  <path d="M 845 58 Q 960 58 975 130" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="932" cy="76" r="9.5" fill="#059669"/>
+                  <text x="932" y="80" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R3_2 -> R3_3 -->
+                  <path d="M 975 181 L 975 227" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="991" cy="204" r="9.5" fill="#059669"/>
+                  <text x="991" y="208" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R3_3 -> R3_4 -->
+                  <path d="M 885 255 L 818 255" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="852" cy="240" r="9.5" fill="#059669"/>
+                  <text x="852" y="244" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R3_4 -> N_SIGN -->
+                  <path d="M 652 255 L 586 255" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="619" cy="240" r="9.5" fill="#059669"/>
+                  <text x="619" y="244" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+                </g>
+
+                <!-- R2 存量增购回路边 -->
+                <g class="cld-edge" data-loops="R2">
+                  <!-- N_SIGN -> R2_1 -->
+                  <path d="M 502 278 L 502 322" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="518" cy="300" r="9.5" fill="#059669"/>
+                  <text x="518" y="304" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R2_1 -> R2_2 -->
+                  <path d="M 502 371 L 502 414" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="518" cy="393" r="9.5" fill="#059669"/>
+                  <text x="518" y="397" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R2_2 -> R2_3 -->
+                  <path d="M 588 441 L 635 441" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="612" cy="426" r="9.5" fill="#059669"/>
+                  <text x="612" y="430" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R2_3 -> R2_4 -->
+                  <path d="M 738 463 L 738 532" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="754" cy="498" r="9.5" fill="#059669"/>
+                  <text x="754" y="502" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R2_4 -> R2_5 -->
+                  <path d="M 641 560 L 594 560" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="617" cy="545" r="9.5" fill="#059669"/>
+                  <text x="617" y="549" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- R2_5 -> R2_2 (产品力反哺强化粘性) -->
+                  <path d="M 502 537 L 502 468" fill="none" stroke="#059669" stroke-width="2.2" marker-end="url(#arrow-emerald)"/>
+                  <circle cx="486" cy="503" r="9.5" fill="#059669"/>
+                  <text x="486" y="507" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+                </g>
+
+                <!-- B1 非代码摩擦约束回路边 -->
+                <g class="cld-edge" data-loops="B1">
+                  <!-- N_SIGN -> B1_1 (盲目扩单/低价诱惑) -->
+                  <path d="M 425 268 L 201 268" fill="none" stroke="#D97706" stroke-width="2.1" stroke-dasharray="5 4" marker-end="url(#arrow-amber)"/>
+                  <circle cx="315" cy="283" r="9.5" fill="#D97706"/>
+                  <text x="315" y="287" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+                  <text x="274" y="261" text-anchor="middle" fill="#B45309" font-size="10.5" font-weight="600">低价/乱接单诱惑</text>
+
+                  <!-- B1_1 -> B1_2 -->
+                  <path d="M 110 291 L 110 350" fill="none" stroke="#E11D48" stroke-width="2.2" marker-end="url(#arrow-rose)"/>
+                  <circle cx="94" cy="321" r="9.5" fill="#E11D48"/>
+                  <text x="94" y="325" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B1_2 -> B1_3 -->
+                  <path d="M 110 401 L 110 460" fill="none" stroke="#E11D48" stroke-width="2.2" marker-end="url(#arrow-rose)"/>
+                  <circle cx="94" cy="431" r="9.5" fill="#E11D48"/>
+                  <text x="94" y="435" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B1_3 -> B1_4 -->
+                  <path d="M 195 488 L 229 488" fill="none" stroke="#E11D48" stroke-width="2.2" marker-end="url(#arrow-rose)"/>
+                  <circle cx="212" cy="474" r="9.5" fill="#E11D48"/>
+                  <text x="212" y="478" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B1_4 -> N_SIGN (反向制约新单) -->
+                  <path d="M 326 465 Q 370 385 432 283" fill="none" stroke="#E11D48" stroke-width="2.3" marker-end="url(#arrow-rose)"/>
+                  <circle cx="378" cy="368" r="9.5" fill="#E11D48"/>
+                  <text x="378" y="372" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="800">−</text>
+                </g>
+
+                <!-- B2 盲目扩招陷阱回路边 -->
+                <g class="cld-edge" data-loops="B2">
+                  <!-- R3_3 -> B2_1 (增长期过早扩招诱惑) -->
+                  <path d="M 992 278 L 992 323" fill="none" stroke="#D97706" stroke-width="2.1" stroke-dasharray="5 4" marker-end="url(#arrow-amber)"/>
+                  <circle cx="1008" cy="301" r="9.5" fill="#D97706"/>
+                  <text x="1008" y="305" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B2_1 -> B2_2 -->
+                  <path d="M 992 374 L 992 422" fill="none" stroke="#E11D48" stroke-width="2.2" marker-end="url(#arrow-rose)"/>
+                  <circle cx="1008" cy="398" r="9.5" fill="#E11D48"/>
+                  <text x="1008" y="402" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B2_2 -> B2_3 -->
+                  <path d="M 992 473 L 992 529" fill="none" stroke="#E11D48" stroke-width="2.2" marker-end="url(#arrow-rose)"/>
+                  <circle cx="1008" cy="501" r="9.5" fill="#E11D48"/>
+                  <text x="1008" y="505" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">+</text>
+
+                  <!-- B2_3 -> R2_4 (反向拖累现金流与净利) -->
+                  <path d="M 902 560 L 841 560" fill="none" stroke="#E11D48" stroke-width="2.3" marker-end="url(#arrow-rose)"/>
+                  <circle cx="872" cy="545" r="9.5" fill="#E11D48"/>
+                  <text x="872" y="549" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="800">−</text>
+                </g>
+
+                <!-- ==================== 回路中心徽章 (LOOP BADGES) ==================== -->
+                <g class="cld-badge cursor-pointer" data-loops="R1" onclick="highlightLoop('R1')">
+                  <rect x="295" y="122" width="102" height="32" rx="16" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.5"/>
+                  <text x="346" y="142" text-anchor="middle" fill="#065F46" font-size="11.5" font-weight="800">↻ R1 工程复利</text>
+                </g>
+
+                <g class="cld-badge cursor-pointer" data-loops="R3" onclick="highlightLoop('R3')">
+                  <rect x="742" y="142" width="102" height="32" rx="16" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.5"/>
+                  <text x="793" y="162" text-anchor="middle" fill="#065F46" font-size="11.5" font-weight="800">↻ R3 渠道口碑</text>
+                </g>
+
+                <g class="cld-badge cursor-pointer" data-loops="R2" onclick="highlightLoop('R2')">
+                  <rect x="568" y="482" width="102" height="32" rx="16" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.5"/>
+                  <text x="619" y="502" text-anchor="middle" fill="#065F46" font-size="11.5" font-weight="800">↻ R2 存量增购</text>
+                </g>
+
+                <g class="cld-badge cursor-pointer" data-loops="B1" onclick="highlightLoop('B1')">
+                  <rect x="218" y="362" width="118" height="32" rx="16" fill="#E11D48" fill-opacity="0.12" stroke="#E11D48" stroke-width="1.5"/>
+                  <text x="277" y="382" text-anchor="middle" fill="#9F1239" font-size="11.5" font-weight="800">⟲ B1 摩擦约束</text>
+                </g>
+
+                <g class="cld-badge cursor-pointer" data-loops="B2" onclick="highlightLoop('B2')">
+                  <rect x="886" y="385" width="90" height="28" rx="14" fill="#E11D48" fill-opacity="0.12" stroke="#E11D48" stroke-width="1.5"/>
+                  <text x="931" y="403" text-anchor="middle" fill="#9F1239" font-size="11" font-weight="800">⟲ B2 扩招陷阱</text>
+                </g>
+
+                <!-- ==================== 节点方框 (NODES) ==================== -->
+
+                <!-- 核心枢纽节点 (Hub) -->
+                <g class="cld-node" data-loops="R1 R2 R3 B1">
+                  <rect x="425" y="232" width="155" height="46" rx="12" fill="#0F172A" stroke="#0F172A" stroke-width="2"/>
+                  <text x="502.5" y="253" text-anchor="middle" fill="#FFFFFF" font-size="12.5" font-weight="800">同类客户签约放量</text>
+                  <text x="502.5" y="269" text-anchor="middle" fill="#34D399" font-size="10" font-weight="600">核心增长枢纽</text>
+                </g>
+
+                <!-- R1 节点 -->
+                <g class="cld-node" data-loops="R1">
+                  <rect x="145" y="135" width="146" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="218" y="162" text-anchor="middle" fill="#0F172A" font-size="12" font-weight="700">垂直项目交付</text>
+                </g>
+                <g class="cld-node" data-loops="R1">
+                  <rect x="145" y="35" width="187" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="238.5" y="55" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">沉淀80%底座与规则库</text>
+                  <text x="238.5" y="71" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">乐高管线 + 脏数据校验</text>
+                </g>
+                <g class="cld-node" data-loops="R1">
+                  <rect x="410" y="35" width="185" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="502.5" y="55" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">交付周期骤降与毛利提升</text>
+                  <text x="502.5" y="71" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">20天→4天 · 毛利80~90%</text>
+                </g>
+                <g class="cld-node" data-loops="R1">
+                  <rect x="414" y="135" width="176" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="502" y="155" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">48h真数据Demo转化飙升</text>
+                  <text x="502" y="171" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">眼见为实 · 击穿信任</text>
+                </g>
+
+                <!-- R3 节点 -->
+                <g class="cld-node" data-loops="R3">
+                  <rect x="665" y="35" width="180" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="755" y="55" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">真实省人ROI实战案例</text>
+                  <text x="755" y="71" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">少招1~2人 · 3~6月回本</text>
+                </g>
+                <g class="cld-node" data-loops="R3">
+                  <rect x="885" y="135" width="180" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="975" y="162" text-anchor="middle" fill="#0F172A" font-size="12" font-weight="700">零口碑风险Demo演示</text>
+                </g>
+                <g class="cld-node" data-loops="R3 B2">
+                  <rect x="885" y="232" width="180" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="975" y="252" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">卖水人与老客积极转介绍</text>
+                  <text x="975" y="268" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">B2B2B借船 + 痛快分润</text>
+                </g>
+                <g class="cld-node" data-loops="R3">
+                  <rect x="652" y="232" width="160" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="732" y="259" text-anchor="middle" fill="#0F172A" font-size="12" font-weight="700">获客成本CAC大幅下降</text>
+                </g>
+
+                <!-- R2 节点 -->
+                <g class="cld-node" data-loops="R2">
+                  <rect x="417" y="325" width="170" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="502" y="352" text-anchor="middle" fill="#0F172A" font-size="12" font-weight="700">流程嵌入核心生产流</text>
+                </g>
+                <g class="cld-node" data-loops="R2">
+                  <rect x="417" y="418" width="170" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="502" y="445" text-anchor="middle" fill="#0F172A" font-size="12" font-weight="700">高替换成本与深度信任</text>
+                </g>
+                <g class="cld-node" data-loops="R2">
+                  <rect x="641" y="418" width="194" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="738" y="438" text-anchor="middle" fill="#0F172A" font-size="11.5" font-weight="700">运维/额度包/培训/Agent增购</text>
+                  <text x="738" y="454" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">二级 + 三级火箭发力</text>
+                </g>
+                <g class="cld-node" data-loops="R2 B2">
+                  <rect x="641" y="537" width="194" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="738" y="557" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">单客LTV与ARR滚雪球</text>
+                  <text x="738" y="573" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">NRR 130%~150%</text>
+                </g>
+                <g class="cld-node" data-loops="R2">
+                  <rect x="414" y="537" width="176" height="46" rx="10" fill="#FFFFFF" stroke="#059669" stroke-width="1.8"/>
+                  <text x="502" y="557" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">充沛现金流反哺微SaaS</text>
+                  <text x="502" y="573" text-anchor="middle" fill="#059669" font-size="10" font-weight="600">Paid R&amp;D 产品化跃迁</text>
+                </g>
+
+                <!-- B1 节点 -->
+                <g class="cld-node" data-loops="B1">
+                  <rect x="25" y="245" width="170" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="110" y="265" text-anchor="middle" fill="#0F172A" font-size="11.5" font-weight="700">跨场景乱接单 / 低价&lt;2万</text>
+                  <text x="110" y="281" text-anchor="middle" fill="#E11D48" font-size="10" font-weight="600">偏离同构场景红线</text>
+                </g>
+                <g class="cld-node" data-loops="B1">
+                  <rect x="25" y="355" width="170" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="110" y="375" text-anchor="middle" fill="#0F172A" font-size="11.3" font-weight="700">梳理/脏数据/售后耗时暴增</text>
+                  <text x="110" y="391" text-anchor="middle" fill="#E11D48" font-size="10" font-weight="600">非代码隐性成本失控</text>
+                </g>
+                <g class="cld-node" data-loops="B1">
+                  <rect x="25" y="465" width="170" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="110" y="492" text-anchor="middle" fill="#0F172A" font-size="11.8" font-weight="700">架构师精力耗尽与延期</text>
+                </g>
+                <g class="cld-node" data-loops="B1">
+                  <rect x="235" y="465" width="132" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="301" y="492" text-anchor="middle" fill="#9F1239" font-size="12" font-weight="700">客户口碑受损</text>
+                </g>
+
+                <!-- B2 节点 -->
+                <g class="cld-node" data-loops="B2">
+                  <rect x="902" y="328" width="180" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="992" y="348" text-anchor="middle" fill="#0F172A" font-size="11.5" font-weight="700">底座未标准化前过早扩招</text>
+                  <text x="992" y="364" text-anchor="middle" fill="#E11D48" font-size="10" font-weight="600">5~8人传统外包陷阱</text>
+                </g>
+                <g class="cld-node" data-loops="B2">
+                  <rect x="902" y="427" width="180" height="46" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="992" y="454" text-anchor="middle" fill="#0F172A" font-size="11.5" font-weight="700">固定人力与管理内耗飙升</text>
+                </g>
+                <g class="cld-node" data-loops="B2">
+                  <rect x="902" y="535" width="180" height="48" rx="10" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+                  <text x="992" y="556" text-anchor="middle" fill="#9F1239" font-size="11.5" font-weight="700">净利率坍塌（增收不增利）</text>
+                  <text x="992" y="573" text-anchor="middle" fill="#E11D48" font-size="10" font-weight="600">现金流承压</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- 动态回路机制深度解说面板 -->
+            <div id="cld-explanation" class="mt-4 rounded-2xl bg-slate-900 text-slate-100 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+              <div id="cld-exp-badge" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs font-bold shrink-0 self-start sm:self-center">
+                全局系统动力学视角
+              </div>
+              <p id="cld-exp-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                本业务能否穿越传统外包宿命，取决于<strong class="text-white">“放大三条正向增强飞轮（R1 工程复利、R2 存量增购、R3 渠道口碑）”</strong>的同时，用严格的客单底线（≥2.5万）、同构场景聚焦与克制的人力编制，死死锁住<strong class="text-rose-300">两条制约回路（B1 非代码摩擦、B2 过早扩招）</strong>。点击上方按钮可逐一拆解单条回路。
+              </p>
+            </div>
+          </div>
+
+          <!-- 三大战略暗礁规避对照表 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden avoid-break">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900">三大战略暗礁与架构师避坑对照表</h4>
+              <span class="text-xs font-semibold text-rose-600">防滑向低毛利杂货铺</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-50/60 text-slate-500 border-b border-slate-200/80">
+                  <tr>
+                    <th class="py-3 px-5 font-semibold w-1/5">战略暗礁</th>
+                    <th class="py-3 px-5 font-semibold w-2/5">典型致命误区</th>
+                    <th class="py-3 px-5 font-semibold w-2/5">正确战略解法</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50/70">
+                    <td class="py-4 px-5 font-bold text-rose-700">① 混淆自研与集采代理</td>
+                    <td class="py-4 px-5 text-slate-600">试图从零自研电子签章、通用 OCR、底层知识库或 AI 外呼，与巨头血拼红海，研发精力被瞬间吸干。</td>
+                    <td class="py-4 px-5 text-slate-800"><strong class="text-emerald-700">定位“业务编排层 + 总包”：</strong>只写贴合业务流的胶水代码与专属 Agent；电子签章、OCR、算力等全部签大厂渠道代理/批发价，赚集成费与管道分成。</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50/70">
+                    <td class="py-4 px-5 font-bold text-rose-700">② 卖透明 Token 被卷死</td>
+                    <td class="py-4 px-5 text-slate-600">直接售卖“1000万 Token 套餐”。大模型底价透明且每半年腰斩，客户听不懂还会拿官网价压价，毛利不足 15%。</td>
+                    <td class="py-4 px-5 text-slate-800"><strong class="text-emerald-700">包装为“业务计量额度包”：</strong>卖“年度 3,000 份合同智能解析/生成包”。老板对“3 元/份，比助理省 90%”极其买账，毛利率拉升至 70%+。</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50/70">
+                    <td class="py-4 px-5 font-bold text-rose-700">③ 无边界跨场景接单</td>
+                    <td class="py-4 px-5 text-slate-600">今天接律所卷宗、明天接工厂质检、后天接餐饮排班，每个项目从零开始，彻底阻断底座复用与第二阶段标准化增购。</td>
+                    <td class="py-4 px-5 text-slate-800"><strong class="text-emerald-700">坚持“跨行业、同场景”：</strong>死磕“重合同、重非标扫描件、重文本流转”的通用办公流，横向贯通律所、招投标、财税、外贸，一套底座全吃下。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 1(b) 业务可行性与护城河评估 ==================== -->
+        <section id="sec-1b" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 1(b) · Feasibility &amp; Core Moats</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">业务可行性评估与架构师核心壁垒</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              该业务不仅<strong>完全具备即刻开展的可行性</strong>，且已通过真实律所项目完成商业闭环验证。但必须清醒认识到：AI 时代“会写代码”本身已彻底去壁垒化，真正决定高溢价和抗竞争能力的，是资深架构师的三重工程与认知壁垒。
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch avoid-break">
+            <!-- 左侧：Chart.js 可行性五维雷达图 -->
+            <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <h4 class="text-base font-bold text-slate-900">业务可行性五维综合评估</h4>
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">综合评分 86.4 / 100</span>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">技术、需求与轻资产启动均为极高分，唯一需重点管控的是“非代码交付摩擦”。</p>
+              </div>
+              <div class="relative w-full h-[300px] sm:h-[320px] mt-4">
+                <canvas id="feasibilityRadar"></canvas>
+              </div>
+            </div>
+
+            <!-- 右侧：真正值钱的三大架构师壁垒 -->
+            <div class="lg:col-span-6 flex flex-col justify-between gap-4">
+              <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-slate-900 text-white text-xs font-bold flex items-center justify-center shrink-0">01</span>
+                  <h5 class="font-bold text-slate-900 text-sm sm:text-base">第一性原理的业务重构能力</h5>
+                </div>
+                <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  普通外包是“客户说什么做什么”，把混乱的手工流程原封不动搬上系统；架构师能将非标业务拆解抽象为<strong>「确定性代码逻辑（状态机、规则引擎）」+「概率性 AI 节点（非结构化提取与生成）」</strong>的混合架构，从根源消除人效黑洞。
+                </p>
+              </div>
+
+              <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0">02</span>
+                  <h5 class="font-bold text-slate-900 text-sm sm:text-base">“最后一公里脏数据”工程兜底能力</h5>
+                </div>
+                <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  跑通玩具 Demo 只需半天，但真实生产现场充斥歪斜扫描件、手写批注、金额大小写冲突、缺页和模型幻觉。设计<strong>置信度阈值、交叉规则校验、人工复核工作台与异常回退机制</strong>，才是客户愿意付 5 万+买单的真正壁垒。
+                </p>
+              </div>
+
+              <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-amber-500 text-white text-xs font-bold flex items-center justify-center shrink-0">03</span>
+                  <h5 class="font-bold text-slate-900 text-sm sm:text-base">资产乐高化沉淀能力（80/20 复用）</h5>
+                </div>
+                <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  将异构解析、动态抽取、规则校验与模板渲染抽象为可配置底座。第 1 家客户用 20 天从零搭建，第 5 家同类客户复用 80% 底座、仅花 4 天写个性化规则，单位时间产出翻 4 倍，彻底跳出卖苦力陷阱。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 红线警告卡片 -->
+          <div class="rounded-2xl bg-rose-50 border border-rose-200 p-5 flex items-start gap-4 avoid-break">
+            <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold text-rose-900">业务红线警告：谨慎触碰「AI 销售」类强效果承诺产品</h5>
+              <p class="mt-1 text-xs sm:text-sm text-rose-800/90 leading-relaxed">
+                老板采购“AI 销售”的潜台词是“直接帮我多签单”，但最终成单高度受限于客户自身的产品力与市场环境，极易不达预期并反噬你在第一阶段辛苦建立的靠谱口碑。在销售侧，应严格限定为<strong>“内部线索清洗、沟通纪要自动归档、报价单自动生成”</strong>等高确定性内部提效环节。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 1(c) 精准获客策略与公域破圈打法 ==================== -->
+        <section id="sec-1c" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 1(c) · Customer Acquisition Strategy</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">精准获客策略与技术人公域破圈打法</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              纯技术背景在无原始 B 端资源时，绝不能靠“拼关系”去卷大企业招投标。必须严格锚定<strong>「决策链极短 + 非标文档极密 + 扩量必招人」</strong>的同心圆客户池，采用<strong>“B2B2B 借船出海 + 公域透明橱窗”</strong>双引擎驱动。
+            </p>
+          </div>
+
+          <!-- ICP 同心圆定位 + 四硬指标 -->
+          <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 items-center avoid-break">
+            <!-- SVG 同心圆 -->
+            <div class="lg:col-span-5 flex flex-col items-center">
+              <svg viewBox="0 0 360 320" class="w-full max-w-[330px] h-auto" xmlns="http://www.w3.org/2000/svg">
+                <!-- 外圈：近邻高同构行业 -->
+                <circle cx="180" cy="160" r="145" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <text x="180" y="38" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">近邻圈：高度同构专业服务与商贸</text>
+                <text x="180" y="55" text-anchor="middle" fill="#64748B" font-size="10">招投标代理 / 工程造价 / 知产商标</text>
+                <text x="180" y="284" text-anchor="middle" fill="#64748B" font-size="10">财税审计代账 / 外贸单证 / 跨境货代</text>
+
+                <!-- 中圈：目标规模与决策特征 -->
+                <circle cx="180" cy="160" r="98" fill="#ECFDF5" stroke="#10B981" stroke-width="1.8"/>
+                <text x="180" y="88" text-anchor="middle" fill="#065F46" font-size="10.5" font-weight="700">10~50 人实战派机构</text>
+                <text x="180" y="242" text-anchor="middle" fill="#065F46" font-size="10" font-weight="600">创始人/合伙人一句话拍板</text>
+
+                <!-- 内核：已验证核心圈 -->
+                <circle cx="180" cy="160" r="56" fill="#0F172A"/>
+                <text x="180" y="148" text-anchor="middle" fill="#34D399" font-size="10" font-weight="700">核心突破圈</text>
+                <text x="180" y="166" text-anchor="middle" fill="#FFFFFF" font-size="12.5" font-weight="800">批量业务律所</text>
+                <text x="180" y="182" text-anchor="middle" fill="#CBD5E1" font-size="9.2">催收/知产/劳资/家事</text>
+              </svg>
+            </div>
+
+            <!-- 筛选四硬指标 -->
+            <div class="lg:col-span-7 space-y-4">
+              <h4 class="text-base font-bold text-slate-900">理想客户画像（ICP）四大筛选硬指标（至少满足 3 条）</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="text-xs font-bold text-slate-900">1. 规模卡在 10~50 人黄金带</div>
+                  <p class="mt-1 text-xs text-slate-600">5 人以下作坊无预算；100 人以上有 IT 部门且流程冗长。10~50 人正处“扩量即利润被工资吃光”的最焦虑临界点。</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="text-xs font-bold text-slate-900">2. 非标信息极度密集</div>
+                  <p class="mt-1 text-xs text-slate-600">高频处理海量扫描件、PDF、复杂 Excel、Word 文书与沟通记录，传统通用 SaaS 束手无策。</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="text-xs font-bold text-slate-900">3. 订单消化瓶颈明显</div>
+                  <p class="mt-1 text-xs text-slate-600">具备接单能力，单笔业务毛利较高，但多接单就必须按比例增招初级专员，管理成本急剧攀升。</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="text-xs font-bold text-slate-900">4. 决策链短、老板直拍</div>
+                  <p class="mt-1 text-xs text-slate-600">30~50 岁实战派创始人或业务合伙人亲抓交付，看到真数据效果 1~2 周即可签单付款。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 双引擎渠道打法 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 avoid-break">
+            <!-- 引擎一：B2B2B 借船出海 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-bold">引擎一 · 最高杠杆</span>
+                <span class="text-xs font-semibold text-slate-400">B2B2B 生态借船</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">寄生在行业“卖水人”身边</h4>
+              <p class="mt-1.5 text-xs sm:text-sm text-slate-600">
+                跳过从零陌拜，直接绑定手里握着大批目标老板、但自身缺乏 AI 交付能力且利益高度互补的生态伙伴：
+              </p>
+              <ul class="mt-4 space-y-3 text-xs sm:text-sm text-slate-700">
+                <li class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <strong class="text-slate-900">① 案源投流 / 短视频代运营公司：</strong>
+                  <span class="block mt-0.5 text-xs text-slate-600">他们帮律所/企业引来了海量线索，但客户接不住、消化慢，反过来就不续费。你帮他们的客户解决“消化瓶颈”，双方利益 100% 同向。</span>
+                </li>
+                <li class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <strong class="text-slate-900">② 行业通用 SaaS 区域代理商与销售：</strong>
+                  <span class="block mt-0.5 text-xs text-slate-600">每天面对客户提出的非标定制需求却无法承接，转包给你赚取 15%~30% 返佣，零成本增加收入并锁牢老客。</span>
+                </li>
+                <li class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <strong class="text-slate-900">③ 垂直行业培训讲师、付费社群主理人 &amp; 管理顾问：</strong>
+                  <span class="block mt-0.5 text-xs text-slate-600">手握高付费意愿实战派老板社群，用你的真实 Demo 为其社群提供硬核提效案例背书，联合举办落地诊断会。</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 引擎二：公域透明橱窗矩阵 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-bold">引擎二 · 自主造血</span>
+                <span class="text-xs font-semibold text-slate-400">公域“透明橱窗”矩阵</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">Show, Don't Tell：只给老板看算账与实操</h4>
+              <div class="mt-2 p-2.5 rounded-lg bg-rose-50 border border-rose-100 text-xs text-rose-800">
+                <strong>绝对禁忌：</strong>严禁在公域大讲大模型原理、Prompt 技巧或 Agent 架构——那只会引来同行点赞和白嫖源码，吸引不到掏钱的老板！
+              </div>
+              <div class="mt-4 space-y-3 text-xs">
+                <div class="flex items-start gap-3">
+                  <span class="px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold shrink-0">小红书</span>
+                  <div class="text-slate-600"><strong class="text-slate-900">高意图搜索 + 暴力对比录屏：</strong>卡位“律所提效/标书审核/外贸录单”等精准长尾词，发 60 秒一镜到底实操录屏（乱糟糟扫描件拖入→一键吐出规范文书）。</div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 font-bold shrink-0">视频号+公众号</span>
+                  <div class="text-slate-600"><strong class="text-slate-900">微信生态承接 35~55 岁老板成交：</strong>视频号演示便于老板一键转发给合伙人/高管群；公众号发“第一性原理诊断长文”与脱敏项目账本复盘，立住顶级架构师专家人设。</div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="px-2 py-1 rounded bg-blue-100 text-blue-800 font-bold shrink-0">知乎</span>
+                  <div class="text-slate-600"><strong class="text-slate-900">长尾痛点搜索兜底：</strong>精准回答“批量金融借款案件如何降本提效”等具体运营难题，获取高意图私信。</div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-2 text-[11px] font-semibold">
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">内容三板斧：</span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800">① 算账型（省2助理）</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800">② 演示型（60s一镜到底）</span>
+                <span class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-800">③ 诊断型（痛批通用SaaS局限）</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 零风险破冰转化漏斗 -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm avoid-break">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
+              <h4 class="text-sm sm:text-base font-bold">零风险破冰转化漏斗（将陌生信任成本压至趋近于零）</h4>
+              <span class="text-xs text-emerald-400 font-semibold">AI 让 Demo 边际成本趋零，但成交转化率暴涨</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              <div class="bg-white/10 rounded-xl p-3.5 border border-white/10">
+                <div class="text-[11px] font-bold text-emerald-400">STEP 01</div>
+                <div class="mt-1 text-xs font-bold">公域 / 渠道触达</div>
+                <p class="mt-1 text-[11px] text-slate-300">实操对比视频或卖水人拉群暖场引荐</p>
+              </div>
+              <div class="bg-white/10 rounded-xl p-3.5 border border-white/10">
+                <div class="text-[11px] font-bold text-emerald-400">STEP 02</div>
+                <div class="mt-1 text-xs font-bold">获取 3~5 份脏文件</div>
+                <p class="mt-1 text-[11px] text-slate-300">引导发来团队最耗人力的脱敏原始件与输出模板</p>
+              </div>
+              <div class="bg-emerald-600/30 rounded-xl p-3.5 border border-emerald-400/50">
+                <div class="text-[11px] font-bold text-emerald-300">STEP 03 · 胜负手</div>
+                <div class="mt-1 text-xs font-bold">48h 免费真数据 Demo</div>
+                <p class="mt-1 text-[11px] text-emerald-100">直接用客户自家脏数据跑通流程演示</p>
+              </div>
+              <div class="bg-white/10 rounded-xl p-3.5 border border-white/10">
+                <div class="text-[11px] font-bold text-amber-400">STEP 04</div>
+                <div class="mt-1 text-xs font-bold">现场击穿信任</div>
+                <p class="mt-1 text-[11px] text-slate-300">老板眼见为实，从“买不买”变为“何时上线”</p>
+              </div>
+              <div class="bg-white/10 rounded-xl p-3.5 border border-white/10">
+                <div class="text-[11px] font-bold text-amber-400">STEP 05</div>
+                <div class="mt-1 text-xs font-bold">切入 3~8 万签约</div>
+                <p class="mt-1 text-[11px] text-slate-300">锚定 3~6 月回本，按 5-4-1 节奏落袋</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 1(d) 定价策略、成本账本与业务天花板 ==================== -->
+        <section id="sec-1d" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 1(d) · Pricing, Unit Economics &amp; Ceiling</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">定价策略、单位成本账本与业务天花板</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              <strong>定价铁律：严禁按“开发人天”报价，必须锚定客户的“人力替代成本”报价。</strong>AI 编码省下来的时间是你赚取 80%~90% 高毛利的护城河，绝不能成为打价格战的理由。
+            </p>
+          </div>
+
+          <!-- 三段式定价表 & 收款节奏 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden avoid-break">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900">「三段式」定价体系与风险控制</h4>
+              <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 text-xs font-bold">收款节奏：5-4-1（签约50% · 验收40% · 稳跑1月10%）</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-50/50 text-slate-500 border-b border-slate-200/80">
+                  <tr>
+                    <th class="py-3 px-5 font-semibold">收费项目</th>
+                    <th class="py-3 px-5 font-semibold">建议定价区间</th>
+                    <th class="py-3 px-5 font-semibold">商业逻辑与避坑边界</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="py-3.5 px-5 font-bold text-slate-900">1. 首单定制交付费</td>
+                    <td class="py-3.5 px-5 font-bold text-emerald-700 tabular-nums">3 万 ~ 8 万<br/><span class="text-[11px] font-medium text-slate-500">甜蜜区 4~6 万 · 底线 2.5 万</span></td>
+                    <td class="py-3.5 px-5 text-slate-600">单一环节提效报 3~5 万，跨部门闭环报 6~12 万。低于 2 万的单子沟通与售后成本会吃光利润，坚决拒接。</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3.5 px-5 font-bold text-slate-900">2. 年度运维与底座费</td>
+                    <td class="py-3.5 px-5 font-bold text-emerald-700 tabular-nums">首单的 15% ~ 20%<br/><span class="text-[11px] font-medium text-slate-500">约 0.6 万 ~ 1.5 万/年</span></td>
+                    <td class="py-3.5 px-5 text-slate-600">覆盖模型升级、提示词调优与小字段微调。首单合同明确写入“首年免费，次年起按年收取”，前置锁定续费心智。</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3.5 px-5 font-bold text-slate-900">3. 云资源与商业 API</td>
+                    <td class="py-3.5 px-5 font-bold text-amber-700">客户独立账号实报实销<br/><span class="text-[11px] font-medium text-slate-500">或转为高毛利业务额度包</span></td>
+                    <td class="py-3.5 px-5 text-slate-600">严禁将底层 Token/OCR 无限量包死在首单报价中，防止客户海量跑脏数据击穿项目毛利。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 客户出价意愿四断层 + 单项目显隐性成本拆解 -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 avoid-break">
+            <!-- 四断层 -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900 mb-4">中小企业老板出价意愿「四断层」图谱</h4>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-rose-50/70 border border-rose-200/70">
+                  <div class="w-24 text-xs font-extrabold text-rose-700 shrink-0 tabular-nums">&lt; 1 万元</div>
+                  <div class="text-xs text-slate-700"><strong>伪需求 / 白嫖重灾区：</strong>预期买全能标品，售后极琐碎，<span class="text-rose-700 font-bold">坚决拒接</span>。</div>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-300 shadow-sm">
+                  <div class="w-24 text-xs font-extrabold text-emerald-800 shrink-0 tabular-nums">2.5 ~ 5 万元</div>
+                  <div class="text-xs text-slate-800"><strong>老板个人拍板甜蜜区（主攻）：</strong>无需开合伙人大会，真数据 Demo 跑通后 <strong>2 周内成交</strong>，转化率最高。</div>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/80">
+                  <div class="w-24 text-xs font-extrabold text-emerald-700 shrink-0 tabular-nums">5 ~ 12 万元</div>
+                  <div class="text-xs text-slate-700"><strong>高利润核心提效区：</strong>认真核算 ROI、要求多节点打通与准确率兜底，决策期 3~6 周，粘性与续费率极高。</div>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-amber-50/70 border border-amber-200/80">
+                  <div class="w-24 text-xs font-extrabold text-amber-800 shrink-0 tabular-nums">&gt; 15 万元</div>
+                  <div class="text-xs text-slate-700"><strong>大企业流程陷阱区：</strong>陷入多方博弈、合规审查、长账期与需求蔓延，3 人以下精锐团队慎碰。</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 显性/隐性成本 -->
+            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm sm:text-base font-bold text-slate-900 mb-4">单项目真实成本结构拆解</h4>
+                <div class="space-y-3.5 text-xs">
+                  <div class="pb-3 border-b border-slate-100">
+                    <div class="flex justify-between font-bold text-slate-900">
+                      <span>显性硬成本（极低）</span>
+                      <span class="text-emerald-700 tabular-nums">1,500 ~ 3,500 元/单</span>
+                    </div>
+                    <p class="mt-1 text-slate-600">AI 编程与调试 API（500~1500元）、轻量托管摊销、小规模税费（1%~3%）。</p>
+                  </div>
+                  <div class="pb-3 border-b border-slate-100">
+                    <div class="flex justify-between font-bold text-slate-900">
+                      <span>可变获客成本（按渠道）</span>
+                      <span class="text-amber-700 tabular-nums">0% 或 15%~20%</span>
+                    </div>
+                    <p class="mt-1 text-slate-600">公域自获客现金成本趋 0；走卖水人/老客渠道让渡 15%~20% 首单返佣换速度。</p>
+                  </div>
+                  <div>
+                    <div class="flex justify-between font-bold text-rose-700">
+                      <span>隐性时间成本（真正约束）</span>
+                      <span class="tabular-nums">12 ~ 20 工作日/单</span>
+                    </div>
+                    <p class="mt-1 text-slate-600">写代码仅占 3 天，大头在售前 Demo 损耗（6~8天）、脏数据适配上线（5~8天）与培训磨合（3~4天）。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 p-3 rounded-xl bg-slate-900 text-white text-[11px] leading-relaxed">
+                <strong>核心洞见：</strong>只有把 80% 底座沉淀出来，将交付压进 10 天内，才能释放真正的产能与时薪杠杆。
+              </div>
+            </div>
+          </div>
+
+          <!-- 核心可视化 2：交互式 3 年财务滚雪球与人手天花板模拟器 -->
+          <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-7 avoid-break">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-5 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-600 text-white text-xs font-bold">图2</span>
+                  <h4 class="text-base sm:text-lg font-bold text-slate-900">交互式 3 年财务滚雪球与团队工时天花板模拟器</h4>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">拖动下方 3 个参数滑块，直观验证“提客单价 + 攒续费池”与“盲目扩招冲单量”对净利润与负荷率的截然不同影响。</p>
+              </div>
+              <button id="reset-sim-btn" class="self-start sm:self-center px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition no-print">
+                恢复默认（单兵模型）
+              </button>
+            </div>
+
+            <!-- 3 个实时拖动滑块 -->
+            <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/70">
+              <div>
+                <div class="flex justify-between items-baseline mb-2">
+                  <label for="slider-ticket" class="text-xs font-bold text-slate-700">平均首单客单价</label>
+                  <span class="text-base font-extrabold text-slate-900 tabular-nums"><span id="val-ticket">5.0</span> 万元</span>
+                </div>
+                <input id="slider-ticket" type="range" min="2" max="12" step="0.5" value="5" class="strategy-slider w-full"/>
+                <div class="flex justify-between text-[10px] text-slate-400 mt-1 tabular-nums"><span>2万</span><span>5万(甜蜜区)</span><span>12万</span></div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-baseline mb-2">
+                  <label for="slider-deals" class="text-xs font-bold text-slate-700">年新增交付单量</label>
+                  <span class="text-base font-extrabold text-slate-900 tabular-nums"><span id="val-deals">12</span> 单/年</span>
+                </div>
+                <input id="slider-deals" type="range" min="4" max="40" step="1" value="12" class="strategy-slider w-full"/>
+                <div class="flex justify-between text-[10px] text-slate-400 mt-1 tabular-nums"><span>4单</span><span>12单</span><span>40单</span></div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-baseline mb-2">
+                  <label for="slider-headcount" class="text-xs font-bold text-slate-700">团队总人数（含创始人）</label>
+                  <span class="text-base font-extrabold text-slate-900 tabular-nums"><span id="val-headcount">1</span> 人</span>
+                </div>
+                <input id="slider-headcount" type="range" min="1" max="6" step="1" value="1" class="strategy-slider w-full"/>
+                <div class="flex justify-between text-[10px] text-slate-400 mt-1 tabular-nums"><span>1人单兵</span><span>3人铁三角</span><span>6人</span></div>
+              </div>
+            </div>
+
+            <!-- 顶部实时 KPI 卡片 -->
+            <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="rounded-2xl border border-slate-200 p-4 bg-white">
+                <div class="text-xs text-slate-500 font-medium">第 3 年预估总营收</div>
+                <div class="mt-1 text-2xl font-extrabold text-slate-900 tabular-nums"><span id="kpi-y3-rev">--</span> <span class="text-xs font-semibold text-slate-500">万元</span></div>
+                <div class="mt-1 text-[11px] text-emerald-700 font-medium">其中老客续费占 <span id="kpi-y3-rec-share" class="tabular-nums">--</span>%</div>
+              </div>
+
+              <div class="rounded-2xl border border-emerald-200 p-4 bg-emerald-50/40">
+                <div class="text-xs text-emerald-800 font-medium">第 3 年预估净利润</div>
+                <div class="mt-1 text-2xl font-extrabold text-emerald-700 tabular-nums"><span id="kpi-y3-profit">--</span> <span class="text-xs font-semibold text-emerald-600">万元</span></div>
+                <div class="mt-1 text-[11px] text-slate-600">综合净利率 <span id="kpi-y3-margin" class="font-bold tabular-nums">--</span>%</div>
+              </div>
+
+              <div id="kpi-workload-card" class="rounded-2xl border border-amber-200 p-4 bg-amber-50/50 transition-colors">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-medium text-slate-700">团队工时负荷率</span>
+                  <span id="kpi-workload-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900">满载运行</span>
+                </div>
+                <div class="mt-1 text-2xl font-extrabold text-slate-900 tabular-nums"><span id="kpi-workload-pct">100</span>%</div>
+                <div class="mt-1 text-[11px] text-slate-600">舒适交付上限：<span id="kpi-capacity" class="font-bold tabular-nums">12</span> 单/年</div>
+              </div>
+            </div>
+
+            <!-- Chart.js 3 年财务分组柱状图 -->
+            <div class="mt-6 relative w-full h-[310px] sm:h-[340px]">
+              <canvas id="financialChart"></canvas>
+            </div>
+
+            <p class="mt-3 text-[11px] text-slate-400 leading-relaxed">
+              测算假设说明：老客次年续费比例为首单 18%、年留存率 80%；每增聘 1 名全职实施/售前人员综合人力成本 20 万元/年（不含创始人自身分红）；显性硬成本 0.2 万元/单 + 年固定工具杂费 2 万元；综合税费与平均渠道返佣预留为总营收的 12%；单人舒适交付上限 12 单/年，每增加 1 人增加 14 单/年交付容量。
+            </p>
+          </div>
+
+          <!-- 团队演进与天花板对比表 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden avoid-break">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900">团队演进阶段、产能上限与“增收不增利”天花板对照</h4>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-50/60 text-slate-500 border-b border-slate-200/80">
+                  <tr>
+                    <th class="py-3 px-4 font-semibold">发展阶段</th>
+                    <th class="py-3 px-4 font-semibold">角色配置</th>
+                    <th class="py-3 px-4 font-semibold">年交付舒适上限</th>
+                    <th class="py-3 px-4 font-semibold">年营收参考</th>
+                    <th class="py-3 px-4 font-semibold">预估年净利润</th>
+                    <th class="py-3 px-4 font-semibold">核心结论与瓶颈</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 tabular-nums">
+                  <tr>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">单兵作战（1人）</td>
+                    <td class="py-3.5 px-4 text-slate-600">架构师本人全包</td>
+                    <td class="py-3.5 px-4 text-slate-700">10~14 单</td>
+                    <td class="py-3.5 px-4 text-slate-700">50~75 万</td>
+                    <td class="py-3.5 px-4 font-bold text-emerald-700">40~60 万</td>
+                    <td class="py-3.5 px-4 text-slate-600">现金流极健康、零管理内耗，稳养高薪个体</td>
+                  </tr>
+                  <tr class="bg-emerald-50/40">
+                    <td class="py-3.5 px-4 font-bold text-emerald-900">黄金铁三角（3人）</td>
+                    <td class="py-3.5 px-4 text-slate-700">架构师 + 实施开发 + 售前交付</td>
+                    <td class="py-3.5 px-4 text-slate-800 font-semibold">25~38 单</td>
+                    <td class="py-3.5 px-4 text-slate-800 font-semibold">140~220 万</td>
+                    <td class="py-3.5 px-4 font-extrabold text-emerald-700">75~125 万</td>
+                    <td class="py-3.5 px-4 text-emerald-900 font-medium">效率与毛利最优形态，可稳步孵化标准产品</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3.5 px-4 font-bold text-rose-700">小型公司（5~8人）</td>
+                    <td class="py-3.5 px-4 text-slate-600">扩充销售、实施与专职售后</td>
+                    <td class="py-3.5 px-4 text-slate-700">45~65 单</td>
+                    <td class="py-3.5 px-4 text-slate-700">260~400 万</td>
+                    <td class="py-3.5 px-4 font-bold text-amber-700">80~120 万</td>
+                    <td class="py-3.5 px-4 text-rose-700"><strong>警惕增收不增利：</strong>未产品化前扩招会退化为外包</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 第二篇 标题分隔 ==================== -->
+        <div class="flex items-center gap-4 pt-6 page-break-before">
+          <div class="px-3.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-bold tracking-wider">PART 02</div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">合作与融资沟通</h2>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+
+        <!-- ==================== 2(a) 合作方洽谈与利润分成体系 ==================== -->
+        <section id="sec-2a" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 2(a) · Partner Negotiation &amp; Revenue Sharing</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">合作方洽谈定位与利润分成体系</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              与手握 B 端资源的朋友或老板谈判，<strong>第一原则是定位翻译</strong>：绝不自称“接 AI 软件外包”，而是定位为<strong>“帮老板用几万块替代几十万年薪人工的 AI 流程改造方”</strong>；同时用<strong>「48 小时免费真数据 Demo」</strong>彻底打消对方最担心的“推错东西丢面子”顾虑。
+            </p>
+          </div>
+
+          <!-- 四档行业惯例分成模型表 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden avoid-break">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900">B 端渠道与合伙人「四档分成」行业惯例对照表</h4>
+              <span class="text-xs font-semibold text-emerald-700">按参与深度灵活匹配</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-50/60 text-slate-500 border-b border-slate-200/80">
+                  <tr>
+                    <th class="py-3 px-4 font-semibold">合作档位</th>
+                    <th class="py-3 px-4 font-semibold">合作方承担角色</th>
+                    <th class="py-3 px-4 font-semibold">行业通用分成 / 激励标准</th>
+                    <th class="py-3 px-4 font-semibold">适用对象</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">1. 轻度牵线居间</td>
+                    <td class="py-3.5 px-4 text-slate-600">提供精准线索 + 拉群/组局暖场，后续方案、谈判、交付、回款全由我方完成。</td>
+                    <td class="py-3.5 px-4 font-bold text-emerald-700">首单实收净额 10%~15%<br/><span class="text-[11px] font-normal text-slate-500">一次性结清，不参与次年运维</span></td>
+                    <td class="py-3.5 px-4 text-slate-600">个人朋友、老同事、行业圈内人</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">2. 深度促单渠道</td>
+                    <td class="py-3.5 px-4 text-slate-600">除引荐外，全程参与商务谈判、客户预期管理、催款及长期客情维护。</td>
+                    <td class="py-3.5 px-4 font-bold text-emerald-700">首单实收净额 20%~30%<br/><span class="text-[11px] font-normal text-slate-500">协助续费/增购持续分润 10%~15%</span></td>
+                    <td class="py-3.5 px-4 text-slate-600">SaaS 代理商、投流代运营、企业顾问</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3.5 px-4 font-bold text-slate-900">3. 贴牌/白标底价</td>
+                    <td class="py-3.5 px-4 text-slate-600">对方以自有品牌直接与客户签合同收款，我方作为幕后技术交付中心。</td>
+                    <td class="py-3.5 px-4 font-bold text-amber-700">给予标准价 6~7 折渠道底价<br/><span class="text-[11px] font-normal text-slate-500">终端溢价 100% 归合作方所有</span></td>
+                    <td class="py-3.5 px-4 text-slate-600">不愿暴露自有客户池的 B 端服务商</td>
+                  </tr>
+                  <tr class="bg-amber-50/40">
+                    <td class="py-3.5 px-4 font-bold text-slate-900">4. 业务合伙人共创</td>
+                    <td class="py-3.5 px-4 text-slate-700">深度投入获客体系搭建与商务扩张，与你长期绑定共创事业。</td>
+                    <td class="py-3.5 px-4 font-bold text-rose-700">严禁第一天均分股权！<br/><span class="text-[11px] font-semibold text-slate-700">项目净利润分红 30%~40% + 里程碑转股（共创 50~100 万回款后工商确权）</span></td>
+                    <td class="py-3.5 px-4 text-slate-700">具备极强 B 端销售能力的资深合伙人</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 必须锁死的 4 条合作底线 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 avoid-break">
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+              <div class="text-xs font-bold text-emerald-700">底线 01 · 基数清晰</div>
+              <h5 class="mt-1 text-sm font-bold text-slate-900">只按「实收净额」结算</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">严禁按合同总额算佣金，必须扣除税点（1%~6%）及客户自付的第三方云资源/API 代付成本后再按比例核算。</p>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+              <div class="text-xs font-bold text-emerald-700">底线 02 · 极速口碑</div>
+              <h5 class="mt-1 text-sm font-bold text-slate-900">背靠背 · 3 工作日打款</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">客户每回款一笔，3 个工作日内即把对应比例分成打给对方。绝不垫付佣金防坏账，到账火速结算立住顶级靠谱人设。</p>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+              <div class="text-xs font-bold text-amber-700">底线 03 · 复购界定</div>
+              <h5 class="mt-1 text-sm font-bold text-slate-900">提前约定 12 个月增购</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">首单高比例分润；12 个月内二期增购若对方参与促单分 15%，未参与给 5%~10% 感恩茶水费，既体面又不背永久包袱。</p>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+              <div class="text-xs font-bold text-amber-700">底线 04 · 圈层智慧</div>
+              <h5 class="mt-1 text-sm font-bold text-slate-900">大老板用「价值置换」</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">高净值老板看不上几千块返佣，直接谈钱反显生分。改为免费为其自家公司搭一套内部 AI 提效工具或担任常年 AI 顾问。</p>
+            </div>
+          </div>
+
+          <!-- 可一键复制的实战沟通脚本 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 avoid-break">
+            <!-- 脚本 1：茶桌/饭局 1 分钟口语开场 -->
+            <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
+                  <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">SCRIPT 01</span>
+                    <h5 class="text-sm font-bold text-white">茶桌 / 饭局 1 分钟口语开场</h5>
+                  </div>
+                  <button onclick="copyScript('script-tea', this)" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shrink-0 no-print">
+                    一键复制
+                  </button>
+                </div>
+                <p id="script-tea" class="mt-3 text-xs sm:text-[13px] text-slate-300 leading-relaxed whitespace-pre-line">“老王，我最近结合前十几年做架构的底子，跑通了一个挺有意思的小生意。我刚帮两家律所做了套 AI 流程改造，他们以前接批量案子，全靠招一堆助理天天录卷宗、改文书，利润全被人工吃光了。我用现在的 AI 架构帮他们重新搭了条流水线，几天的活压缩到半小时，直接省了一两个人。现在 AI 把开发成本打穿了，这种过去几十万才干得了的定制，现在几万块就能落地，老板三四个月就回本。我想顺着这条路，专门做律所、招投标、外贸这些文档特别杂的 10 到 50 人小公司。你圈子里这种实战派老板多，我也不让你瞎背书——你觉得谁最近在喊招人贵、人效低的，拉个群，我免费拿他家真实文件 2 天跑个样板出来。成了咱们按行规分润，不成他也欠你个人情，觉得你给他介绍了个懂行的技术专家。”</p>
+              </div>
+            </div>
+
+            <!-- 脚本 2：微信极简先导破冰话术 -->
+            <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
+                  <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">SCRIPT 02</span>
+                    <h5 class="text-sm font-bold text-white">微信极简先导破冰话术</h5>
+                  </div>
+                  <button onclick="copyScript('script-wechat', this)" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shrink-0 no-print">
+                    一键复制
+                  </button>
+                </div>
+                <p id="script-wechat" class="mt-3 text-xs sm:text-[13px] text-slate-300 leading-relaxed whitespace-pre-line">【称呼】，最近我结合以前做架构的底子，落地了一个帮中小企业降本的 AI 轻定制业务，已经帮律所跑通了真实案例——把原来需要几个助理干好几天的卷宗整理和文书生成，压缩到半小时跑完，客户直接省下了招人的硬成本。
+
+现在 AI 把开发成本打下来了，过去几十万的流程定制现在 3~6 万就能落地，特别适合 10~50 人的律所、招投标、财税、外贸这类文档极杂的小公司，老板三四个月就回本。
+
+我知道你手里实战派企业主资源多，咱们不搞硬推销——你圈子里谁最近在头疼招人贵、业务扩张卡人效的，拉个群，我免费拿他家 3 份脱敏文件 48 小时跑出真实效果演示给他看，成了按行规分润，不成也绝不砸你口碑。我整理了一页纸的合作思路，方便的话发你看看，哪天喝杯茶细聊？</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 2(b) 投资人推介与商业逻辑阐述 ==================== -->
+        <section id="sec-2b" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 2(b) · Investor Pitch &amp; Viability Narrative</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">投资人推介逻辑与资本估值跃迁</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              传统 VC 对“软件定制”存在天然偏见（人力密集、难规模化、低估值倍数）。向投资人或战略伙伴阐述本项目时，绝不能陷入外包叙事，而必须亮出极具穿透力的<strong>「五重可行性论证逻辑」</strong>，证明轻定制只是我们的<strong>“付费研发入口（Paid R&amp;D）”</strong>。
+            </p>
+          </div>
+
+          <!-- 五重可行性论证逻辑 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 avoid-break">
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+              <div class="text-xs font-extrabold text-emerald-700 uppercase">01 · Paid R&amp;D 零烧钱探索</div>
+              <h5 class="mt-1.5 text-sm font-bold text-slate-900">客户掏钱帮我们验证真实刚需</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">传统 SaaS 烧投资人几百万闭门造车却找不到 PMF；我们用 80% 毛利的轻定制从 Day 1 实现正向现金流，每一单都在真实生产现场打磨产品原型。</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+              <div class="text-xs font-extrabold text-emerald-700 uppercase">02 · 预算池跃迁（IT → HR）</div>
+              <h5 class="mt-1.5 text-sm font-bold text-slate-900">吃进大 10 倍的人力替代预算</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">中国中小企业 IT 预算微薄，但 HR 人工成本池极其庞大。AI 让我们从卖提效软件升维为替代初级人力，单客支付意愿直接提升 5~10 倍。</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+              <div class="text-xs font-extrabold text-emerald-700 uppercase">03 · Dirty Data Moat</div>
+              <h5 class="mt-1.5 text-sm font-bold text-slate-900">底层开源降价反而是成本红利</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">不赌基座大模型，模型越卷越便宜我们的毛利越高。真正护城河是在数十家企业现场攒下的非标脏数据规则库、防幻觉校验与行业评测集。</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+              <div class="text-xs font-extrabold text-emerald-700 uppercase">04 · 负 CAC 与高 NRR</div>
+              <h5 class="mt-1.5 text-sm font-bold text-slate-900">净收入留存率突破 130%~150%</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">一级火箭本身高毛利盈利（相当于获客成本 CAC 极低甚至为负）；二级业务额度包与三级多部门 Agent 扩面驱动存量客户持续增购。</p>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm md:col-span-2">
+              <div class="text-xs font-extrabold text-amber-700 uppercase">05 · 务实融资节奏建议</div>
+              <h5 class="mt-1.5 text-sm font-bold text-slate-900">先靠高毛利自循环，等标准引擎跑通再拿钱放大</h5>
+              <p class="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                <strong>1~3 人早期阶段完全不需要融资</strong>——现金流极健康，过早融资只会低价稀释股权并被资本催熟走形。最佳融资窗口是：<strong>服务完 15~20 家同构客户、沉淀出高复购标准微 SaaS 或 RaaS 流水引擎、需要资金快速铺设全国渠道与销售团队时</strong>，再启动天使 / Pre-A 轮融资，此时估值谈判掌握绝对主动权。
+              </p>
+            </div>
+          </div>
+
+          <!-- Chart.js 资本估值倍数跃迁图 -->
+          <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm avoid-break">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-4 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-900 text-white text-xs font-bold">图3</span>
+                  <h4 class="text-base font-bold text-slate-900">资本市场估值倍数跃迁路径（从人力定制到微 SaaS / RaaS）</h4>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">通过三级火箭改变收入结构（经常性订阅与按量流水占比提升），实现估值逻辑的阶梯式跃升。</p>
+              </div>
+              <span class="text-xs font-semibold text-emerald-700">倍数中枢：1.5x → 4.0x → 10.0x</span>
+            </div>
+            <div class="mt-5 relative w-full h-[270px] sm:h-[290px]">
+              <canvas id="valuationChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 2(c) 未来发展的四大演进可能性 ==================== -->
+        <section id="sec-2c" class="scroll-mt-16 space-y-8">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-700">Section 2(c) · Future Evolution &amp; Strategic Horizons</div>
+            <h3 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">未来发展的四大战略演进可能性</h3>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              当手里沉淀了可复用的 80% 工程底座、行业脏数据规则库，以及数十上百家深度信任的实战派企业主入口后，业务天然具备向四条高价值「第二曲线」演进的战略期权：
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 avoid-break">
+            <!-- 曲线一 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:border-emerald-400 transition">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-bold">曲线一 · 产品化双轮</span>
+                <span class="text-xs font-semibold text-slate-400">PLG + SLG</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">垂直行业微 SaaS（标品引流 + 定制赚大钱）</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                服务 15 家同类机构后，把 90% 客户反复买单的单一刚需（如批量文书预处理/标书废标项初筛）抽离为 <strong>¥3,800/年</strong> 的标准订阅工具，通过公域低门槛铺量，再将高活跃大客户筛选出来向上转化 5~10 万深度定制单。
+              </p>
+            </div>
+
+            <!-- 曲线二 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:border-emerald-400 transition">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 text-xs font-bold">曲线二 · 切入交易流水</span>
+                <span class="text-xs font-semibold text-slate-400">Result-as-a-Service</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">RaaS 按结果 / 按量计费（AI 数字外包工厂）</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                针对连系统都不愿自己操作的小微机构，直接承接其非标文档处理业务——依托自研 AI 底座按件计费（如按份处理批量诉讼材料、标书初审或外贸单证），从“卖软件一次钱”彻底升级为切入行业交易流水的持续抽成。
+              </p>
+            </div>
+
+            <!-- 曲线三 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:border-emerald-400 transition">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">曲线三 · 吃透单客 LTV</span>
+                <span class="text-xs font-semibold text-slate-400">External AI CTO</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">单客多部门横向扩面（中小企业外部 AI CTO）</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                从第一年的核心文档流转出发，顺理成章切入客户的<strong>销售线索清洗、自动报价单生成、财务自动对账、法务合规审查与私有知识库</strong>，将单个高信任客户的综合产值由 5 万拉升至 15 万+，成为长期绑定的数字化基建伙伴。
+              </p>
+            </div>
+
+            <!-- 曲线四 -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:border-emerald-400 transition">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-800 text-xs font-bold">曲线四 · 资本与生态出口</span>
+                <span class="text-xs font-semibold text-slate-400">M&amp;A / Distribution</span>
+              </div>
+              <h4 class="mt-3 text-lg font-bold text-slate-900">生态流量变现与战略并购出口</h4>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                手握数百家高净值、高付费能力中小企业的核心生产流入口，既能作为精准 B 端服务（财税、签章、金融、企业服务）的高转化分发平台，更是传统垂直行业 SaaS 厂商急需补齐 AI 落地能力时的优质战略并购标的。
+              </p>
+            </div>
+          </div>
+
+          <!-- 行动清单尾注 -->
+          <div class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 shadow-md avoid-break">
+            <div class="text-xs font-bold uppercase tracking-widest text-emerald-400">IMMEDIATE ACTION PLAN · 30 天冷启动优先级</div>
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+              <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div class="font-bold text-emerald-300">Week 1：资产封装</div>
+                <p class="mt-1.5 text-slate-300 text-xs leading-relaxed">将已交付的两个律所案例脱敏，录制 60 秒一镜到底暴力对比视频，并提炼出 1 页纸 ROI 算账案例卡。</p>
+              </div>
+              <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div class="font-bold text-amber-300">Week 2~3：借船与破冰</div>
+                <p class="mt-1.5 text-slate-300 text-xs leading-relaxed">约聊 3~5 位律所案源代运营/SaaS 代理商及 B 端人脉朋友，用「48h 免费真数据 Demo + 痛快分润」跑通首批 5 个精准样板线索。</p>
+              </div>
+              <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div class="font-bold text-white">Week 4+：底座抽离</div>
+                <p class="mt-1.5 text-slate-300 text-xs leading-relaxed">每交付 1 家新客户即反哺 80% 通用文档解析与校验底座，同步启动小红书/视频号透明橱窗内容周更。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="pt-6 pb-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+          <div>《AI 时代高文档密度中小企业「流程降本与托管」商业战略全景报告》</div>
+          <div>内部复盘 · 渠道洽谈 · 路演展示专用</div>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== 交互与可视化核心脚本 ==================== -->
+  <script>
+    // ---------- 1. 顶部阅读进度条 & 左侧导航高亮 ----------
+    (function initNavigation() {
+      const progressBar = document.getElementById('reading-progress');
+      const desktopNav = document.getElementById('desktop-nav');
+      const mobileNavLinks = document.getElementById('mobile-nav-links');
+      const mobileDrawer = document.getElementById('mobile-drawer');
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileCloseBtn = document.getElementById('mobile-close-btn');
+      const mobileBackdrop = document.getElementById('mobile-drawer-backdrop');
+
+      // 克隆桌面端导航到移动端抽屉
+      if (desktopNav && mobileNavLinks) {
+        mobileNavLinks.innerHTML = desktopNav.innerHTML;
+        mobileNavLinks.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        });
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => mobileDrawer.classList.remove('hidden'));
+      }
+      if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      }
+      if (mobileBackdrop) {
+        mobileBackdrop.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      }
+
+      // 滚动进度监听
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+        if (progressBar) progressBar.style.width = pct + '%';
+      }, { passive: true });
+
+      // IntersectionObserver 监听当前阅读章节
+      const sections = document.querySelectorAll('section[id]');
+      const allNavLinks = document.querySelectorAll('.nav-link');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            allNavLinks.forEach(link => {
+              const isMatch = link.getAttribute('href') === '#' + id;
+              link.classList.toggle('active', isMatch);
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -65% 0px', threshold: 0.01 });
+
+      sections.forEach(sec => observer.observe(sec));
+    })();
+
+    // ---------- 2. Toast 轻提示与一键复制功能 ----------
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-lg border border-emerald-500/40 flex items-center gap-2 transition-all duration-300 opacity-0 translate-y-2';
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>${message}</span>`;
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-2');
+      });
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 2200);
+    }
+
+    function copyScript(elementId, btn) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText.trim();
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (ok) {
+          const orig = btn.innerText;
+          btn.innerText = '已复制 ✓';
+          btn.classList.replace('bg-emerald-600', 'bg-slate-700');
+          showToast('话术已复制到剪贴板，可直接粘贴使用');
+          setTimeout(() => {
+            btn.innerText = orig;
+            btn.classList.replace('bg-slate-700', 'bg-emerald-600');
+          }, 1800);
+        } else {
+          showToast('复制失败，请手动选中复制');
+        }
+      } catch (err) {
+        showToast('复制失败，请手动选中复制');
+      }
+    }
+
+    // ---------- 3. 系统动力因果回路图交互控制 ----------
+    const loopDescriptions = {
+      all: {
+        badge: '全局系统动力学视角',
+        badgeClass: 'bg-emerald-500/20 text-emerald-300',
+        html: '本业务能否穿越传统外包宿命，取决于<strong class="text-white">“放大三条正向增强飞轮（R1 工程复利、R2 存量增购、R3 渠道口碑）”</strong>的同时，用严格的客单底线（≥2.5万）、同构场景聚焦与克制的人力编制，死死锁住<strong class="text-rose-300">两条制约回路（B1 非代码摩擦、B2 过早扩招）</strong>。'
+      },
+      R1: {
+        badge: 'R1 工程复利飞轮（正向增强）',
+        badgeClass: 'bg-emerald-500/25 text-emerald-300',
+        html: '<strong class="text-white">核心机制：</strong>聚焦同构垂直场景交付 → 持续沉淀「80% 标准化底座 + 脏数据校验规则库」 → 单单交付周期从 20 天骤降至 4 天、毛利稳居 80%~90% → 具备极低成本 48 小时跑通真数据 Demo 的降维打击力 → 转化率飙升、签约放量，反哺更多行业样本。'
+      },
+      R2: {
+        badge: 'R2 存量增购飞轮（正向增强）',
+        badgeClass: 'bg-emerald-500/25 text-emerald-300',
+        html: '<strong class="text-white">核心机制：</strong>系统深度嵌入客户每日核心生产流 → 形成极高替换成本与老板深度信任 → 顺理成章切入年度运维费、70%+ 毛利的业务额度包、AI 内训与多部门 Agent 增购 → 单客 2 年 LTV 由 5 万增至 15 万+，ARR 滚雪球并反哺标准微 SaaS 研发。'
+      },
+      R3: {
+        badge: 'R3 渠道口碑飞轮（正向增强）',
+        badgeClass: 'bg-emerald-500/25 text-emerald-300',
+        html: '<strong class="text-white">核心机制：</strong>“省掉 1~2 名助理、3~6 个月回本”的硬核实战案例 + “先拿客户真数据跑通再签约”的零口碑风险机制 → 彻底激活投流代运营、SaaS 代理商等“卖水人”与老客户主动转介绍 → 获客成本（CAC）大幅坍塌，驱动新单滚雪球。'
+      },
+      B1: {
+        badge: 'B1 非代码摩擦约束（制约红线）',
+        badgeClass: 'bg-rose-500/25 text-rose-300',
+        html: '<strong class="text-white">致命风险：</strong>一旦经不住诱惑跨场景乱接单，或接低于 2 万的低价单，AI 虽让写代码变快，但需求梳理、脏数据清洗与无休止售后磨合会瞬间吞噬架构师 100% 精力，导致交付延期、口碑坍塌，从源头卡死新单增长。'
+      },
+      B2: {
+        badge: 'B2 盲目扩招陷阱（制约红线）',
+        badgeClass: 'bg-rose-500/25 text-rose-300',
+        html: '<strong class="text-white">致命风险：</strong>在 80% 标准化底座未成熟前，因订单增多而急于扩招至 5~8 人以上，固定人力成本（20万+/人/年）与内部管理内耗会急剧飙升，导致典型的“增收不增利”，净利率坍塌并拖垮现金流。'
+      }
+    };
+
+    function highlightLoop(loopKey) {
+      const nodes = document.querySelectorAll('#cld-svg .cld-node');
+      const edges = document.querySelectorAll('#cld-svg .cld-edge');
+      const badges = document.querySelectorAll('#cld-svg .cld-badge');
+      const btns = document.querySelectorAll('#cld-controls .cld-btn');
+
+      // 更新按钮激活样式
+      btns.forEach(btn => {
+        const key = btn.getAttribute('data-loop');
+        const isActive = key === loopKey;
+        if (key === 'all') {
+          btn.className = isActive
+            ? 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white shadow-sm transition'
+            : 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+        } else if (key.startsWith('R')) {
+          btn.className = isActive
+            ? 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white shadow-sm transition'
+            : 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition';
+        } else {
+          btn.className = isActive
+            ? 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-sm transition'
+            : 'cld-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200 transition';
+        }
+      });
+
+      // 高亮或淡化 SVG 元素
+      const toggleGroup = (list) => {
+        list.forEach(el => {
+          const loops = (el.getAttribute('data-loops') || '').split(' ');
+          if (loopKey === 'all') {
+            el.classList.remove('cld-dimmed', 'cld-highlighted');
+          } else if (loops.includes(loopKey)) {
+            el.classList.remove('cld-dimmed');
+            el.classList.add('cld-highlighted');
+          } else {
+            el.classList.remove('cld-highlighted');
+            el.classList.add('cld-dimmed');
+          }
+        });
+      };
+
+      toggleGroup(nodes);
+      toggleGroup(edges);
+      toggleGroup(badges);
+
+      // 更新解说文案
+      const info = loopDescriptions[loopKey] || loopDescriptions.all;
+      const badgeEl = document.getElementById('cld-exp-badge');
+      const textEl = document.getElementById('cld-exp-text');
+      if (badgeEl) {
+        badgeEl.className = `px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 self-start sm:self-center ${info.badgeClass}`;
+        badgeEl.textContent = info.badge;
+      }
+      if (textEl) {
+        textEl.innerHTML = info.html;
+      }
+    }
+
+    document.querySelectorAll('#cld-controls .cld-btn').forEach(btn => {
+      btn.addEventListener('click', () => highlightLoop(btn.getAttribute('data-loop')));
+    });
+
+    // ---------- 4. 图表初始化（Chart.js） ----------
+    window.addEventListener('DOMContentLoaded', () => {
+      // 通用 Chart.js 字体配置
+      Chart.defaults.font.family = "Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif";
+      Chart.defaults.color = '#475569';
+
+      // --- 4A. 可行性五维评估雷达图 ---
+      const radarCtx = document.getElementById('feasibilityRadar');
+      if (radarCtx) {
+        new Chart(radarCtx, {
+          type: 'radar',
+          data: {
+            labels: [
+              '技术成熟度与成本优势',
+              '客户付费痛点刚性',
+              '轻资产启动安全性',
+              '已有实战验证度',
+              '非代码摩擦风险管控'
+            ],
+            datasets: [{
+              label: '当前业务评估得分',
+              data: [95, 90, 92, 85, 70],
+              backgroundColor: 'rgba(5, 150, 105, 0.18)',
+              borderColor: '#059669',
+              borderWidth: 2.5,
+              pointBackgroundColor: '#0F172A',
+              pointBorderColor: '#FFFFFF',
+              pointBorderWidth: 2,
+              pointRadius: 4.5,
+              pointHoverRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                min: 0,
+                max: 100,
+                ticks: {
+                  stepSize: 20,
+                  backdropColor: 'transparent',
+                  font: { size: 10 }
+                },
+                grid: { color: '#E2E8F0' },
+                angleLines: { color: '#E2E8F0' },
+                pointLabels: {
+                  color: '#0F172A',
+                  font: { size: 11.5, weight: '600' }
+                }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#0F172A',
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => ` 评估得分：${ctx.parsed.r} / 100 分`
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // --- 4B. 交互式 3 年财务滚雪球模拟器 ---
+      const finCtx = document.getElementById('financialChart');
+      let finChart = null;
+
+      function computeFinancials(ticket, deals, headcount) {
+        const y1Init = deals * ticket;
+        const y1Rec = 0;
+        const y1Rev = y1Init + y1Rec;
+
+        const y2Init = deals * ticket;
+        const y2Rec = deals * 0.8 * ticket * 0.18;
+        const y2Rev = y2Init + y2Rec;
+
+        const y3Init = deals * ticket;
+        const y3Rec = (deals * 0.8 + deals * 0.64) * ticket * 0.18;
+        const y3Rev = y3Init + y3Rec;
+
+        const calcCost = (rev) => (headcount - 1) * 20 + 2 + deals * 0.2 + rev * 0.12;
+        const y1Cost = calcCost(y1Rev);
+        const y2Cost = calcCost(y2Rev);
+        const y3Cost = calcCost(y3Rev);
+
+        const y1Profit = y1Rev - y1Cost;
+        const y2Profit = y2Rev - y2Cost;
+        const y3Profit = y3Rev - y3Cost;
+
+        const capacity = 12 + (headcount - 1) * 14;
+        const workloadPct = Math.round((deals / capacity) * 100);
+
+        return {
+          init: [y1Init, y2Init, y3Init].map(v => +v.toFixed(1)),
+          rec: [y1Rec, y2Rec, y3Rec].map(v => +v.toFixed(1)),
+          cost: [y1Cost, y2Cost, y3Cost].map(v => +v.toFixed(1)),
+          profit: [y1Profit, y2Profit, y3Profit].map(v => +v.toFixed(1)),
+          y3Rev: +y3Rev.toFixed(1),
+          y3Rec: +y3Rec.toFixed(1),
+          y3Profit: +y3Profit.toFixed(1),
+          y3Margin: y3Rev > 0 ? Math.round((y3Profit / y3Rev) * 100) : 0,
+          y3RecShare: y3Rev > 0 ? Math.round((y3Rec / y3Rev) * 100) : 0,
+          capacity,
+          workloadPct
+        };
+      }
+
+      function updateSimulator() {
+        const ticket = parseFloat(document.getElementById('slider-ticket').value);
+        const deals = parseInt(document.getElementById('slider-deals').value, 10);
+        const headcount = parseInt(document.getElementById('slider-headcount').value, 10);
+
+        document.getElementById('val-ticket').textContent = ticket.toFixed(1);
+        document.getElementById('val-deals').textContent = deals;
+        document.getElementById('val-headcount').textContent = headcount;
+
+        const res = computeFinancials(ticket, deals, headcount);
+
+        // 更新顶部 KPI
+        document.getElementById('kpi-y3-rev').textContent = res.y3Rev.toFixed(1);
+        document.getElementById('kpi-y3-rec-share').textContent = res.y3RecShare;
+        document.getElementById('kpi-y3-profit').textContent = res.y3Profit.toFixed(1);
+        document.getElementById('kpi-y3-margin').textContent = res.y3Margin;
+        document.getElementById('kpi-workload-pct').textContent = res.workloadPct;
+        document.getElementById('kpi-capacity').textContent = res.capacity;
+
+        // 负荷率状态预警切换
+        const card = document.getElementById('kpi-workload-card');
+        const badge = document.getElementById('kpi-workload-badge');
+        if (res.workloadPct <= 85) {
+          card.className = 'rounded-2xl border border-emerald-200 p-4 bg-emerald-50/50 transition-colors';
+          badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-200 text-emerald-900';
+          badge.textContent = '健康可复用';
+        } else if (res.workloadPct <= 110) {
+          card.className = 'rounded-2xl border border-amber-200 p-4 bg-amber-50/50 transition-colors';
+          badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900';
+          badge.textContent = '满载运行';
+        } else {
+          card.className = 'rounded-2xl border border-rose-300 p-4 bg-rose-50/70 transition-colors';
+          badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-600 text-white';
+          badge.textContent = '严重超载 · 需提价或招人';
+        }
+
+        // 渲染或更新 Chart.js 柱状图
+        if (!finChart && finCtx) {
+          finChart = new Chart(finCtx, {
+            type: 'bar',
+            data: {
+              labels: ['第 1 年', '第 2 年', '第 3 年'],
+              datasets: [
+                {
+                  label: '首单交付营收（万元）',
+                  data: res.init,
+                  backgroundColor: '#0F172A',
+                  borderRadius: 6,
+                  stack: 'revenue'
+                },
+                {
+                  label: '老客续费营收（万元）',
+                  data: res.rec,
+                  backgroundColor: '#10B981',
+                  borderRadius: 6,
+                  stack: 'revenue'
+                },
+                {
+                  label: '综合总成本（万元）',
+                  data: res.cost,
+                  backgroundColor: '#F43F5E',
+                  borderRadius: 6,
+                  stack: 'cost'
+                },
+                {
+                  label: '预估年净利润（万元）',
+                  data: res.profit,
+                  backgroundColor: '#F59E0B',
+                  borderRadius: 6,
+                  stack: 'profit'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              scales: {
+                x: {
+                  grid: { display: false },
+                  ticks: { font: { size: 12, weight: '700' }, color: '#0F172A' }
+                },
+                y: {
+                  grid: { color: '#F1F5F9' },
+                  ticks: {
+                    callback: val => val + ' 万'
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: { usePointStyle: true, boxWidth: 8, padding: 16, font: { size: 11.5 } }
+                },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 12,
+                  cornerRadius: 10,
+                  callbacks: {
+                    label: ctx => ` ${ctx.dataset.label}：${ctx.parsed.y} 万元`
+                  }
+                }
+              }
+            }
+          });
+        } else if (finChart) {
+          finChart.data.datasets[0].data = res.init;
+          finChart.data.datasets[1].data = res.rec;
+          finChart.data.datasets[2].data = res.cost;
+          finChart.data.datasets[3].data = res.profit;
+          finChart.update();
+        }
+      }
+
+      ['slider-ticket', 'slider-deals', 'slider-headcount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateSimulator);
+      });
+
+      const resetBtn = document.getElementById('reset-sim-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          document.getElementById('slider-ticket').value = 5;
+          document.getElementById('slider-deals').value = 12;
+          document.getElementById('slider-headcount').value = 1;
+          updateSimulator();
+          showToast('已恢复默认单兵财务模型');
+        });
+      }
+
+      updateSimulator();
+
+      // --- 4C. 投资人估值倍数跃迁阶梯柱状图 ---
+      const valCtx = document.getElementById('valuationChart');
+      if (valCtx) {
+        new Chart(valCtx, {
+          type: 'bar',
+          data: {
+            labels: [
+              '阶段 1：纯项目软件定制\n（1~2x 营收估值）',
+              '阶段 2：AI 托管服务商 AI MSP\n（3~5x 营收估值）',
+              '阶段 3：垂直微 SaaS + RaaS\n（8~12x ARR 估值）'
+            ],
+            datasets: [
+              {
+                label: '保守估值下限（x）',
+                data: [1, 3, 8],
+                backgroundColor: '#94A3B8',
+                borderRadius: 8,
+                barPercentage: 0.55
+              },
+              {
+                label: '优质标的上限（x）',
+                data: [2, 5, 12],
+                backgroundColor: ['#475569', '#059669', '#0F172A'],
+                borderRadius: 8,
+                barPercentage: 0.55
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { font: { size: 11.5, weight: '600' }, color: '#0F172A' }
+              },
+              y: {
+                beginAtZero: true,
+                max: 14,
+                grid: { color: '#F1F5F9' },
+                ticks: { callback: v => v + 'x' }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { usePointStyle: true, boxWidth: 8, padding: 16, font: { size: 11.5 } }
+              },
+              tooltip: {
+                backgroundColor: '#0F172A',
+                padding: 10,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => ` ${ctx.dataset.label}：${ctx.parsed.y} 倍`
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

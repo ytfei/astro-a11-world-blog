@@ -8,7 +8,8 @@
     "build": "astro build",
     "deploy": "astro build && wrangler deploy",
     "preview": "wrangler dev",
-    "new": "node scripts/new-post.mjs"
+    "new": "node scripts/new-post.mjs",
+    "report": "node scripts/new-report.mjs"
   },
   "packageManager": "pnpm@12.21.0",
   "dependencies": {
