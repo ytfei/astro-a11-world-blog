@@ -1,8 +1,8 @@
 // 站点全局配置，改这里即可
-export const SITE_TITLE = '思考与对话'
+export const SITE_TITLE = '思考与分析'
 export const SITE_SLOGAN = '丰沛时代，选择即品味。'
 export const SITE_DESCRIPTION =
-  '记录思考、分析，以及与 AI 对话后整理出的问答笔记'
+  '记录思考、分析。信息丰沛的时代，选择即品味。'
 export const SITE_AUTHOR = 'Mason'
 
 // 各内容集合的展示名称
