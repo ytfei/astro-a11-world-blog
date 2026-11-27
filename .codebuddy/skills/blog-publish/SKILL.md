@@ -116,7 +116,7 @@ pnpm build   # 必须通过；frontmatter 不合 schema 会在此报错
 - push 和 deploy 是对外可见动作，先征得用户同意：
   - `git push` → Cloudflare Pages 自动构建上线
   - 或 `pnpm deploy` → 本地直接部署到 Cloudflare Workers
-- 上线后可用站点域名 `https://astro-a11-world-blog.pages.dev` 拼出文章 URL 告知用户。
+- 上线后可用站点域名 `https://a11.world` 拼出文章 URL 告知用户。
 
 ## 示例
 

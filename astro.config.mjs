@@ -9,8 +9,8 @@ import { remarkQaContainers } from './src/lib/remark-qa.mjs'
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  // 部署后改成你的正式域名（Cloudflare Pages 自定义域名或 *.pages.dev）
-  site: 'https://astro-a11-world-blog.pages.dev',
+  // 正式域名，sitemap、canonical、RSS 均引用此配置
+  site: 'https://a11.world',
   output: 'static',
   integrations: [sitemap()],
   vite: {
