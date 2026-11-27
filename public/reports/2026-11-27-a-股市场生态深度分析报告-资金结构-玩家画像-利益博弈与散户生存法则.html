@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A 股市场生态深度分析报告：资金结构、玩家画像、利益博弈与散户生存法则</title>
+
+  <!-- 字体引入：金融智库衬线标题 + 现代无衬线正文与等宽数字 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#FCFBF9',
+            surface: '#F8FAFC',
+            navy: {
+              DEFAULT: '#1E3A5F',
+              dark: '#142944',
+              light: '#2C5282',
+              soft: '#EEF3F8',
+            },
+            tealbrand: {
+              DEFAULT: '#0D9488',
+              dark: '#0F766E',
+              soft: '#ECFDF5',
+            },
+            crimson: {
+              DEFAULT: '#DC2626',
+              dark: '#B91C1C',
+              soft: '#FEF2F2',
+            },
+            amberbrand: {
+              DEFAULT: '#D97706',
+              dark: '#B45309',
+              soft: '#FFFBEB',
+            },
+          },
+          fontFamily: {
+            serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+            sans: ['Inter', '"Noto Sans SC"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Chart.js 稳定 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* 基础金融排版与等宽数字 */
+    body {
+      background-color: #FCFBF9;
+      color: #0F172A;
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 细腻研报级滑块控件样式 */
+    input[type="range"].report-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: #E2E8F0;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"].report-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #1E3A5F;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.28);
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    input[type="range"].report-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+      background: #0D9488;
+    }
+
+    input[type="range"].report-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #1E3A5F;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.28);
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    /* 隐藏移动端横向导航滚动条但保留滑动功能 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 折叠面板平滑过渡 */
+    .accordion-content {
+      transition: max-height 0.28s ease, opacity 0.24s ease;
+    }
+
+    /* 锚点跳转预留吸顶导航高度 */
+    section[id] {
+      scroll-margin-top: 84px;
+    }
+  </style>
+</head>
+<body class="bg-paper text-slate-900 selection:bg-navy/15 selection:text-navy">
+
+  <!-- =================================================================== -->
+  <!-- 顶部吸顶导航栏 + 阅读进度条                                          -->
+  <!-- =================================================================== -->
+  <header class="sticky top-0 z-50 bg-paper/95 backdrop-blur-md border-b border-slate-200/90">
+    <!-- 实时阅读进度条 -->
+    <div class="w-full h-[3px] bg-slate-200/70 overflow-hidden">
+      <div id="reading-progress" class="h-full bg-gradient-to-r from-navy via-tealbrand to-amberbrand transition-all duration-75" style="width: 0%;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14 gap-4">
+        <!-- 报头标识 -->
+        <a href="#hero" class="flex items-center gap-2.5 shrink-0 group">
+          <div class="w-7 h-7 rounded-md bg-navy text-white flex items-center justify-center font-serif font-bold text-sm shadow-sm group-hover:bg-navy-dark transition-colors">
+            A
+          </div>
+          <div class="leading-tight">
+            <span class="block text-xs font-bold tracking-wider uppercase text-navy">EQUITY ECOLOGY REPORT</span>
+            <span class="block text-[11px] text-slate-500 hidden sm:block">A 股市场生态深度研报</span>
+          </div>
+        </a>
+
+        <!-- 桌面及平板导航锚点 -->
+        <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1" aria-label="报告章节导航">
+          <a href="#hero" data-nav-link="hero" class="nav-link whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-slate-600 hover:text-navy hover:bg-navy-soft/70 transition-colors">核心摘要</a>
+          <a href="#capital-ledger" data-nav-link="capital-ledger" class="nav-link whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-slate-600 hover:text-navy hover:bg-navy-soft/70 transition-colors">资金底盘与暗账</a>
+          <a href="#player-profiles" data-nav-link="player-profiles" class="nav-link whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-slate-600 hover:text-navy hover:bg-navy-soft/70 transition-colors">七大玩家画像</a>
+          <a href="#game-theory" data-nav-link="game-theory" class="nav-link whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-slate-600 hover:text-navy hover:bg-navy-soft/70 transition-colors">双轨与周期博弈</a>
+          <a href="#retail-strategy" data-nav-link="retail-strategy" class="nav-link whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium text-slate-600 hover:text-navy hover:bg-navy-soft/70 transition-colors">散户策略与测算器</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+
+    <!-- =================================================================== -->
+    <!-- 模块 0：研报首屏与核心宏观仪表盘 (Hero)                              -->
+    <!-- =================================================================== -->
+    <section id="hero" class="pt-10 sm:pt-14 pb-12 border-b border-slate-200">
+      <div class="max-w-4xl">
+        <div class="inline-flex flex-wrap items-center gap-2 mb-5">
+          <span class="px-2.5 py-1 rounded-full bg-navy text-white text-[11px] font-semibold tracking-wider uppercase">深度专题研究报告</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-medium">数据口径：2021–2026Q2 实证与结构测算</span>
+          <span class="px-2.5 py-1 rounded-full bg-tealbrand-soft border border-tealbrand/20 text-tealbrand-dark text-[11px] font-medium">交互式动态研报</span>
+        </div>
+
+        <h1 class="font-serif text-3xl sm:text-4xl lg:text-[42px] font-bold text-slate-950 leading-[1.22] tracking-tight mb-4">
+          A 股市场生态深度分析报告：<br class="hidden sm:inline" />
+          <span class="text-navy">资金结构、玩家画像、利益博弈与散户生存法则</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-7">
+          穿透表层涨跌与情绪叙事，沿着“存量筹码分布 → 二级市场全口径现金流 → 七类玩家目标函数 → 周期筹码转移”的因果链条，还原真实牌桌并构建面向个人投资者的反脆弱配置框架。
+        </p>
+
+        <!-- 核心判断引言卡片 -->
+        <blockquote class="relative bg-white border border-slate-200 border-l-4 border-l-navy rounded-xl p-5 sm:p-6 shadow-sm">
+          <div class="text-[11px] font-bold uppercase tracking-widest text-navy mb-2">核心研报判断 · EXECUTIVE THESIS</div>
+          <p class="font-serif text-base sm:text-[18px] text-slate-800 leading-relaxed">
+            “A 股并不是单一逻辑定价的价值发现市场，而是由<strong class="text-navy font-bold">产业资本与长钱压舱</strong>、<strong class="text-crimson font-bold">高换手情绪资金主导波动</strong>、各路参与者在截然不同的考核函数下展开多维博弈的复杂生态。”
+          </p>
+        </blockquote>
+      </div>
+
+      <!-- 4 张顶部关键实证 KPI 卡片 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+        <!-- KPI 1 -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:border-navy/40 transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">个人投资者倒挂</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-amberbrand"></span>
+          </div>
+          <div class="flex items-baseline gap-2 tabular-nums">
+            <span class="text-2xl sm:text-3xl font-bold text-navy">35.0%</span>
+            <span class="text-xs text-slate-400">vs</span>
+            <span class="text-2xl sm:text-3xl font-bold text-amberbrand">60%–70%</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+            个人投资者占流通市值约 35.0%（超 2.39 亿户），却贡献全市场 60%–70% 日均成交额（美股散户通常 &lt;10%）。
+          </p>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:border-crimson/40 transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">散户亏损现状</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson"></span>
+          </div>
+          <div class="flex items-baseline gap-2 tabular-nums">
+            <span class="text-2xl sm:text-3xl font-bold text-crimson">81.1%</span>
+            <span class="text-xs font-medium text-slate-500">盈利仅 18.9%</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+            2025 年统计显示 A 股个人账户整体亏损比例高达 81.1%，处置效应与高频追涨杀跌持续放大亏损。
+          </p>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:border-crimson/40 transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">交易摩擦黑洞</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson"></span>
+          </div>
+          <div class="flex items-baseline gap-2 tabular-nums">
+            <span class="text-2xl sm:text-3xl font-bold text-crimson">8%–10%</span>
+            <span class="text-xs font-medium text-slate-500">年化本金损耗</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+            50 万元以下中小散户年均换手率超 300%，为机构（约 25%）的 12 倍，税费佣金与滑点形成刚性失血。
+          </p>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:border-tealbrand/40 transition-colors">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">分红融资新拐点</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-tealbrand"></span>
+          </div>
+          <div class="flex items-baseline gap-2 tabular-nums">
+            <span class="text-2xl sm:text-3xl font-bold text-tealbrand">近 7 万亿</span>
+            <span class="text-xs font-medium text-slate-500">约融资 3 倍</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">
+            新“国九条”两年多累计分红近 7 万亿元，但扣除大股东截留、减持与摩擦后，公众流通盘仍处零轴紧平衡。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 模块 1：资金结构底盘与全口径“暗账”推演器                             -->
+    <!-- =================================================================== -->
+    <section id="capital-ledger" class="py-12 border-b border-slate-200">
+      <div class="mb-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-navy mb-1.5">SECTION 01 · CAPITAL STRUCTURE &amp; REAL CASHFLOW</div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-950 mb-2">资金结构底盘与全口径“暗账”推演器</h2>
+        <p class="text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">
+          存量决定底部，流量决定波动，而二级市场真实现金流决定普惠回报的难易程度。下方先从三个维度拆解存量与流量的倒挂格局，再对包含大股东分红截留与摩擦成本的“全口径暗账”进行动态压力测试。
+        </p>
+      </div>
+
+      <!-- 1A. 存量 vs 流量结构看板（3 Tab 切换交互图表） -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+          <div>
+            <h3 id="structure-chart-title" class="text-lg font-bold text-slate-900">流通市值持股结构（2026Q2 口径）</h3>
+            <p id="structure-chart-subtitle" class="text-xs sm:text-sm text-slate-500 mt-1">
+              一般法人与个人投资者合计占 76.2%，境内专业机构整体占比 19.4%，呈现“重产业、高散户、轻机构”的底层筹码格局。
+            </p>
+          </div>
+          <!-- 3 个互斥 Tab 按钮 -->
+          <div class="inline-flex flex-wrap bg-surface p-1 rounded-xl border border-slate-200 gap-1" role="tablist">
+            <button type="button" data-structure-tab="holding" class="structure-tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-navy text-white shadow-sm">
+              流通市值持股结构
+            </button>
+            <button type="button" data-structure-tab="mismatch" class="structure-tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-navy">
+              持仓 vs 成交倒挂
+            </button>
+            <button type="button" data-structure-tab="scissor" class="structure-tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-navy">
+              2021–2025 分红 vs 融资
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-8 relative h-[320px] sm:h-[370px] w-full">
+            <canvas id="structureChart"></canvas>
+          </div>
+          <!-- 右侧动态洞察注释盒 -->
+          <div class="lg:col-span-4 bg-surface rounded-xl border border-slate-200/80 p-5 space-y-4">
+            <div class="text-xs font-bold uppercase tracking-wider text-navy">结构关键解读</div>
+            <div id="structure-insight-body" class="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <!-- 由 JS 随 Tab 动态填充 -->
+            </div>
+            <div id="structure-footnote" class="pt-3 border-t border-slate-200 text-[11px] text-slate-500 leading-relaxed">
+              <!-- 动态口径附注 -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1B. 全口径二级市场“真实股东净流向”交互测算器 -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+        <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 pb-5 border-b border-slate-100">
+          <div>
+            <div class="inline-flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded bg-crimson-soft text-crimson text-[11px] font-bold">交互式暗账测算器</span>
+              <span class="text-xs text-slate-500">按自由流通市值约 45 万亿元折算</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900">全口径二级市场“真实股东净流向”压力测试</h3>
+            <div class="mt-2.5 inline-block bg-surface border border-slate-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm font-mono text-navy overflow-x-auto max-w-full">
+              公众流通盘真实净流向 = (公众实得分红 + 股票回购) − (一级股权融资 + 重要股东净减持 + 交易摩擦)
+            </div>
+          </div>
+
+          <!-- 3 个一键预设场景按钮 -->
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <button type="button" data-ledger-preset="2021" class="ledger-preset-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition-all border-slate-200 bg-white text-slate-700 hover:border-navy">
+              2021 抽血期
+            </button>
+            <button type="button" data-ledger-preset="2024" class="ledger-preset-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition-all border-slate-200 bg-white text-slate-700 hover:border-navy">
+              2024 拐点期
+            </button>
+            <button type="button" data-ledger-preset="2025" class="ledger-preset-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold transition-all border-navy bg-navy text-white shadow-sm">
+              2025 基准测算
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 个实时输出指标卡 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+          <div class="rounded-xl bg-surface border border-slate-200 p-4">
+            <div class="text-xs text-slate-500 font-medium">全市场名义净回流（含大股东分红）</div>
+            <div id="kpi-nominal-net" class="text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 text-tealbrand">+1.16 万亿</div>
+            <div id="kpi-nominal-sub" class="text-[11px] text-slate-500 mt-1">总分红 2.63 万亿 · 股权融资 1.02 万亿</div>
+          </div>
+          <div class="rounded-xl bg-surface border border-slate-200 p-4">
+            <div class="text-xs text-slate-500 font-medium">公众流通盘真实净流向（扣除大股东截留）</div>
+            <div id="kpi-public-net" class="text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 text-crimson">-0.16 万亿</div>
+            <div id="kpi-public-sub" class="text-[11px] text-slate-500 mt-1">公众实得分红 1.32 万亿 · 摩擦成本 0.35 万亿</div>
+          </div>
+          <div class="rounded-xl bg-surface border border-slate-200 p-4">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs text-slate-500 font-medium">估算公众流通盘净回报率</span>
+              <span class="px-2 py-0.5 rounded-full bg-navy-soft text-navy text-[10px] font-semibold">基准：标普500 +2.5%~3.5%</span>
+            </div>
+            <div id="kpi-public-rate" class="text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 text-crimson">-0.34%</div>
+            <div id="kpi-public-status" class="text-[11px] font-medium text-amberbrand-dark mt-1">处于零轴紧平衡区，尚未形成普惠顺风</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- 左侧滑块控制面板 -->
+          <div class="lg:col-span-5 bg-surface rounded-xl border border-slate-200 p-5 space-y-5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-navy">调节敏感度参数</span>
+              <span id="ledger-fee-badge" class="text-[11px] px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-600 tabular-nums">当前综合税费率：0.10%</span>
+            </div>
+
+            <!-- 滑块 1：大股东分红截留比例 -->
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-insider-share" class="font-semibold text-slate-700">大股东分红截留比例</label>
+                <span id="val-insider-share" class="font-bold text-navy tabular-nums">50%</span>
+              </div>
+              <input id="slider-insider-share" type="range" min="0" max="70" step="1" value="50" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>0% (全市场名义口径)</span>
+                <span>50% (央国企/产业实证)</span>
+                <span>70%</span>
+              </div>
+            </div>
+
+            <!-- 滑块 2：全年总成交额 -->
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-turnover" class="font-semibold text-slate-700">全年市场总成交额</label>
+                <span id="val-turnover" class="font-bold text-navy tabular-nums">350 万亿元</span>
+              </div>
+              <input id="slider-turnover" type="range" min="150" max="500" step="1" value="350" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>150 万亿 (缩量)</span>
+                <span>257 万亿 (2024)</span>
+                <span>500 万亿 (放量)</span>
+              </div>
+            </div>
+
+            <!-- 滑块 3：重要股东年度净减持 -->
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-selloff" class="font-semibold text-slate-700">重要股东年度净减持</label>
+                <span id="val-selloff" class="font-bold text-crimson tabular-nums">0.25 万亿元</span>
+              </div>
+              <input id="slider-selloff" type="range" min="0" max="0.80" step="0.01" value="0.25" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>0.00 (严控)</span>
+                <span>0.25 (基准)</span>
+                <span>0.80 万亿 (泡沫派发)</span>
+              </div>
+            </div>
+
+            <!-- 当前预设静态底数摘要 -->
+            <div class="pt-3 border-t border-slate-200 grid grid-cols-3 gap-2 text-center">
+              <div class="bg-white rounded-lg border border-slate-200/80 py-2 px-1">
+                <div class="text-[10px] text-slate-500">现金分红总额</div>
+                <div id="base-div-val" class="text-xs font-bold text-tealbrand tabular-nums mt-0.5">+2.63 万亿</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200/80 py-2 px-1">
+                <div class="text-[10px] text-slate-500">股票回购规模</div>
+                <div id="base-buyback-val" class="text-xs font-bold text-tealbrand tabular-nums mt-0.5">+0.15 万亿</div>
+              </div>
+              <div class="bg-white rounded-lg border border-slate-200/80 py-2 px-1">
+                <div class="text-[10px] text-slate-500">一级股权融资</div>
+                <div id="base-fin-val" class="text-xs font-bold text-crimson tabular-nums mt-0.5">-1.02 万亿</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧分项正负柱状图 -->
+          <div class="lg:col-span-7 relative h-[340px] sm:h-[370px] w-full">
+            <canvas id="ledgerChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 模块 2：七大玩家用户画像与利益诉求全景浏览器                          -->
+    <!-- =================================================================== -->
+    <section id="player-profiles" class="py-12 border-b border-slate-200">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-navy mb-1.5">SECTION 02 · PARTICIPANT PERSONAS &amp; INCENTIVES</div>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-950 mb-2">七大玩家用户画像与利益诉求全景浏览器</h2>
+          <p class="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+            同一只股票出现剧烈分歧，本质上是七类资金按完全不同的考核函数在同一牌桌上打“多维混战”。点击任意玩家检视其资金久期、目标函数与散户应对策略。
+          </p>
+        </div>
+
+        <!-- 生态层级筛选按钮 -->
+        <div class="inline-flex flex-wrap bg-white p-1 rounded-xl border border-slate-200 shadow-sm gap-1">
+          <button type="button" data-layer-filter="all" class="layer-filter-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-navy text-white transition-all">全部玩家 (7)</button>
+          <button type="button" data-layer-filter="ballast" class="layer-filter-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-navy transition-all">压舱石层</button>
+          <button type="button" data-layer-filter="pricing" class="layer-filter-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-navy transition-all">定价层</button>
+          <button type="button" data-layer-filter="sentiment" class="layer-filter-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-navy transition-all">情绪/博弈层</button>
+        </div>
+      </div>
+
+      <!-- 主浏览器：左侧列表 + 右侧深度画像档案卡 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- 玩家选择列表 -->
+        <div id="player-list" class="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
+          <!-- 由 JS 动态渲染 7 类玩家按钮 -->
+        </div>
+
+        <!-- 深度画像档案卡 -->
+        <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+          <div class="flex flex-wrap items-start justify-between gap-4 pb-5 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span id="dossier-layer-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-navy-soft text-navy">压舱石层</span>
+                <span id="dossier-share-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-surface border border-slate-200 text-slate-700 tabular-nums">流通市值占比 41.2%</span>
+              </div>
+              <h3 id="dossier-name" class="font-serif text-xl sm:text-2xl font-bold text-slate-950">一般法人（产业资本）</h3>
+              <p id="dossier-tagline" class="text-xs sm:text-sm text-slate-500 mt-1">全市场筹码总供给方，决定长期底盘与牛市高位减持阀值</p>
+            </div>
+          </div>
+
+          <!-- 档案内容 + 雷达图 -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6 items-center">
+            <!-- 雷达图容器 -->
+            <div class="md:col-span-5 flex flex-col items-center">
+              <div class="relative h-[260px] w-full max-w-[300px]">
+                <canvas id="playerRadarChart"></canvas>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1 text-center">五维行为特征量化评估（0–100 相对指数）</div>
+            </div>
+
+            <!-- 6 大核心维度拆解 -->
+            <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div class="bg-surface rounded-xl border border-slate-200/80 p-3.5">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-navy mb-1">1. 资金来源与久期</div>
+                <p id="dossier-capital" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+              <div class="bg-surface rounded-xl border border-slate-200/80 p-3.5">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-navy mb-1">2. 核心利益诉求（考核函数）</div>
+                <p id="dossier-goal" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+              <div class="bg-surface rounded-xl border border-slate-200/80 p-3.5 sm:col-span-2">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-navy mb-1">3. 典型行为与持仓偏好</div>
+                <p id="dossier-behavior" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+              <div class="bg-tealbrand-soft/60 rounded-xl border border-tealbrand/20 p-3.5">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-tealbrand-dark mb-1">4. 核心优势</div>
+                <p id="dossier-strength" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+              <div class="bg-crimson-soft/60 rounded-xl border border-crimson/20 p-3.5">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-crimson-dark mb-1">5. 致命软肋</div>
+                <p id="dossier-weakness" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. 散户应对原则高亮条 -->
+          <div class="mt-5 rounded-xl bg-navy text-white p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <span class="shrink-0 px-2.5 py-1 rounded-md bg-white/15 text-[11px] font-bold uppercase tracking-wider text-amber-200">6. 散户应对原则</span>
+            <p id="dossier-retail-action" class="text-xs sm:text-sm leading-relaxed text-slate-100"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 张可展开深度机制解析卡 -->
+      <div class="mt-8">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">核心底层利益机制深度拆解（点击展开/收起）</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- 机制卡 1 -->
+          <div class="mechanism-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <button type="button" class="mechanism-toggle w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3 hover:bg-surface/80 transition-colors" aria-expanded="true">
+              <div>
+                <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-navy-soft text-navy mb-2">压舱石底层逻辑</span>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">险资 IFRS 9 与 FVOCI 会计诉求</h4>
+              </div>
+              <span class="mechanism-icon shrink-0 w-6 h-6 rounded-full bg-surface border border-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold transition-transform rotate-180">⌄</span>
+            </button>
+            <div class="mechanism-body px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+              新金融工具会计准则（IFRS 9）全面落地后，股票公允价值波动会直接冲击险企当期利润表。为覆盖 2.5%–3.5% 的刚性保单负债成本并平滑报表波动，险资将大量权益资产划入 <strong class="text-navy">FVOCI 账户</strong>（仅股息计入当期损益，股价涨跌计入其他综合收益）。这一制度诉求决定了险资对“高股息、低波动、商业模式稳固”的央国企蓝筹具有长期刚性配置需求。
+            </div>
+          </div>
+
+          <!-- 机制卡 2 -->
+          <div class="mechanism-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <button type="button" class="mechanism-toggle w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3 hover:bg-surface/80 transition-colors" aria-expanded="true">
+              <div>
+                <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amberbrand-soft text-amberbrand-dark mb-2">定价层行为异化</span>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">公募相对排名与基民申赎魔咒</h4>
+              </div>
+              <span class="mechanism-icon shrink-0 w-6 h-6 rounded-full bg-surface border border-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold transition-transform rotate-180">⌄</span>
+            </button>
+            <div class="mechanism-body px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+              公募基金经理的激励核心是<strong class="text-slate-900">相对排名</strong>与规模（AUM）而非绝对回报：若同行都在抱团高景气赛道而自己踏空，两个季度就面临淘汰；若共同回调则相对安全。叠加基民天然在净值高点集中申购、熊市低点恐慌赎回的负债端魔咒，主动公募在客观上往往被迫“高位接盘、底部割肉”，成为趋势波动的放大器。
+            </div>
+          </div>
+
+          <!-- 机制卡 3 -->
+          <div class="mechanism-card bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <button type="button" class="mechanism-toggle w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3 hover:bg-surface/80 transition-colors" aria-expanded="true">
+              <div>
+                <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-crimson-soft text-crimson mb-2">博弈层收割闭环</span>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">量化私募与游资的微结构盈利逻辑</h4>
+              </div>
+              <span class="mechanism-icon shrink-0 w-6 h-6 rounded-full bg-surface border border-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold transition-transform rotate-180">⌄</span>
+            </button>
+            <div class="mechanism-body px-4 sm:px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+              两者均不依赖企业长期盈利复利，本质上赚取<strong class="text-crimson">交易对手的非理性情绪与流动性溢价</strong>。游资借涨停板赚钱效应吸引散户接力并于高潮期派发；量化私募则利用高频算法在全市场数千只中小盘股票的日内波动与隔夜反转中持续收割微结构偏差。只要市场存在高换手散户，其收割土壤就长期存在。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 模块 3：利益博弈全景——双轨分化与牛熊周期筹码演进器                    -->
+    <!-- =================================================================== -->
+    <section id="game-theory" class="py-12 border-b border-slate-200">
+      <div class="mb-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-navy mb-1.5">SECTION 03 · DUAL-TRACK BIFURCATION &amp; CYCLE EVOLUTION</div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-950 mb-2">利益博弈全景：双轨分化与牛熊周期筹码演进</h2>
+        <p class="text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">
+          全市场名义上的“零轴紧平衡”掩盖了剧烈的内部撕裂：A 股在空间上已分化为两条游戏规则截然不同的轨道，在时间上则沿着“长周期收割中周期、中周期与算力收割短周期情绪”的规律反复循环。
+        </p>
+      </div>
+
+      <!-- 3A. 双轨平行宇宙对比视图 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+        <!-- 轨道一：正和慢轨 -->
+        <div class="bg-white rounded-2xl border-2 border-tealbrand/30 shadow-sm overflow-hidden flex flex-col">
+          <div class="bg-gradient-to-r from-navy to-tealbrand-dark text-white p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-white/15 text-[11px] font-bold tracking-wider uppercase">轨道一 · 正和长钱生态</span>
+              <span class="text-xs font-semibold text-teal-100">正现金流闭环</span>
+            </div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold">正和慢轨：红利蓝筹与核心宽基</h3>
+            <p class="text-xs sm:text-sm text-slate-200 mt-1">依靠企业盈利、稳定分红与长钱配置形成底薪复利</p>
+          </div>
+          <div class="p-5 sm:p-6 space-y-4 flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-navy">核心主导玩家</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">国家队（汇金等）、保险资金、社保养老、配置型外资、高分红央国企产业资本。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-navy">现金流闭环</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">监管强制分红与市值考核驱动下，跑通“稳定盈利 → <strong class="text-tealbrand-dark">3%–5% 现金分红/回购</strong> → 低换手再投资”正向闭环。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-navy">换手与估值特征</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">低换手、低估值波动、股权再融资与大股东减持克制，交易摩擦损耗极低。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="text-xs font-bold text-navy">数学期望</div>
+              <div class="sm:col-span-2">
+                <span class="inline-block px-2.5 py-1 rounded-lg bg-tealbrand-soft text-tealbrand-dark text-xs font-bold">正和博弈 · 不依赖下一个接盘侠也能回本</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 轨道二：负和快轨 -->
+        <div class="bg-white rounded-2xl border-2 border-crimson/25 shadow-sm overflow-hidden flex flex-col">
+          <div class="bg-gradient-to-r from-slate-900 to-crimson-dark text-white p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-white/15 text-[11px] font-bold tracking-wider uppercase">轨道二 · 负和博弈生态</span>
+              <span class="text-xs font-semibold text-red-100">持续抽血与互割</span>
+            </div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold">负和快轨：中小微盘与题材概念</h3>
+            <p class="text-xs sm:text-sm text-slate-200 mt-1">脱离基本面现金流，本质为高摩擦“击鼓传花”的存量互割</p>
+          </div>
+          <div class="p-5 sm:p-6 space-y-4 flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-crimson-dark">核心主导玩家</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">高频散户（年换手 &gt;300%）、连板游资、高频量化私募、具备套现诉求的原始股东。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-crimson-dark">现金流闭环</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">分红微薄，但再融资、解禁减持与高频交易税费佣金极高，整体资金池处于<strong class="text-crimson">持续净流出</strong>状态。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-3 border-b border-slate-100">
+              <div class="text-xs font-bold text-crimson-dark">换手与估值特征</div>
+              <div class="sm:col-span-2 text-xs sm:text-sm text-slate-700">超高换手（如创业板指年换手历史曾超 900%）、剧烈情绪溢价与单年回撤超 30% 的极端风险。</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="text-xs font-bold text-crimson-dark">数学期望</div>
+              <div class="sm:col-span-2">
+                <span class="inline-block px-2.5 py-1 rounded-lg bg-crimson-soft text-crimson-dark text-xs font-bold">负和博弈 · 散户在信息与算力上处于绝对劣势</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3B. 牛熊周期筹码转移交互演进器 -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-amberbrand-dark">交互式周期演进器</span>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">牛熊周期中的跨维度筹码转移路线图</h3>
+          </div>
+          <span class="text-xs text-slate-500">点击下方三个阶段，观察筹码流向与操作指令切换</span>
+        </div>
+
+        <!-- 3 阶段时间轴切换卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+          <button type="button" data-cycle-stage="0" class="cycle-stage-btn text-left p-4 rounded-xl border-2 transition-all border-navy bg-navy-soft/60 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-navy">阶段 01 · 左侧吸筹</span>
+              <span class="text-xs font-bold text-tealbrand tabular-nums">情绪 15°C</span>
+            </div>
+            <div class="font-bold text-sm sm:text-base text-slate-950">熊市绝望底</div>
+            <div class="text-xs text-slate-600 mt-0.5">筹码从情绪层向压舱石集中</div>
+          </button>
+
+          <button type="button" data-cycle-stage="1" class="cycle-stage-btn text-left p-4 rounded-xl border-2 transition-all border-slate-200 bg-white hover:border-amberbrand/50">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amberbrand-dark">阶段 02 · 估值扩张</span>
+              <span class="text-xs font-bold text-amberbrand tabular-nums">情绪 62°C</span>
+            </div>
+            <div class="font-bold text-sm sm:text-base text-slate-950">结构启动与主升浪</div>
+            <div class="text-xs text-slate-600 mt-0.5">定价层围绕景气主线主导溢价</div>
+          </button>
+
+          <button type="button" data-cycle-stage="2" class="cycle-stage-btn text-left p-4 rounded-xl border-2 transition-all border-slate-200 bg-white hover:border-crimson/50">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-crimson">阶段 03 · 高位派发</span>
+              <span class="text-xs font-bold text-crimson tabular-nums">情绪 94°C</span>
+            </div>
+            <div class="font-bold text-sm sm:text-base text-slate-950">情绪泡沫顶</div>
+            <div class="text-xs text-slate-600 mt-0.5">筹码向情绪层与杠杆散户集中派发</div>
+          </button>
+        </div>
+
+        <!-- 动态详情演进面板 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-surface rounded-xl border border-slate-200 p-5 sm:p-6">
+          <!-- 左侧：筹码流向图解 + 市场情绪温度条 -->
+          <div class="lg:col-span-6 space-y-5">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">三层生态筹码流向图解</div>
+              <div id="cycle-flow-diagram" class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
+                <!-- 由 JS 渲染动态流向卡片 -->
+              </div>
+            </div>
+
+            <!-- 情绪温度条 -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4">
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-bold text-slate-700">市场情绪温度计</span>
+                <span id="cycle-temp-label" class="font-bold text-tealbrand tabular-nums">15°C · 极度冰点（高赔率区）</span>
+              </div>
+              <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden border border-slate-200/70">
+                <div id="cycle-temp-bar" class="h-full rounded-full transition-all duration-500 bg-tealbrand" style="width: 15%;"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-400 mt-1.5">
+                <span>0° 绝望割肉</span>
+                <span>50° 理性均衡</span>
+                <span>100° 全面狂热</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧：盘面特征 + 散户操作指令 -->
+          <div class="lg:col-span-6 flex flex-col justify-between gap-4">
+            <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5">
+              <div class="text-xs font-bold uppercase tracking-wider text-navy mb-3">当前阶段关键盘面特征</div>
+              <ul id="cycle-features-list" class="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                <!-- JS 填充 -->
+              </ul>
+            </div>
+
+            <div id="cycle-directive-box" class="rounded-xl p-4 sm:p-5 border transition-colors bg-tealbrand-soft border-tealbrand/30">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span id="cycle-directive-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-tealbrand text-white">散户操作指令</span>
+                <span id="cycle-directive-title" class="text-sm font-bold text-tealbrand-dark"></span>
+              </div>
+              <p id="cycle-directive-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- 模块 4：散户最佳生存法则、十年复利推演器与杠铃配置工作台              -->
+    <!-- =================================================================== -->
+    <section id="retail-strategy" class="py-12">
+      <div class="mb-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-navy mb-1.5">SECTION 04 · RETAIL SURVIVAL &amp; PORTFOLIO WORKBENCH</div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-950 mb-2">散户最佳生存法则、十年复利推演与杠铃配置工作台</h2>
+        <p class="text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">
+          小资金破局的唯一答案不是更勤奋地看 K 线，而是主动撤出对手盘最强的短线主战场，将个人“无业绩考核、无赎回压力、无清盘线、进出无冲击成本”的特质，活成全市场独一无二的<strong class="text-navy">“微型险资”</strong>。
+        </p>
+      </div>
+
+      <!-- 4A. 散户战略升维五条铁律 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+        <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:border-navy/40 transition-colors">
+          <div class="w-8 h-8 rounded-lg bg-navy text-white font-bold text-sm flex items-center justify-center mb-3 tabular-nums">01</div>
+          <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">站队压舱石层</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">全面撤出高换手题材博弈，将 A 股底仓锚定在红利低波与核心宽基，借 3%–5% 股息率获取“不靠接盘侠”的底薪收益。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:border-navy/40 transition-colors">
+          <div class="w-8 h-8 rounded-lg bg-navy text-white font-bold text-sm flex items-center justify-center mb-3 tabular-nums">02</div>
+          <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">ETF 工具降维</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">用年费率 0.15%–0.5% 的宽基与红利 ETF 替代重仓单押个股，一键分散单年回撤超 30% 与造假退市“踩雷”风险。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:border-tealbrand/40 transition-colors">
+          <div class="w-8 h-8 rounded-lg bg-tealbrand text-white font-bold text-sm flex items-center justify-center mb-3 tabular-nums">03</div>
+          <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">换手压至 50% 以下</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">从 300% 高频换手降至 50% 以下，直接省下每年 8%–10% 的税费滑点黑洞——降频本身就是最确定的超额收益。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:border-tealbrand/40 transition-colors">
+          <div class="w-8 h-8 rounded-lg bg-tealbrand text-white font-bold text-sm flex items-center justify-center mb-3 tabular-nums">04</div>
+          <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">杠铃 + 跨市场多元</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">一端用现金固收与红利守底线，另一端借 QDII 分享海外成熟市场现金流顺风与黄金避险，打破单一市场低贝塔宿命。</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:border-amberbrand/50 transition-colors sm:col-span-2 lg:col-span-1">
+          <div class="w-8 h-8 rounded-lg bg-amberbrand text-white font-bold text-sm flex items-center justify-center mb-3 tabular-nums">05</div>
+          <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">零杠杆 + 机械再平衡</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">绝不碰两融配资，保留无限时间久期；每年按目标权重执行机械再平衡，用纪律强行逆转“追涨杀跌”人性本能。</p>
+        </div>
+      </div>
+
+      <!-- 4B. 十年策略复利推演器 -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 mb-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-slate-100">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-tealbrand-soft text-tealbrand-dark text-[11px] font-bold">交互式复利推演器</span>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900 mt-1">摩擦损耗如何决定十年财富分化？</h3>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">对比高频追涨杀跌（毛收益 6.0% − 损耗）、低换手 A 股红利+宽基（净年化 6.2%）与杠铃跨市场配置（净年化 7.1%）的长期复利曲线</p>
+          </div>
+        </div>
+
+        <!-- 期末 KPI 指标卡 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 my-6">
+          <div class="rounded-xl bg-crimson-soft/60 border border-crimson/20 p-4">
+            <div class="text-xs font-medium text-crimson-dark">高频追涨杀跌散户</div>
+            <div id="comp-val-retail" class="text-2xl font-bold text-crimson tabular-nums mt-1">7.76 万元</div>
+            <div id="comp-pct-retail" class="text-xs font-semibold text-crimson-dark/80 tabular-nums mt-0.5">累计 -22.4% (年化 -2.5%)</div>
+          </div>
+
+          <div class="rounded-xl bg-navy-soft/70 border border-navy/20 p-4">
+            <div class="text-xs font-medium text-navy">低换手 A 股红利+宽基</div>
+            <div id="comp-val-dividend" class="text-2xl font-bold text-navy tabular-nums mt-1">18.25 万元</div>
+            <div id="comp-pct-dividend" class="text-xs font-semibold text-navy/80 tabular-nums mt-0.5">累计 +82.5% (净年化 6.2%)</div>
+          </div>
+
+          <div class="rounded-xl bg-tealbrand-soft/80 border border-tealbrand/30 p-4">
+            <div class="text-xs font-medium text-tealbrand-dark">杠铃防御+跨市场再平衡</div>
+            <div id="comp-val-barbell" class="text-2xl font-bold text-tealbrand-dark tabular-nums mt-1">19.86 万元</div>
+            <div id="comp-pct-barbell" class="text-xs font-semibold text-tealbrand-dark/80 tabular-nums mt-0.5">累计 +98.6% (净年化 7.1%)</div>
+          </div>
+
+          <div class="rounded-xl bg-navy text-white p-4">
+            <div class="text-xs font-medium text-amber-200">杠铃策略 vs 高频散户财富差</div>
+            <div id="comp-val-gap" class="text-2xl font-bold text-white tabular-nums mt-1">+12.10 万元</div>
+            <div id="comp-pct-gap" class="text-xs text-slate-300 tabular-nums mt-0.5">期末资产为高频散户的 2.56 倍</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- 滑块控制区 -->
+          <div class="lg:col-span-4 bg-surface rounded-xl border border-slate-200 p-5 space-y-5">
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-principal" class="font-semibold text-slate-700">初始投入本金</label>
+                <span id="val-principal" class="font-bold text-navy tabular-nums">10 万元</span>
+              </div>
+              <input id="slider-principal" type="range" min="5" max="100" step="1" value="10" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>5 万</span>
+                <span>50 万</span>
+                <span>100 万</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-drag" class="font-semibold text-slate-700">高频散户年化综合损耗</label>
+                <span id="val-drag" class="font-bold text-crimson tabular-nums">8.5%</span>
+              </div>
+              <input id="slider-drag" type="range" min="2" max="12" step="0.5" value="8.5" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>2.0% (低频)</span>
+                <span>8.5% (实证均值)</span>
+                <span>12.0% (极端)</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-2">
+                <label for="slider-years" class="font-semibold text-slate-700">复利持有年限</label>
+                <span id="val-years" class="font-bold text-navy tabular-nums">10 年</span>
+              </div>
+              <input id="slider-years" type="range" min="3" max="20" step="1" value="10" class="report-slider" />
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>3 年</span>
+                <span>10 年</span>
+                <span>20 年</span>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200 text-[11px] text-slate-500 leading-relaxed">
+              提示：当高频散户综合损耗超过 6.0% 市场毛收益阈值时，时间从复利的朋友逆转为持续侵蚀本金的敌人。
+            </div>
+          </div>
+
+          <!-- 折线图区 -->
+          <div class="lg:col-span-8 relative h-[320px] sm:h-[360px] w-full">
+            <canvas id="compoundChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4C. 个人“杠铃防御”生存配置定制器 -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-navy-soft text-navy text-[11px] font-bold">个人配置定制工作台</span>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900 mt-1">“杠铃防御”生存配置方案自动测算器</h3>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">输入计划投入的闲钱总额、选择风险偏好或微调四大资产桶权重，自动拆分至 8 类落地工具</p>
+          </div>
+
+          <!-- 三种风险模板一键切换 -->
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-risk-template="conservative" class="risk-template-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold border-slate-200 bg-white text-slate-700 hover:border-navy transition-all">
+              保守防御型
+            </button>
+            <button type="button" data-risk-template="balanced" class="risk-template-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold border-navy bg-navy text-white shadow-sm transition-all">
+              平衡稳健型·基准
+            </button>
+            <button type="button" data-risk-template="growth" class="risk-template-btn px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-semibold border-slate-200 bg-white text-slate-700 hover:border-navy transition-all">
+              平衡进取型
+            </button>
+          </div>
+        </div>
+
+        <!-- 投入资金输入与快捷金额按钮 -->
+        <div class="mt-6 bg-surface rounded-xl border border-slate-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <label for="input-capital" class="text-xs sm:text-sm font-bold text-slate-800">计划投入闲钱总额：</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-slate-400 font-semibold text-sm">¥</span>
+              <input id="input-capital" type="number" min="1" max="10000" step="1" value="10" class="w-28 pl-7 pr-3 py-2 rounded-lg border border-slate-300 bg-white text-sm font-bold text-navy tabular-nums focus:outline-none focus:ring-2 focus:ring-navy/30 focus:border-navy" />
+              <span class="ml-2 text-xs sm:text-sm font-semibold text-slate-600">万元</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-xs text-slate-500 mr-1">快捷设定：</span>
+            <button type="button" data-quick-cap="5" class="quick-cap-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-navy hover:text-navy transition-colors">5 万</button>
+            <button type="button" data-quick-cap="10" class="quick-cap-btn px-3 py-1.5 rounded-lg border border-navy bg-navy-soft text-xs font-semibold text-navy transition-colors">10 万</button>
+            <button type="button" data-quick-cap="30" class="quick-cap-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-navy hover:text-navy transition-colors">30 万</button>
+            <button type="button" data-quick-cap="50" class="quick-cap-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-navy hover:text-navy transition-colors">50 万</button>
+            <button type="button" data-quick-cap="100" class="quick-cap-btn px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-navy hover:text-navy transition-colors">100 万</button>
+          </div>
+        </div>
+
+        <!-- 环形图 + 权重调节 + 8 细分标的拆分 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-start">
+          <!-- 左列：环形图与权重滑块 -->
+          <div class="lg:col-span-5 space-y-5">
+            <div class="relative h-[260px] w-full flex items-center justify-center">
+              <canvas id="portfolioChart"></canvas>
+              <!-- 环形图中心文字 -->
+              <div class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-[11px] text-slate-400 font-medium">配置总资金</span>
+                <span id="doughnut-center-total" class="text-xl font-bold text-navy tabular-nums">¥100,000</span>
+                <span id="doughnut-center-sum" class="text-[11px] font-semibold text-tealbrand mt-0.5 tabular-nums">权重合计 100%</span>
+              </div>
+            </div>
+
+            <!-- 4 大资产桶手动权重滑块 + 校验提示 -->
+            <div class="bg-surface rounded-xl border border-slate-200 p-4 space-y-3.5">
+              <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-200">
+                <span class="text-xs font-bold text-slate-700">四大资产桶权重微调</span>
+                <div class="flex items-center gap-2">
+                  <span id="weight-sum-badge" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-tealbrand-soft text-tealbrand-dark tabular-nums">合计 100%</span>
+                  <button type="button" id="btn-normalize-weights" class="hidden px-2.5 py-0.5 rounded-md bg-amberbrand text-white text-[11px] font-semibold hover:bg-amberbrand-dark transition-colors">
+                    一键配平 100%
+                  </button>
+                </div>
+              </div>
+
+              <!-- 权重滑块 1 -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="font-semibold text-slate-700 flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-navy inline-block"></span>A 股红利低波底仓</span>
+                  <span id="w-val-0" class="font-bold text-navy tabular-nums">30%</span>
+                </div>
+                <input id="w-slider-0" type="range" min="0" max="70" step="1" value="30" class="report-slider weight-slider" data-bucket="0" />
+              </div>
+
+              <!-- 权重滑块 2 -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="font-semibold text-slate-700 flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-tealbrand inline-block"></span>跨市场与避险分散</span>
+                  <span id="w-val-1" class="font-bold text-tealbrand-dark tabular-nums">30%</span>
+                </div>
+                <input id="w-slider-1" type="range" min="0" max="70" step="1" value="30" class="report-slider weight-slider" data-bucket="1" />
+              </div>
+
+              <!-- 权重滑块 3 -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="font-semibold text-slate-700 flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-slate-500 inline-block"></span>现金与固收安全垫</span>
+                  <span id="w-val-2" class="font-bold text-slate-700 tabular-nums">25%</span>
+                </div>
+                <input id="w-slider-2" type="range" min="0" max="70" step="1" value="25" class="report-slider weight-slider" data-bucket="2" />
+              </div>
+
+              <!-- 权重滑块 4 -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="font-semibold text-slate-700 flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amberbrand inline-block"></span>A 股逆向宽基弹性仓</span>
+                  <span id="w-val-3" class="font-bold text-amberbrand-dark tabular-nums">15%</span>
+                </div>
+                <input id="w-slider-3" type="range" min="0" max="70" step="1" value="15" class="report-slider weight-slider" data-bucket="3" />
+              </div>
+
+              <div id="weight-warning-msg" class="hidden rounded-lg bg-amberbrand-soft border border-amberbrand/30 p-2.5 text-[11px] text-amberbrand-dark">
+                当前权重合计不为 100%，右侧金额按当前各桶比例计算，建议点击“一键配平 100%”以保持严格资金闭环。
+              </div>
+            </div>
+          </div>
+
+          <!-- 右列：8 个细分标的金额自动拆分表 + 年度再平衡触发线 -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="border border-slate-200 rounded-xl overflow-hidden">
+              <div class="bg-surface px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-navy">8 类细分工具配置金额明细</span>
+                <span class="text-[11px] text-slate-500">单位：人民币（元）</span>
+              </div>
+              <div id="holdings-breakdown-list" class="divide-y divide-slate-100">
+                <!-- 由 JS 动态渲染 4 大桶及 8 个细分标的 -->
+              </div>
+            </div>
+
+            <!-- 年度机械再平衡触发线提示盒 -->
+            <div class="rounded-xl bg-amberbrand-soft/80 border border-amberbrand/30 p-4">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded bg-amberbrand text-white text-[11px] font-bold">执行纪律</span>
+                <span class="text-xs sm:text-sm font-bold text-amberbrand-dark">年度机械再平衡触发线（偏离目标权重 ±5%）</span>
+              </div>
+              <p id="rebalance-rule-text" class="text-xs text-slate-700 leading-relaxed">
+                每半年或每年固定日期检查一次组合占比：当任一资产桶的实际占比偏离目标权重超过 <strong>±5%</strong> 时（例如红利底仓涨超 35% 或跌破 25%），强制卖出超配部分、补入低配资产，用机械规则把散户“追涨杀跌”的本能彻底反过来执行。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =================================================================== -->
+  <!-- 页脚：数据口径说明与风险免责声明                                      -->
+  <!-- =================================================================== -->
+  <footer class="bg-navy-dark text-slate-300 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-2">数据口径与来源说明</h4>
+          <p class="text-slate-400">
+            1. 持股结构占比基于 2026 年二季度末 A 股流通市值口径统计（一般法人 41.2%、个人投资者 35.0%、境内专业机构合计 19.4%、外资 4.4%）；国家队整体体量（8.5–9.5 万亿元）包含借道宽基 ETF 的间接持仓。<br />
+            2. 年度现金分红与一级市场股权融资（含 IPO 与再融资）引用 Wind、21 财经及公开披露统计；股票回购、重要股东净减持与交易摩擦成本按对应年度成交额及单边印花税调整前后税率（2021 年 0.15%，2024–2025 年 0.10%）进行结构测算；大股东分红截留基准默认取 50%。<br />
+            3. 散户亏损比例（81.1%）、换手率（&gt;300% vs 机构约 25%）及成交贡献（60%–70%）引用 2025–2026Q1 公开实证统计。
+          </p>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-2">风险提示与免责声明</h4>
+          <p class="text-slate-400">
+            本交互式报告基于历史统计数据与金融市场微结构理论编制，仅供投资认知框架研究与量化推演参考。<strong class="text-slate-200">报告中的全口径资金流测算器、十年策略复利推演模型及杠铃资产配置工作台均属于参数化情景演示</strong>，真实资本市场存在显著的年度波动、政策变化与极端黑天鹅风险，历史数据及模型假设均不代表未来实际收益承诺，亦不构成针对任何具体证券、基金或金融产品的买卖建议。
+          </p>
+        </div>
+      </div>
+      <div class="pt-5 border-t border-slate-700/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+        <span>《A 股市场生态深度分析报告》 · 交互式金融研报门户</span>
+        <span>Built with Tailwind CSS &amp; Chart.js · 全中文交互实证版</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =================================================================== -->
+  <!-- 核心交互逻辑脚本（零外部依赖，全容错、无 alert/confirm）              -->
+  <!-- =================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 全局 Chart.js 字体与默认视觉样式配置
+      if (typeof Chart !== 'undefined') {
+        Chart.defaults.font.family = "'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif";
+        Chart.defaults.color = '#475569';
+      }
+
+      // 调色板常量
+      const COLORS = {
+        navy: '#1E3A5F',
+        navyLight: '#3B6496',
+        teal: '#0D9488',
+        crimson: '#DC2626',
+        amber: '#D97706',
+        slate: '#64748B',
+        slateLight: '#94A3B8',
+      };
+
+      // =================================================================
+      // 0. 顶部阅读进度条 & 章节导航高亮监听
+      // =================================================================
+      function initScrollSpy() {
+        const progressBar = document.getElementById('reading-progress');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = ['hero', 'capital-ledger', 'player-profiles', 'game-theory', 'retail-strategy']
+          .map((id) => document.getElementById(id))
+          .filter(Boolean);
+
+        function updateScrollUI() {
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+          if (progressBar) {
+            progressBar.style.width = pct.toFixed(1) + '%';
+          }
+
+          let activeId = 'hero';
+          for (let i = 0; i < sections.length; i++) {
+            const rect = sections[i].getBoundingClientRect();
+            if (rect.top <= 130) {
+              activeId = sections[i].id;
+            }
+          }
+
+          navLinks.forEach((link) => {
+            const isActive = link.getAttribute('data-nav-link') === activeId;
+            link.classList.toggle('bg-navy', isActive);
+            link.classList.toggle('text-white', isActive);
+            link.classList.toggle('text-slate-600', !isActive);
+          });
+        }
+
+        window.addEventListener('scroll', updateScrollUI, { passive: true });
+        updateScrollUI();
+      }
+
+      // =================================================================
+      // 1A. 存量 vs 流量结构看板（3 Tab 切换交互图表）
+      // =================================================================
+      let structureChartInstance = null;
+
+      const STRUCTURE_TABS = {
+        holding: {
+          title: '流通市值持股结构（2026Q2 口径）',
+          subtitle: '一般法人与个人投资者合计占 76.2%，境内专业机构合计 19.4%，呈现“重产业、高散户、轻机构”的底层筹码格局。',
+          insights: [
+            '<p><strong class="text-navy">筹码底盘高度锁定：</strong>一般法人（产业资本）占比高达 <strong>41.2%</strong>，绝大多数股权长期锁仓，决定全市场筹码总供给。</p>',
+            '<p><strong class="text-amberbrand-dark">个人持股仍居高位：</strong>个人投资者持股占 <strong>35.0%</strong>，账户数突破 2.39 亿户（占比超 99.76%），90% 账户资产低于 50 万元。</p>',
+            '<p><strong class="text-tealbrand-dark">专业机构碎片化：</strong>公募（7.1%，约 7.52 万亿）、险资（5.9%，约 5.7 万亿）、其他境内机构（4.0%）与私募（2.4%，约 2.32 万亿）合计 19.4%。</p>',
+          ],
+          footnote: '附注：若计入借道宽基 ETF 的间接持仓，以中央汇金为代表的“国家队”整体体量约 8.5–9.5 万亿元（约占自由流通市值 9%）。',
+        },
+        mismatch: {
+          title: '存量持仓占比 vs 日均成交额贡献倒挂对比',
+          subtitle: '存量决定底部，流量决定波动：三成个人筹码制造近七成日均成交，而超四成产业资本极少参与日常交易。',
+          insights: [
+            '<p><strong class="text-crimson">散户高频换手黑洞：</strong>个人投资者以 <strong>35.0%</strong> 持仓贡献约 <strong>65.0%</strong>（实证区间 60%–70%）成交额，约 30% 高频账户贡献其中六至七成交易量。</p>',
+            '<p><strong class="text-navy">机构成交受量化放大：</strong>境内专业机构持仓 <strong>19.4%</strong>、成交占比约 <strong>28.0%</strong>，其中持仓仅 2.4% 的私募阵营中，量化私募贡献了极高换手权重。</p>',
+            '<p><strong class="text-slate-800">沉睡的产业筹码：</strong>一般法人与外资合计持股 <strong>45.6%</strong>，但日常成交贡献估算仅约 <strong>7.0%</strong>，仅在极端牛熊拐点发生显著筹码吞吐。</p>',
+          ],
+          footnote: '口径说明：持股占比取自 2026Q2 流通市值统计；成交额占比基于个人 60%–70% 实证区间及各阵营换手率结构测算。',
+        },
+        scissor: {
+          title: '2021–2025 年现金分红总额 vs 一级股权融资剪刀差',
+          subtitle: '新“国九条”落地后，A 股现金分红连续五年攀升至 2.63 万亿元，股权融资显著收窄，一级抽血格局出现历史性拐点。',
+          insights: [
+            '<p><strong class="text-crimson">2021 融资抽血峰值：</strong>当年股权融资高达 <strong>1.79 万亿元</strong>，直接超过 1.55 万亿元的现金分红总额（净差额 -0.24 万亿元）。</p>',
+            '<p><strong class="text-tealbrand-dark">2024–2025 剪刀差反转：</strong>2024 年股权融资骤降至 0.31 万亿元，分红增至 2.38 万亿元（净差额 +2.07 万亿元）；2025 年分红再升至 <strong>2.63 万亿元</strong>。</p>',
+            '<p><strong class="text-navy">结构分化隐忧：</strong>央国企贡献超六成分红，而普通散户热衷的中小盘题材股仍是融资减持主力、分红洼地，需结合下方“暗账测算器”还原真实体感。</p>',
+          ],
+          footnote: '数据来源：Wind、21 财经及公开披露统计（单位：万亿元人民币）；股权融资含 IPO 与再融资，尚未扣除大股东减持及交易税费。',
+        },
+      };
+
+      function renderStructureChart(tabKey) {
+        const ctx = document.getElementById('structureChart');
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        // 更新标题与右侧解读
+        const meta = STRUCTURE_TABS[tabKey];
+        document.getElementById('structure-chart-title').textContent = meta.title;
+        document.getElementById('structure-chart-subtitle').textContent = meta.subtitle;
+        document.getElementById('structure-insight-body').innerHTML = meta.insights.join('');
+        document.getElementById('structure-footnote').textContent = meta.footnote;
+
+        // 更新 Tab 样式
+        document.querySelectorAll('.structure-tab-btn').forEach((btn) => {
+          const active = btn.getAttribute('data-structure-tab') === tabKey;
+          btn.classList.toggle('bg-navy', active);
+          btn.classList.toggle('text-white', active);
+          btn.classList.toggle('shadow-sm', active);
+          btn.classList.toggle('text-slate-600', !active);
+        });
+
+        // 销毁旧图表实例防止重叠
+        if (structureChartInstance) {
+          structureChartInstance.destroy();
+          structureChartInstance = null;
+        }
+
+        let config;
+
+        if (tabKey === 'holding') {
+          config = {
+            type: 'bar',
+            data: {
+              labels: [
+                '一般法人（产业资本）',
+                '个人投资者（含散户/游资）',
+                '公募基金（约7.52万亿）',
+                '保险资金（约5.7万亿）',
+                '外资（北向/QFII）',
+                '其他境内机构（社保/自营等）',
+                '私募基金（约2.32万亿）',
+              ],
+              datasets: [
+                {
+                  label: '流通市值占比 (%)',
+                  data: [41.2, 35.0, 7.1, 5.9, 4.4, 4.0, 2.4],
+                  backgroundColor: [
+                    COLORS.navy,
+                    COLORS.crimson,
+                    COLORS.amber,
+                    COLORS.teal,
+                    '#2563EB',
+                    '#475569',
+                    '#9333EA',
+                  ],
+                  borderRadius: 6,
+                  barThickness: 24,
+                },
+              ],
+            },
+            options: {
+              indexAxis: 'y',
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 10,
+                  callbacks: {
+                    label: (c) => ` 流通市值占比：${c.parsed.x.toFixed(1)}%`,
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  max: 48,
+                  grid: { color: '#E2E8F0' },
+                  ticks: { callback: (v) => v + '%' },
+                },
+                y: {
+                  grid: { display: false },
+                  ticks: { color: '#1E293B', font: { size: 12, weight: '500' } },
+                },
+              },
+            },
+          };
+        } else if (tabKey === 'mismatch') {
+          config = {
+            type: 'bar',
+            data: {
+              labels: ['个人投资者（含游资）', '境内专业机构（公募/私募/险资等）', '一般法人与外资'],
+              datasets: [
+                {
+                  label: '流通市值持仓占比 (%)',
+                  data: [35.0, 19.4, 45.6],
+                  backgroundColor: COLORS.navy,
+                  borderRadius: 6,
+                },
+                {
+                  label: '全市场日均成交估算占比 (%)',
+                  data: [65.0, 28.0, 7.0],
+                  backgroundColor: COLORS.crimson,
+                  borderRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 10,
+                  callbacks: {
+                    label: (c) => ` ${c.dataset.label}：${c.parsed.y.toFixed(1)}%`,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 75,
+                  grid: { color: '#E2E8F0' },
+                  ticks: { callback: (v) => v + '%' },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#1E293B', font: { size: 12, weight: '500' } },
+                },
+              },
+            },
+          };
+        } else {
+          const divs = [1.55, 2.06, 2.13, 2.38, 2.63];
+          const fins = [1.79, 1.59, 1.03, 0.31, 1.02];
+          config = {
+            type: 'bar',
+            data: {
+              labels: ['2021年', '2022年', '2023年', '2024年', '2025年'],
+              datasets: [
+                {
+                  label: '上市公司现金分红总额（万亿元）',
+                  data: divs,
+                  backgroundColor: COLORS.teal,
+                  borderRadius: 6,
+                },
+                {
+                  label: '一级市场股权融资总额（万亿元）',
+                  data: fins,
+                  backgroundColor: COLORS.crimson,
+                  borderRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 12,
+                  callbacks: {
+                    label: (c) => ` ${c.dataset.label}：${c.parsed.y.toFixed(2)} 万亿元`,
+                    afterBody: (items) => {
+                      const idx = items[0].dataIndex;
+                      const diff = divs[idx] - fins[idx];
+                      const ratio = (divs[idx] / fins[idx]).toFixed(2);
+                      const sign = diff >= 0 ? '+' : '';
+                      return `\n分红 − 融资剪刀差：${sign}${diff.toFixed(2)} 万亿元\n分红 / 融资倍数：${ratio} 倍`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 3.0,
+                  grid: { color: '#E2E8F0' },
+                  ticks: { callback: (v) => v.toFixed(1) + '万亿' },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#1E293B', font: { size: 12, weight: '600' } },
+                },
+              },
+            },
+          };
+        }
+
+        structureChartInstance = new Chart(ctx, config);
+      }
+
+      // =================================================================
+      // 1B. 全口径二级市场“真实股东净流向”交互测算器
+      // =================================================================
+      const LEDGER_PRESETS = {
+        '2021': {
+          label: '2021 抽血期',
+          totalDiv: 1.55,
+          buyback: 0.12,
+          financing: 1.79,
+          sellOff: 0.50,
+          turnover: 258,
+          feeRate: 0.0015, // 0.15% (印花税0.10% + 佣金0.05%)
+          insiderShare: 50,
+        },
+        '2024': {
+          label: '2024 拐点期',
+          totalDiv: 2.38,
+          buyback: 0.16,
+          financing: 0.31,
+          sellOff: 0.12,
+          turnover: 257,
+          feeRate: 0.0010, // 0.10% (印花税减半至0.05% + 佣金0.05%)
+          insiderShare: 50,
+        },
+        '2025': {
+          label: '2025 基准测算',
+          totalDiv: 2.63,
+          buyback: 0.15,
+          financing: 1.02,
+          sellOff: 0.25,
+          turnover: 350,
+          feeRate: 0.0010,
+          insiderShare: 50,
+        },
+      };
+
+      let activeLedgerPresetKey = '2025';
+      let ledgerChartInstance = null;
+
+      function formatSignedTrillion(val) {
+        const fixed = val.toFixed(2);
+        return (val > 0 ? '+' : '') + fixed + ' 万亿';
+      }
+
+      function updateLedgerModel() {
+        const base = LEDGER_PRESETS[activeLedgerPresetKey];
+        const insiderShare = Number(document.getElementById('slider-insider-share').value);
+        const turnover = Number(document.getElementById('slider-turnover').value);
+        const sellOff = Number(document.getElementById('slider-selloff').value);
+
+        // 更新滑块读数
+        document.getElementById('val-insider-share').textContent = insiderShare + '%';
+        document.getElementById('val-turnover').textContent = turnover + ' 万亿元';
+        document.getElementById('val-selloff').textContent = sellOff.toFixed(2) + ' 万亿元';
+        document.getElementById('ledger-fee-badge').textContent =
+          '当前综合税费率：' + (base.feeRate * 100).toFixed(2) + '%';
+
+        // 更新底数标签
+        document.getElementById('base-div-val').textContent = '+' + base.totalDiv.toFixed(2) + ' 万亿';
+        document.getElementById('base-buyback-val').textContent = '+' + base.buyback.toFixed(2) + ' 万亿';
+        document.getElementById('base-fin-val').textContent = '-' + base.financing.toFixed(2) + ' 万亿';
+
+        // 核心全口径计算（与报告口径完全一致）
+        const friction = Math.round(turnover * base.feeRate * 100) / 100;
+        const publicDiv = base.totalDiv * (1 - insiderShare / 100);
+        const nominalNet = base.totalDiv + base.buyback - base.financing - sellOff - friction;
+        const publicNet = publicDiv + base.buyback - base.financing - sellOff - friction;
+        const publicRatePct = (publicNet / 45) * 100; // 按 45 万亿元自由流通市值估算
+
+        // 更新 3 个 KPI 输出卡
+        const elNom = document.getElementById('kpi-nominal-net');
+        elNom.textContent = formatSignedTrillion(nominalNet);
+        elNom.className =
+          'text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 ' +
+          (nominalNet >= 0 ? 'text-tealbrand' : 'text-crimson');
+        document.getElementById('kpi-nominal-sub').textContent =
+          `总分红 ${base.totalDiv.toFixed(2)} 万亿 · 股权融资 ${base.financing.toFixed(2)} 万亿`;
+
+        const elPub = document.getElementById('kpi-public-net');
+        elPub.textContent = formatSignedTrillion(publicNet);
+        elPub.className =
+          'text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 ' +
+          (publicNet >= 0 ? 'text-tealbrand' : 'text-crimson');
+        document.getElementById('kpi-public-sub').textContent =
+          `公众实得分红 ${publicDiv.toFixed(2)} 万亿 · 交易摩擦 ${friction.toFixed(2)} 万亿`;
+
+        const elRate = document.getElementById('kpi-public-rate');
+        elRate.textContent = (publicRatePct > 0 ? '+' : '') + publicRatePct.toFixed(2) + '%';
+        elRate.className =
+          'text-2xl sm:text-3xl font-bold tabular-nums mt-1.5 ' +
+          (publicRatePct >= 0.5 ? 'text-tealbrand' : publicRatePct <= -0.8 ? 'text-crimson' : 'text-amberbrand');
+
+        const elStatus = document.getElementById('kpi-public-status');
+        if (publicRatePct <= -1.0) {
+          elStatus.textContent = '显著负和抽血状态：资金池每年先失血，散户极难盈利';
+          elStatus.className = 'text-[11px] font-medium text-crimson mt-1';
+        } else if (publicRatePct < 0.8) {
+          elStatus.textContent = '处于零轴紧平衡区：刚刚止血，尚未形成普惠现金顺风';
+          elStatus.className = 'text-[11px] font-medium text-amberbrand-dark mt-1';
+        } else {
+          elStatus.textContent = '实现二级市场正向现金净回流，长钱生态显著改善';
+          elStatus.className = 'text-[11px] font-medium text-tealbrand-dark mt-1';
+        }
+
+        // 更新分项柱状图
+        const values = [
+          Number(publicDiv.toFixed(2)),
+          Number(base.buyback.toFixed(2)),
+          Number((-base.financing).toFixed(2)),
+          Number((-sellOff).toFixed(2)),
+          Number((-friction).toFixed(2)),
+          Number(publicNet.toFixed(2)),
+        ];
+
+        const bgColors = values.map((v, i) => {
+          if (i === 5) return v >= 0 ? COLORS.navy : '#991B1B';
+          return v >= 0 ? COLORS.teal : COLORS.crimson;
+        });
+
+        const ctx = document.getElementById('ledgerChart');
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        if (!ledgerChartInstance) {
+          ledgerChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: [
+                '公众实得分红 (+)',
+                '股票回购 (+)',
+                '一级股权融资 (-)',
+                '重要股东净减持 (-)',
+                '交易摩擦成本 (-)',
+                '公众真实净流向 (=)',
+              ],
+              datasets: [
+                {
+                  label: '金额（万亿元）',
+                  data: values,
+                  backgroundColor: bgColors,
+                  borderRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 11,
+                  callbacks: {
+                    label: (c) => {
+                      const val = c.parsed.y;
+                      const share45 = ((val / 45) * 100).toFixed(2);
+                      return [
+                        ` 金额：${val > 0 ? '+' : ''}${val.toFixed(2)} 万亿元`,
+                        ` 占 45 万亿自由流通市值：${val > 0 ? '+' : ''}${share45}%`,
+                      ];
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  suggestedMin: -2.2,
+                  suggestedMax: 2.2,
+                  grid: {
+                    color: (ctxLine) => (ctxLine.tick.value === 0 ? '#0F172A' : '#E2E8F0'),
+                    lineWidth: (ctxLine) => (ctxLine.tick.value === 0 ? 1.5 : 1),
+                  },
+                  ticks: { callback: (v) => (v > 0 ? '+' : '') + v.toFixed(1) + '万亿' },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#1E293B', font: { size: 11, weight: '600' } },
+                },
+              },
+            },
+          });
+        } else {
+          ledgerChartInstance.data.datasets[0].data = values;
+          ledgerChartInstance.data.datasets[0].backgroundColor = bgColors;
+          ledgerChartInstance.update();
+        }
+      }
+
+      function applyLedgerPreset(key) {
+        activeLedgerPresetKey = key;
+        const p = LEDGER_PRESETS[key];
+        document.getElementById('slider-insider-share').value = p.insiderShare;
+        document.getElementById('slider-turnover').value = p.turnover;
+        document.getElementById('slider-selloff').value = p.sellOff;
+
+        document.querySelectorAll('.ledger-preset-btn').forEach((btn) => {
+          const active = btn.getAttribute('data-ledger-preset') === key;
+          btn.classList.toggle('border-navy', active);
+          btn.classList.toggle('bg-navy', active);
+          btn.classList.toggle('text-white', active);
+          btn.classList.toggle('shadow-sm', active);
+          btn.classList.toggle('border-slate-200', !active);
+          btn.classList.toggle('bg-white', !active);
+          btn.classList.toggle('text-slate-700', !active);
+        });
+
+        updateLedgerModel();
+      }
+
+      // =================================================================
+      // 2. 七大玩家用户画像与利益诉求全景浏览器
+      // =================================================================
+      const PLAYERS = [
+        {
+          id: 'corporate',
+          name: '一般法人（产业资本）',
+          shareLabel: '41.2%',
+          layer: 'ballast',
+          layerName: '压舱石层',
+          tagline: '控股股东、国资集团及上市公司实控人，决定全市场筹码总供给',
+          capital: '自有长期股权 / 国资控股；资金久期长达数年乃至永久，几乎无二级市场短期赎回压力。',
+          goal: '保障控股权稳固、低成本再融资、落实央国企市值管理考核；部分民企原始股东存在泡沫高位套现变现诉求。',
+          behavior: '绝大多数筹码长期锁仓；仅在估值极端低位回购增持，在牛市泡沫高位通过减持、大宗交易、定增或可转债释放筹码。',
+          strength: '身处产业一线，掌握企业最底层的真实经营订单与财务真相。',
+          weakness: '持股体量极大且受减持新规约束，高位退出高度依赖牛市流动性配合。',
+          retailAction: '高度警惕高估值、频繁解禁减持且不分红的标的；拥抱持续高分红、主动注销式回购的优质产业龙头。',
+          radar: [98, 95, 10, 78, 35], // 资金久期、信息算力、换手活跃、逆周期左侧、短期波动影响
+        },
+        {
+          id: 'national',
+          name: '国家队与政策长钱',
+          shareLabel: '含 ETF 8.5–9.5 万亿',
+          layer: 'ballast',
+          layerName: '压舱石层',
+          tagline: '中央汇金、证金及社保/养老金（直接流通口径含自营等约 4.0%）',
+          capital: '政策性稳定资金与公共长期保障资金；无短期赎回压力，具备跨周期逆向承接能力。',
+          goal: '汇金/证金核心守住金融系统性风险底线；社保与养老金追求长期稳健保值增值以覆盖长期负债。',
+          behavior: '在系统性暴跌与市场绝望底部逆周期左侧托底，集中配置大金融蓝筹与沪深 300 等核心宽基 ETF。',
+          strength: '拥有近乎无限的资金久期与政策视野，毫无季度排名焦虑。',
+          weakness: '承担市场维稳与公共托底职能，体量庞大，难以灵活追逐中小盘题材弹性。',
+          retailAction: '当国家队与政策长钱在极端悲观期大举净申购核心宽基 ETF 时，切忌恐慌割肉，应保持定力分批跟随布局。',
+          radar: [96, 85, 18, 96, 60],
+        },
+        {
+          id: 'insurance',
+          name: '保险资金',
+          shareLabel: '5.9%（约5.7万亿）',
+          layer: 'ballast',
+          layerName: '压舱石层',
+          tagline: 'A 股高股息低波蓝筹最坚定、最具持续性的增量“耐心资本”',
+          capital: '长期保费现金流；资金持续稳定流入，但背负 2.5%–3.5% 的刚性负债端保底成本。',
+          goal: '在覆盖刚性负债成本的同时，借助 IFRS 9 下 FVOCI 科目最大程度压低当期利润表的净值波动。',
+          behavior: '极少追涨杀跌，常年左侧稳步增配银行、电力、煤炭、交运等高股息、现金流稳固的央国企蓝筹。',
+          strength: '保费增量现金流源源不断，久期长、心态稳，天然适配复利滚动。',
+          weakness: '受偿付能力充足率与会计准则严格约束，难以重仓高波动成长股。',
+          retailAction: '这是散户最值得“抄作业”的阵营——将个人底仓锚定在红利低波资产上，把散户活成“微型险资”。',
+          radar: [90, 76, 22, 88, 38],
+        },
+        {
+          id: 'mutual',
+          name: '公募基金',
+          shareLabel: '7.1%（约7.52万亿）',
+          layer: 'pricing',
+          layerName: '定价层',
+          tagline: '境内机构第一大主力，主动赛道定价与被动宽基 ETF 扩容的核心引擎',
+          capital: '大众开放式申赎受托资金；负债端呈强顺周期波动（牛市顶部申购潮、熊市底部赎回潮）。',
+          goal: '核心追求扩大管理规模（AUM）赚取管理费，以及在季度/年度相对排名中不掉队。',
+          behavior: '主动权益易在景气度最高的成长赛道（AI、半导体、新能源）形成抱团与踩踏；被动宽基/红利 ETF 占比近年持续抬升。',
+          strength: '拥有庞大的行业研究员团队，深度覆盖产业供应链与公司调研。',
+          weakness: '受制于相对排名与基民申赎魔咒，经常在泡沫期被迫买贵、在底部被迫割肉。',
+          retailAction: '远离主动公募情绪极度一致的抱团顶部；善用低费率（0.15%–0.5%）宽基与红利 ETF 替代高费率主动追高。',
+          radar: [42, 84, 58, 35, 78],
+        },
+        {
+          id: 'foreign',
+          name: '外资（北向 / QFII）',
+          shareLabel: '4.4%',
+          layer: 'pricing',
+          layerName: '定价层',
+          tagline: '全球资产配置视角，核心白马边际定价锚与风格切换先行指标',
+          capital: '全球主权基金、海外养老金及对冲资金；受美债利率、美元汇率与全球风险偏好影响显著。',
+          goal: '在全球权益市场横向比价下，追求风险调整后的超额收益与高确定性估值性价比。',
+          behavior: '配置型长钱偏爱治理透明、ROE 稳定的行业龙头；交易型外资近年围绕宏观预期做波段的属性有所增强。',
+          strength: '具备全球跨市场估值视野与成熟财务排雷框架。',
+          weakness: '面临汇率波动、地缘扰动以及对中国本土草根产业变化的信息隔阂。',
+          retailAction: '学习其看重自由现金流与高 ROE 的基本面筛选标准，但不必盲目跟随短期汇率驱动的日度波段进出。',
+          radar: [64, 80, 48, 56, 72],
+        },
+        {
+          id: 'private',
+          name: '私募基金（主观 + 量化）',
+          shareLabel: '2.4%（约2.32万亿）',
+          layer: 'sentiment',
+          layerName: '情绪/博弈层',
+          tagline: '持仓市值占比不高，但量化私募在中小盘日内定价与成交中权重大幅领先',
+          capital: '高净值客户与机构募资；产品普遍设有净值预警线与强平止损线。',
+          goal: '追求高夏普比率绝对收益与超额业绩报酬（Carry），将严控回撤防清盘视为生命线。',
+          behavior: '主观私募分化为深度价值或趋势集中押注；量化私募凭借全市场选股与高频微结构算法，在中小微盘持续获取超额阿尔法。',
+          strength: '机制高度灵活，量化私募在算力、数据因子与毫秒级盘口微结构上对散户形成降维碾压。',
+          weakness: '预警清盘线迫使其在极端流动性危机时被动降仓，易引发微盘股踩踏。',
+          retailAction: '认清算力与微结构代差——绝不在中小微盘高换手日内交易里与量化拼手速、做短线博弈。',
+          radar: [38, 96, 92, 42, 86],
+        },
+        {
+          id: 'retail',
+          name: '个人投资者与游资',
+          shareLabel: '35.0%（成交60%–70%）',
+          layer: 'sentiment',
+          layerName: '情绪/博弈层',
+          tagline: '超 2.39 亿账户构成流动性主底座，内部呈“90% 小散 + 顶级游资”极端分化',
+          capital: '个人自有闲钱或高息两融杠杆资金；约 90% 账户低于 50 万元，百万以上高净值仅占 3%。',
+          goal: '普通散户普遍渴望“以小博大”快速翻倍与高频情绪反馈；游资专攻情绪周期连板接力套现。',
+          behavior: '重度偏好中小微盘题材股与热点消息；中小散户年均换手超 300%（平均持股不足 40 天），深受处置效应支配。',
+          strength: '散户拥有全市场独一无二的制度红利：无业绩考核、无赎回压力、无清盘线、小资金进出无冲击成本。',
+          weakness: '缺乏稳定估值定价锚，极易追涨杀跌，每年被 8%–10% 交易摩擦与对手盘持续收割。',
+          retailAction: '彻底放弃“短线暴富”执念，把独有的无限时间久期优势用足：零杠杆、降换手、借道 ETF 站队压舱石与全球配置。',
+          radar: [72, 22, 98, 20, 95],
+        },
+      ];
+
+      let activeLayerFilter = 'all';
+      let activePlayerId = 'corporate';
+      let playerRadarChartInstance = null;
+
+      function getLayerBadgeClasses(layer) {
+        if (layer === 'ballast') return 'bg-navy-soft text-navy';
+        if (layer === 'pricing') return 'bg-amberbrand-soft text-amberbrand-dark';
+        return 'bg-crimson-soft text-crimson';
+      }
+
+      function renderPlayerList() {
+        const listEl = document.getElementById('player-list');
+        if (!listEl) return;
+
+        const filtered =
+          activeLayerFilter === 'all'
+            ? PLAYERS
+            : PLAYERS.filter((p) => p.layer === activeLayerFilter);
+
+        // 若当前选中玩家不在筛选列表中，自动切到第一个
+        if (!filtered.some((p) => p.id === activePlayerId) && filtered.length > 0) {
+          activePlayerId = filtered[0].id;
+        }
+
+        listEl.innerHTML = filtered
+          .map((p) => {
+            const isSelected = p.id === activePlayerId;
+            return `
+              <button type="button" data-player-id="${p.id}"
+                class="player-item-btn w-full text-left p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                  isSelected
+                    ? 'bg-navy text-white border-navy shadow-md'
+                    : 'bg-white text-slate-800 border-slate-200 hover:border-navy/40 hover:bg-surface'
+                }">
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">${p.name}</div>
+                  <div class="text-[11px] mt-0.5 tabular-nums ${isSelected ? 'text-slate-200' : 'text-slate-500'}">
+                    规模/占比：${p.shareLabel}
+                  </div>
+                </div>
+                <span class="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  isSelected ? 'bg-white/20 text-white' : getLayerBadgeClasses(p.layer)
+                }">${p.layerName}</span>
+              </button>
+            `;
+          })
+          .join('');
+
+        // 绑定点击事件
+        listEl.querySelectorAll('.player-item-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            activePlayerId = btn.getAttribute('data-player-id');
+            renderPlayerList();
+            renderPlayerDossier();
+          });
+        });
+
+        renderPlayerDossier();
+      }
+
+      function renderPlayerDossier() {
+        const p = PLAYERS.find((item) => item.id === activePlayerId) || PLAYERS[0];
+
+        const badge = document.getElementById('dossier-layer-badge');
+        badge.textContent = p.layerName;
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold ' + getLayerBadgeClasses(p.layer);
+
+        document.getElementById('dossier-share-badge').textContent = '规模/占比：' + p.shareLabel;
+        document.getElementById('dossier-name').textContent = p.name;
+        document.getElementById('dossier-tagline').textContent = p.tagline;
+        document.getElementById('dossier-capital').textContent = p.capital;
+        document.getElementById('dossier-goal').textContent = p.goal;
+        document.getElementById('dossier-behavior').textContent = p.behavior;
+        document.getElementById('dossier-strength').textContent = p.strength;
+        document.getElementById('dossier-weakness').textContent = p.weakness;
+        document.getElementById('dossier-retail-action').textContent = p.retailAction;
+
+        const radarColor =
+          p.layer === 'ballast' ? COLORS.navy : p.layer === 'pricing' ? COLORS.amber : COLORS.crimson;
+        const radarFill =
+          p.layer === 'ballast'
+            ? 'rgba(30, 58, 95, 0.22)'
+            : p.layer === 'pricing'
+            ? 'rgba(217, 119, 6, 0.22)'
+            : 'rgba(220, 38, 38, 0.20)';
+
+        const ctx = document.getElementById('playerRadarChart');
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        if (!playerRadarChartInstance) {
+          playerRadarChartInstance = new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: ['资金久期\n稳定性', '信息与算力\n优势', '交易换手\n活跃度', '逆周期左侧\n意愿', '短期波动\n影响力'],
+              datasets: [
+                {
+                  label: p.name,
+                  data: p.radar,
+                  borderColor: radarColor,
+                  backgroundColor: radarFill,
+                  pointBackgroundColor: radarColor,
+                  pointBorderColor: '#FFFFFF',
+                  pointRadius: 4,
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  callbacks: {
+                    label: (c) => ` 相对分值：${c.parsed.r} / 100`,
+                  },
+                },
+              },
+              scales: {
+                r: {
+                  min: 0,
+                  max: 100,
+                  ticks: { stepSize: 25, display: false },
+                  grid: { color: '#E2E8F0' },
+                  angleLines: { color: '#E2E8F0' },
+                  pointLabels: {
+                    color: '#334155',
+                    font: { size: 11, weight: '600' },
+                  },
+                },
+              },
+            },
+          });
+        } else {
+          const ds = playerRadarChartInstance.data.datasets[0];
+          ds.label = p.name;
+          ds.data = p.radar;
+          ds.borderColor = radarColor;
+          ds.backgroundColor = radarFill;
+          ds.pointBackgroundColor = radarColor;
+          playerRadarChartInstance.update();
+        }
+      }
+
+      function initMechanismAccordions() {
+        document.querySelectorAll('.mechanism-toggle').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!expanded));
+            const card = btn.closest('.mechanism-card');
+            const body = card.querySelector('.mechanism-body');
+            const icon = card.querySelector('.mechanism-icon');
+            if (expanded) {
+              body.classList.add('hidden');
+              icon.classList.remove('rotate-180');
+            } else {
+              body.classList.remove('hidden');
+              icon.classList.add('rotate-180');
+            }
+          });
+        });
+      }
+
+      // =================================================================
+      // 3B. 牛熊周期筹码转移交互演进器
+      // =================================================================
+      const CYCLE_STAGES = [
+        {
+          temp: 15,
+          tempLabel: '15°C · 极度冰点（高赔率左侧区）',
+          tempColorClass: 'bg-tealbrand',
+          tempTextClass: 'text-tealbrand',
+          flows: [
+            { from: '情绪层（散户/杠杆资金）', to: '压舱石层（国家队/险资/产业回购）', desc: '散户深度套牢后绝望割肉，带止损线私募被动降仓，低估筹码被长钱安静承接', tone: 'teal' },
+            { from: '定价层（公募主动权益）', to: '现金 / 宽基 ETF', desc: '基民恐慌赎回迫使主动公募在低位被动卖出，压低估值中枢至历史极低分位', tone: 'navy' },
+          ],
+          features: [
+            '全市场成交额持续萎缩，新发基金募集困难，社交平台与媒体充斥“A 股彻底不能投”的悲观叙事。',
+            '沪深 300 与红利板块股息率升至历史高位（3%–5%+），上市公司回购增持公告密集增加。',
+            '中央汇金等政策长钱借道核心宽基 ETF 逆周期托底，底部流动性锚逐步形成。',
+          ],
+          directiveTitle: '逆向分批定投 · 贪婪地收集便宜筹码',
+          directiveText:
+            '这是散户发挥“无考核、无赎回”唯一优势的黄金窗口。严禁在此位置情绪化割肉，利用 20%–30% 的现金安全垫，按计划向红利低波与核心宽基 ETF 分批定投，把高波动转化为低成本筹码。',
+          directiveStyle: 'bg-tealbrand-soft border-tealbrand/30',
+          directiveBadgeStyle: 'bg-tealbrand text-white',
+          directiveTitleStyle: 'text-tealbrand-dark',
+        },
+        {
+          temp: 62,
+          tempLabel: '62°C · 景气升温（主升结构区）',
+          tempColorClass: 'bg-amberbrand',
+          tempTextClass: 'text-amberbrand',
+          flows: [
+            { from: '观望现金 / 固收仓位', to: '定价层（公募/外资主线抱团）', desc: '政策或产业景气拐点确认，外资与公募率先围绕核心成长主线推升估值溢价', tone: 'amber' },
+            { from: '全市场微结构波动', to: '量化私募与趋势资金', desc: '成交额显著放大，量化高频算法推升中小盘流动性，局部赚钱效应开始扩散', tone: 'navy' },
+          ],
+          features: [
+            '政策预期与产业周期共振，主线赛道与核心宽基率先走出趋势，主动基金净值快速修复。',
+            '两融余额温和回升，市场成交量从冰点放大，赚钱效应由核心龙头向中游细分扩散。',
+            '前期在底部恐慌踏空的个人投资者开始犹豫试探，但尚未出现全民狂热入场。',
+          ],
+          directiveTitle: '严守仓位纪律 · 拿住底仓不频繁换车',
+          directiveText:
+            '不要因为短期反弹 15% 就急于清仓，也不要卖掉稳健底仓去追涨已经暴涨的题材热点。保持既有杠铃组合不动，把看盘频率降到最低，让利润沿着趋势自然奔跑。',
+          directiveStyle: 'bg-amberbrand-soft border-amberbrand/30',
+          directiveBadgeStyle: 'bg-amberbrand text-white',
+          directiveTitleStyle: 'text-amberbrand-dark',
+        },
+        {
+          temp: 94,
+          tempLabel: '94°C · 情绪过热（高风险派发区）',
+          tempColorClass: 'bg-crimson',
+          tempTextClass: 'text-crimson',
+          flows: [
+            { from: '产业资本 / 压舱石与先知长钱', to: '情绪层（新开户散户与两融杠杆）', desc: '大股东借牛市流动性高位减持、发定增/可转债套现，长钱与游资在情绪高潮期有序兑现', tone: 'crimson' },
+            { from: '高股息稳健资产', to: '高估值中小微盘纯题材股', desc: '赚钱效应破圈引发散户扎堆追连板、加杠杆，高成本筹码在山顶完成最终换手', tone: 'crimson' },
+          ],
+          features: [
+            '全网热议开户排队、单日成交额暴增至天量，中小散户与两融杠杆资金加速涌入高估值概念股。',
+            '游资借助连板制造“每天涨停”的暴富幻觉，题材股脱离盈利基本面，换手率飙升至极端区间。',
+            '重要股东减持公告与一级再融资显著放量，二级市场真实净流向再次转为大规模抽血。',
+          ],
+          directiveTitle: '触发机械止盈 · 拒绝加杠杆与高位满仓',
+          directiveText:
+            '停止一切新增定投，绝不在情绪最狂热时加杠杆或将安全垫资金全部杀入股市。严格执行“偏离 ±5% 机械再平衡”纪律：将涨超目标比例的权益仓位分批卖出，锁回货币基金、短债与黄金等安全垫。',
+          directiveStyle: 'bg-crimson-soft border-crimson/30',
+          directiveBadgeStyle: 'bg-crimson text-white',
+          directiveTitleStyle: 'text-crimson-dark',
+        },
+      ];
+
+      function renderCycleStage(stageIdx) {
+        const s = CYCLE_STAGES[stageIdx];
+
+        // 切换按钮高亮
+        document.querySelectorAll('.cycle-stage-btn').forEach((btn, idx) => {
+          const active = idx === stageIdx;
+          btn.classList.remove(
+            'border-navy',
+            'bg-navy-soft/60',
+            'border-amberbrand',
+            'bg-amberbrand-soft/60',
+            'border-crimson',
+            'bg-crimson-soft/60',
+            'shadow-sm',
+            'border-slate-200',
+            'bg-white'
+          );
+          if (active) {
+            if (idx === 0) btn.classList.add('border-navy', 'bg-navy-soft/60', 'shadow-sm');
+            if (idx === 1) btn.classList.add('border-amberbrand', 'bg-amberbrand-soft/60', 'shadow-sm');
+            if (idx === 2) btn.classList.add('border-crimson', 'bg-crimson-soft/60', 'shadow-sm');
+          } else {
+            btn.classList.add('border-slate-200', 'bg-white');
+          }
+        });
+
+        // 筹码流向图解
+        const flowEl = document.getElementById('cycle-flow-diagram');
+        flowEl.innerHTML = s.flows
+          .map((f) => {
+            const arrowColor =
+              f.tone === 'teal'
+                ? 'text-tealbrand bg-tealbrand-soft'
+                : f.tone === 'amber'
+                ? 'text-amberbrand-dark bg-amberbrand-soft'
+                : f.tone === 'crimson'
+                ? 'text-crimson bg-crimson-soft'
+                : 'text-navy bg-navy-soft';
+            return `
+              <div class="p-3 rounded-lg bg-surface border border-slate-200/80">
+                <div class="flex flex-wrap items-center gap-2 text-xs font-bold mb-1.5">
+                  <span class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">${f.from}</span>
+                  <span class="px-2 py-0.5 rounded-full ${arrowColor}">筹码流向 →</span>
+                  <span class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-900">${f.to}</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">${f.desc}</p>
+              </div>
+            `;
+          })
+          .join('');
+
+        // 温度条
+        const tempBar = document.getElementById('cycle-temp-bar');
+        tempBar.style.width = s.temp + '%';
+        tempBar.className = 'h-full rounded-full transition-all duration-500 ' + s.tempColorClass;
+
+        const tempLabel = document.getElementById('cycle-temp-label');
+        tempLabel.textContent = s.tempLabel;
+        tempLabel.className = 'font-bold tabular-nums ' + s.tempTextClass;
+
+        // 盘面特征
+        document.getElementById('cycle-features-list').innerHTML = s.features
+          .map(
+            (feat) =>
+              `<li class="flex items-start gap-2"><span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-navy shrink-0"></span><span>${feat}</span></li>`
+          )
+          .join('');
+
+        // 操作指令
+        const dirBox = document.getElementById('cycle-directive-box');
+        dirBox.className = 'rounded-xl p-4 sm:p-5 border transition-colors ' + s.directiveStyle;
+        const dirBadge = document.getElementById('cycle-directive-badge');
+        dirBadge.className = 'px-2 py-0.5 rounded text-[11px] font-bold ' + s.directiveBadgeStyle;
+        const dirTitle = document.getElementById('cycle-directive-title');
+        dirTitle.textContent = s.directiveTitle;
+        dirTitle.className = 'text-sm font-bold ' + s.directiveTitleStyle;
+        document.getElementById('cycle-directive-text').textContent = s.directiveText;
+      }
+
+      // =================================================================
+      // 4B. 十年策略复利推演器
+      // =================================================================
+      let compoundChartInstance = null;
+
+      function updateCompoundSimulator() {
+        const principal = Number(document.getElementById('slider-principal').value);
+        const drag = Number(document.getElementById('slider-drag').value);
+        const years = Number(document.getElementById('slider-years').value);
+
+        document.getElementById('val-principal').textContent = principal + ' 万元';
+        document.getElementById('val-drag').textContent = drag.toFixed(1) + '%';
+        document.getElementById('val-years').textContent = years + ' 年';
+
+        const rRetail = (6.0 - drag) / 100; // 高频散户净年化
+        const rDividend = 0.062; // 低换手 A 股红利+核心宽基 6.2%
+        const rBarbell = 0.071; // 杠铃防御+跨市场再平衡 7.1%
+
+        const labels = [];
+        const dataRetail = [];
+        const dataDividend = [];
+        const dataBarbell = [];
+
+        for (let t = 0; t <= years; t++) {
+          labels.push('第 ' + t + ' 年');
+          dataRetail.push(Number((principal * Math.pow(1 + rRetail, t)).toFixed(2)));
+          dataDividend.push(Number((principal * Math.pow(1 + rDividend, t)).toFixed(2)));
+          dataBarbell.push(Number((principal * Math.pow(1 + rBarbell, t)).toFixed(2)));
+        }
+
+        const endRetail = dataRetail[years];
+        const endDividend = dataDividend[years];
+        const endBarbell = dataBarbell[years];
+        const gap = endBarbell - endRetail;
+        const ratio = endRetail > 0 ? endBarbell / endRetail : 0;
+
+        const pctRetail = ((endRetail / principal - 1) * 100).toFixed(1);
+        const pctDividend = ((endDividend / principal - 1) * 100).toFixed(1);
+        const pctBarbell = ((endBarbell / principal - 1) * 100).toFixed(1);
+
+        document.getElementById('comp-val-retail').textContent = endRetail.toFixed(2) + ' 万元';
+        document.getElementById('comp-pct-retail').textContent =
+          `累计 ${Number(pctRetail) >= 0 ? '+' : ''}${pctRetail}% (净年化 ${(rRetail * 100).toFixed(1)}%)`;
+
+        document.getElementById('comp-val-dividend').textContent = endDividend.toFixed(2) + ' 万元';
+        document.getElementById('comp-pct-dividend').textContent = `累计 +${pctDividend}% (净年化 6.2%)`;
+
+        document.getElementById('comp-val-barbell').textContent = endBarbell.toFixed(2) + ' 万元';
+        document.getElementById('comp-pct-barbell').textContent = `累计 +${pctBarbell}% (净年化 7.1%)`;
+
+        document.getElementById('comp-val-gap').textContent = '+' + gap.toFixed(2) + ' 万元';
+        document.getElementById('comp-pct-gap').textContent = `期末资产为高频散户的 ${ratio.toFixed(2)} 倍`;
+
+        const ctx = document.getElementById('compoundChart');
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        if (!compoundChartInstance) {
+          compoundChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: '杠铃防御+跨市场再平衡 (7.1%)',
+                  data: dataBarbell,
+                  borderColor: COLORS.teal,
+                  backgroundColor: 'rgba(13, 148, 136, 0.08)',
+                  fill: true,
+                  tension: 0.25,
+                  borderWidth: 2.5,
+                  pointRadius: 3,
+                },
+                {
+                  label: '低换手 A 股红利+核心宽基 (6.2%)',
+                  data: dataDividend,
+                  borderColor: COLORS.navy,
+                  backgroundColor: 'transparent',
+                  tension: 0.25,
+                  borderWidth: 2.5,
+                  pointRadius: 3,
+                },
+                {
+                  label: '高频追涨杀跌散户 (6.0% − 损耗)',
+                  data: dataRetail,
+                  borderColor: COLORS.crimson,
+                  backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                  fill: true,
+                  borderDash: [6, 4],
+                  tension: 0.25,
+                  borderWidth: 2.5,
+                  pointRadius: 3,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true, padding: 14 } },
+                tooltip: {
+                  backgroundColor: '#0F172A',
+                  padding: 12,
+                  callbacks: {
+                    label: (c) => ` ${c.dataset.label}：${c.parsed.y.toFixed(2)} 万元`,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: { color: '#E2E8F0' },
+                  ticks: { callback: (v) => v + ' 万' },
+                },
+                x: {
+                  grid: { display: false },
+                },
+              },
+            },
+          });
+        } else {
+          compoundChartInstance.data.labels = labels;
+          compoundChartInstance.data.datasets[0].data = dataBarbell;
+          compoundChartInstance.data.datasets[1].data = dataDividend;
+          compoundChartInstance.data.datasets[2].data = dataRetail;
+          compoundChartInstance.update();
+        }
+      }
+
+      // =================================================================
+      // 4C. 个人“杠铃防御”生存配置定制器
+      // =================================================================
+      const RISK_TEMPLATES = {
+        conservative: { name: '保守防御型', weights: [25, 20, 45, 10] },
+        balanced: { name: '平衡稳健型·基准', weights: [30, 30, 25, 15] },
+        growth: { name: '平衡进取型', weights: [25, 35, 15, 25] },
+      };
+
+      // 4 大桶及 8 类细分工具配置比例（桶内权重之和 = 1）
+      const PORTFOLIO_BUCKETS = [
+        {
+          name: 'A 股红利低波底仓',
+          color: COLORS.navy,
+          badgeBg: 'bg-navy-soft text-navy',
+          holdings: [
+            { name: '中证红利低波宽基 ETF', note: '核心高股息防守底薪', ratio: 0.6 },
+            { name: '央国企高股息蓝筹 ETF', note: '站队险资与市值管理红利', ratio: 0.4 },
+          ],
+        },
+        {
+          name: '跨市场与避险分散',
+          color: COLORS.teal,
+          badgeBg: 'bg-tealbrand-soft text-tealbrand-dark',
+          holdings: [
+            { name: '海外成熟市场宽基（QDII）', note: '分享注销式回购与长期顺风', ratio: 2 / 3 },
+            { name: '黄金 ETF / 低相关性避险资产', note: '对冲地缘、通胀与汇率波动', ratio: 1 / 3 },
+          ],
+        },
+        {
+          name: '现金与固收安全垫',
+          color: '#64748B',
+          badgeBg: 'bg-slate-100 text-slate-700',
+          holdings: [
+            { name: '货币基金 / 国债逆回购', note: '生活应急与极端暴跌抄底弹药', ratio: 0.6 },
+            { name: '中短债基金 / 同业存单指数', note: '增强稳健票息收益', ratio: 0.4 },
+          ],
+        },
+        {
+          name: 'A 股逆向宽基弹性仓',
+          color: COLORS.amber,
+          badgeBg: 'bg-amberbrand-soft text-amberbrand-dark',
+          holdings: [
+            { name: '沪深 300 / 中证 A500 核心宽基', note: '获取市场整体均值回归弹性', ratio: 2 / 3 },
+            { name: '低位定投 / 行业轮动机动仓', note: '仅在低估冰点区间分批介入', ratio: 1 / 3 },
+          ],
+        },
+      ];
+
+      let portfolioWeights = [30, 30, 25, 15];
+      let portfolioChartInstance = null;
+
+      function formatRMB(amount) {
+        return '¥' + Math.round(amount).toLocaleString('zh-CN');
+      }
+
+      function updatePortfolioWorkbench() {
+        const capInput = document.getElementById('input-capital');
+        let capitalWan = parseFloat(capInput.value);
+        if (isNaN(capitalWan) || capitalWan <= 0) {
+          capitalWan = 10;
+        }
+        const totalRMB = capitalWan * 10000;
+
+        // 读取 4 个权重滑块
+        portfolioWeights = [0, 1, 2, 3].map((i) =>
+          Number(document.getElementById('w-slider-' + i).value)
+        );
+        const sumWeights = portfolioWeights.reduce((a, b) => a + b, 0);
+
+        // 更新滑块读数
+        portfolioWeights.forEach((w, i) => {
+          document.getElementById('w-val-' + i).textContent = w + '%';
+        });
+
+        // 快捷按钮高亮同步
+        document.querySelectorAll('.quick-cap-btn').forEach((btn) => {
+          const isMatch = Number(btn.getAttribute('data-quick-cap')) === capitalWan;
+          btn.classList.toggle('border-navy', isMatch);
+          btn.classList.toggle('bg-navy-soft', isMatch);
+          btn.classList.toggle('text-navy', isMatch);
+          btn.classList.toggle('border-slate-200', !isMatch);
+          btn.classList.toggle('bg-white', !isMatch);
+          btn.classList.toggle('text-slate-700', !isMatch);
+        });
+
+        // 权重合计校验与配平按钮
+        const sumBadge = document.getElementById('weight-sum-badge');
+        const normalizeBtn = document.getElementById('btn-normalize-weights');
+        const warningBox = document.getElementById('weight-warning-msg');
+        const centerSum = document.getElementById('doughnut-center-sum');
+
+        document.getElementById('doughnut-center-total').textContent = formatRMB(totalRMB);
+
+        if (sumWeights === 100) {
+          sumBadge.textContent = '合计 100%';
+          sumBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-bold bg-tealbrand-soft text-tealbrand-dark tabular-nums';
+          centerSum.textContent = '权重合计 100%';
+          centerSum.className = 'text-[11px] font-semibold text-tealbrand mt-0.5 tabular-nums';
+          normalizeBtn.classList.add('hidden');
+          warningBox.classList.add('hidden');
+        } else {
+          sumBadge.textContent = `当前合计 ${sumWeights}%`;
+          sumBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-bold bg-amberbrand-soft text-amberbrand-dark tabular-nums';
+          centerSum.textContent = `合计 ${sumWeights}% (待配平)`;
+          centerSum.className = 'text-[11px] font-semibold text-amberbrand mt-0.5 tabular-nums';
+          normalizeBtn.classList.remove('hidden');
+          warningBox.classList.remove('hidden');
+        }
+
+        // 更新 Chart.js 环形图
+        const ctx = document.getElementById('portfolioChart');
+        if (ctx && typeof Chart !== 'undefined') {
+          if (!portfolioChartInstance) {
+            portfolioChartInstance = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: PORTFOLIO_BUCKETS.map((b) => b.name),
+                datasets: [
+                  {
+                    data: portfolioWeights,
+                    backgroundColor: PORTFOLIO_BUCKETS.map((b) => b.color),
+                    borderColor: '#FFFFFF',
+                    borderWidth: 3,
+                    hoverOffset: 6,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '66%',
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    backgroundColor: '#0F172A',
+                    padding: 10,
+                    callbacks: {
+                      label: (c) => {
+                        const w = c.parsed;
+                        const amt = totalRMB * (w / 100);
+                        return ` ${c.label}：${w}% (${formatRMB(amt)})`;
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          } else {
+            portfolioChartInstance.data.datasets[0].data = portfolioWeights;
+            portfolioChartInstance.update();
+          }
+        }
+
+        // 渲染 8 类细分标的金额明细
+        const listEl = document.getElementById('holdings-breakdown-list');
+        listEl.innerHTML = PORTFOLIO_BUCKETS.map((bucket, bIdx) => {
+          const w = portfolioWeights[bIdx];
+          const bucketAmt = totalRMB * (w / 100);
+          const lowerBound = Math.max(0, w - 5);
+          const upperBound = Math.min(100, w + 5);
+
+          const subRows = bucket.holdings
+            .map((h) => {
+              const subAmt = bucketAmt * h.ratio;
+              const subPct = (w * h.ratio).toFixed(1);
+              return `
+                <div class="flex items-center justify-between gap-3 py-2 pl-4 pr-4 hover:bg-surface/60 transition-colors">
+                  <div class="min-w-0">
+                    <div class="text-xs sm:text-sm font-medium text-slate-800">${h.name}</div>
+                    <div class="text-[11px] text-slate-400">${h.note}</div>
+                  </div>
+                  <div class="text-right shrink-0 tabular-nums">
+                    <div class="text-xs sm:text-sm font-bold text-slate-900">${formatRMB(subAmt)}</div>
+                    <div class="text-[11px] text-slate-400">占总资金 ${subPct}%</div>
+                  </div>
+                </div>
+              `;
+            })
+            .join('');
+
+          return `
+            <div class="bg-white">
+              <div class="px-4 py-2.5 bg-surface/70 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-sm shrink-0" style="background-color:${bucket.color};"></span>
+                  <span class="text-xs sm:text-sm font-bold text-slate-900">${bucket.name}</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold tabular-nums ${bucket.badgeBg}">${w}%</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs tabular-nums">
+                  <span class="text-[11px] text-slate-400 hidden sm:inline">再平衡区间：${lowerBound}%–${upperBound}%</span>
+                  <span class="font-bold text-navy">${formatRMB(bucketAmt)}</span>
+                </div>
+              </div>
+              <div class="divide-y divide-slate-100/80">${subRows}</div>
+            </div>
+          `;
+        }).join('');
+
+        // 动态更新底部再平衡触发提示文案
+        const w0 = portfolioWeights[0];
+        document.getElementById('rebalance-rule-text').innerHTML =
+          `每半年或每年固定日期检查一次组合占比：当任一资产桶的实际占比偏离目标权重超过 <strong>±5%</strong> 时（例如当前红利底仓目标 ${w0}%，若涨超 ${Math.min(100, w0 + 5)}% 或跌破 ${Math.max(0, w0 - 5)}%），强制卖出超配部分、补入低配资产，用机械纪律把散户“追涨杀跌”的本能彻底反过来执行。`;
+      }
+
+      function applyRiskTemplate(templateKey) {
+        const tpl = RISK_TEMPLATES[templateKey];
+        if (!tpl) return;
+        tpl.weights.forEach((w, idx) => {
+          document.getElementById('w-slider-' + idx).value = w;
+        });
+
+        document.querySelectorAll('.risk-template-btn').forEach((btn) => {
+          const active = btn.getAttribute('data-risk-template') === templateKey;
+          btn.classList.toggle('border-navy', active);
+          btn.classList.toggle('bg-navy', active);
+          btn.classList.toggle('text-white', active);
+          btn.classList.toggle('shadow-sm', active);
+          btn.classList.toggle('border-slate-200', !active);
+          btn.classList.toggle('bg-white', !active);
+          btn.classList.toggle('text-slate-700', !active);
+        });
+
+        updatePortfolioWorkbench();
+      }
+
+      function normalizePortfolioWeights() {
+        const raw = [0, 1, 2, 3].map((i) => Number(document.getElementById('w-slider-' + i).value));
+        const sum = raw.reduce((a, b) => a + b, 0);
+        let normalized;
+        if (sum === 0) {
+          normalized = [30, 30, 25, 15];
+        } else {
+          normalized = raw.map((v) => Math.round((v / sum) * 100));
+          const diff = 100 - normalized.reduce((a, b) => a + b, 0);
+          // 将四舍五入尾差补入最大权重的桶
+          const maxIdx = normalized.indexOf(Math.max(...normalized));
+          normalized[maxIdx] += diff;
+        }
+        normalized.forEach((w, idx) => {
+          document.getElementById('w-slider-' + idx).value = Math.min(70, Math.max(0, w));
+        });
+        // 若受限于单桶 70% 上限仍未满 100，顺延补入其余桶
+        let currentSum = [0, 1, 2, 3].reduce((acc, i) => acc + Number(document.getElementById('w-slider-' + i).value), 0);
+        for (let i = 0; i < 4 && currentSum !== 100; i++) {
+          const el = document.getElementById('w-slider-' + i);
+          const cur = Number(el.value);
+          const delta = 100 - currentSum;
+          const next = Math.min(70, Math.max(0, cur + delta));
+          el.value = next;
+          currentSum += next - cur;
+        }
+        updatePortfolioWorkbench();
+      }
+
+      // =================================================================
+      // 页面初始化入口（带全局错误保护）
+      // =================================================================
+      window.addEventListener('DOMContentLoaded', () => {
+        try {
+          // 0. 导航与进度条
+          initScrollSpy();
+
+          // 1A. 存量 vs 流量 3 Tab
+          document.querySelectorAll('.structure-tab-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              renderStructureChart(btn.getAttribute('data-structure-tab'));
+            });
+          });
+          renderStructureChart('holding');
+
+          // 1B. 全口径暗账测算器
+          document.querySelectorAll('.ledger-preset-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              applyLedgerPreset(btn.getAttribute('data-ledger-preset'));
+            });
+          });
+          ['slider-insider-share', 'slider-turnover', 'slider-selloff'].forEach((id) => {
+            document.getElementById(id).addEventListener('input', updateLedgerModel);
+          });
+          applyLedgerPreset('2025');
+
+          // 2. 七大玩家画像浏览器
+          document.querySelectorAll('.layer-filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              activeLayerFilter = btn.getAttribute('data-layer-filter');
+              document.querySelectorAll('.layer-filter-btn').forEach((b) => {
+                const isAct = b === btn;
+                b.classList.toggle('bg-navy', isAct);
+                b.classList.toggle('text-white', isAct);
+                b.classList.toggle('text-slate-600', !isAct);
+              });
+              renderPlayerList();
+            });
+          });
+          renderPlayerList();
+          initMechanismAccordions();
+
+          // 3B. 牛熊周期演进器
+          document.querySelectorAll('.cycle-stage-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              renderCycleStage(Number(btn.getAttribute('data-cycle-stage')));
+            });
+          });
+          renderCycleStage(0);
+
+          // 4B. 十年策略复利推演器
+          ['slider-principal', 'slider-drag', 'slider-years'].forEach((id) => {
+            document.getElementById(id).addEventListener('input', updateCompoundSimulator);
+          });
+          updateCompoundSimulator();
+
+          // 4C. 个人杠铃配置定制器
+          document.querySelectorAll('.risk-template-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              applyRiskTemplate(btn.getAttribute('data-risk-template'));
+            });
+          });
+          document.querySelectorAll('.quick-cap-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              document.getElementById('input-capital').value = btn.getAttribute('data-quick-cap');
+              updatePortfolioWorkbench();
+            });
+          });
+          document.getElementById('input-capital').addEventListener('input', updatePortfolioWorkbench);
+          document.querySelectorAll('.weight-slider').forEach((slider) => {
+            slider.addEventListener('input', () => {
+              // 手动微调后取消预设按钮选中态，提示用户处于自定义模式
+              document.querySelectorAll('.risk-template-btn').forEach((b) => {
+                b.classList.remove('border-navy', 'bg-navy', 'text-white', 'shadow-sm');
+                b.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+              });
+              updatePortfolioWorkbench();
+            });
+          });
+          document.getElementById('btn-normalize-weights').addEventListener('click', normalizePortfolioWeights);
+          applyRiskTemplate('balanced');
+        } catch (err) {
+          console.error('研报交互模块初始化异常：', err);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
