@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A 股中长线宏观与情绪双轨投研及仓位管理手册</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Google Fonts: Inter 与 Noto Sans SC 提升中英文数字混排质感 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '"Noto Sans SC"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#0F172A',
+              slate: '#334155',
+              bg: '#F8FAFC',
+              card: '#FFFFFF',
+              amber: '#D97706',
+              coral: '#E11D48',
+              emerald: '#059669',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局基础排版与数字等宽优化 */
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* 自定义复选框动效 */
+    .signal-checkbox:checked + .signal-card {
+      border-color: #0F172A;
+      background-color: #F8FAFC;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    }
+    .signal-checkbox-cut:checked + .signal-card {
+      border-color: #E11D48;
+      background-color: #FFF1F2;
+    }
+    .signal-checkbox-add:checked + .signal-card {
+      border-color: #059669;
+      background-color: #ECFDF5;
+    }
+    /* 隐藏横向滚动条但保留滚动能力 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* 打印与导出 PDF 专属样式 */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm;
+      }
+      body {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        font-size: 11pt;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-break-avoid {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+        border: 1px solid #CBD5E1 !important;
+      }
+      main {
+        padding-top: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-[#0F172A] selection:bg-slate-800 selection:text-white">
+
+  <!-- 顶部固定目录导航栏 -->
+  <header class="no-print sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
+      <!-- 左侧报告短标题 -->
+      <a href="#top" class="flex items-center gap-2.5 shrink-0 group">
+        <span class="w-2.5 h-2.5 rounded-sm bg-[#0F172A] group-hover:bg-amber-600 transition-colors"></span>
+        <span class="font-bold text-sm tracking-tight text-[#0F172A]">A股双轨投研手册</span>
+        <span class="hidden md:inline-block text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">2周–2个月周期</span>
+      </a>
+
+      <!-- 中部目录锚点（移动端支持横向滑动） -->
+      <nav aria-label="报告目录" class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1 text-xs sm:text-[13px] font-medium text-slate-600">
+        <a href="#module-1" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-[#0F172A] whitespace-nowrap transition-colors">01 架构升级</a>
+        <a href="#module-2" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-[#0F172A] whitespace-nowrap transition-colors">02 高频温度计</a>
+        <a href="#module-3" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-[#0F172A] whitespace-nowrap transition-colors">03 四阶段矩阵</a>
+        <a href="#module-4" class="px-2.5 py-1.5 rounded-lg bg-slate-900/5 text-[#0F172A] font-semibold hover:bg-slate-900/10 whitespace-nowrap transition-colors">04 周末仓位计算器</a>
+        <a href="#module-5" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 hover:text-[#0F172A] whitespace-nowrap transition-colors">05 日程与铁律</a>
+      </nav>
+
+      <!-- 右侧打印/保存 PDF 按钮 -->
+      <button
+        type="button"
+        onclick="window.print()"
+        class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] hover:bg-slate-800 active:scale-[0.99] text-white text-xs font-medium shadow-sm transition-all cursor-pointer"
+        title="打印或另存为 PDF 归档"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        <span class="hidden sm:inline">打印 / 保存 PDF</span>
+        <span class="sm:hidden">PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 报告主体容器 -->
+  <main id="top" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 sm:space-y-16">
+
+    <!-- 投研报告封面刊头 (Masthead) -->
+    <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-10 shadow-sm print-shadow-none print-break-avoid relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#0F172A] via-slate-600 to-amber-600"></div>
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div class="space-y-3 max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold tracking-wide">
+            <span>INSTITUTIONAL RESEARCH MANUAL</span>
+            <span class="text-slate-400">•</span>
+            <span>适配 2 周 – 2 个月调仓周期</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#0F172A] leading-tight">
+            A 股中长线宏观与情绪双轨投研及仓位管理手册
+          </h1>
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            以“自上而下宏观周期”定仓位中枢与行业风格，以“量能、市场广度与情绪水位”控买卖节奏——实现<strong>冰点有支撑分批加仓、亢奋过热阶梯减仓</strong>的标准化实战框架。
+          </p>
+        </div>
+
+        <!-- 核心策略参数摘要卡 -->
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-3 shrink-0 bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+          <div class="px-2">
+            <div class="text-[11px] text-slate-500 font-medium">决策架构</div>
+            <div class="text-sm sm:text-base font-bold text-[#0F172A] mt-0.5">宏观 × 情绪</div>
+          </div>
+          <div class="px-2 border-l border-slate-200">
+            <div class="text-[11px] text-slate-500 font-medium">调仓频率</div>
+            <div class="text-sm sm:text-base font-bold text-[#0F172A] mt-0.5 tabular-nums">2周 – 2个月</div>
+          </div>
+          <div class="px-2 border-l border-slate-200">
+            <div class="text-[11px] text-slate-500 font-medium">仓位区间</div>
+            <div class="text-sm sm:text-base font-bold text-amber-600 mt-0.5 tabular-nums">15% – 90%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         模块一：顶层架构升级——从“单向线性”到“双轨时间切片”
+    ===================================================================== -->
+    <section id="module-1" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">MODULE 01 · ARCHITECTURE UPGRADE</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">顶层架构升级：从“单向线性”到“双轨时间切片”</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">保留机构大局观，剥离日常看盘噪音</p>
+      </div>
+
+      <!-- 优势肯定与痛点诊断双栏卡片 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 左卡：现有优势与天然哑铃行业池 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm print-shadow-none print-break-avoid flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span>核心优势沉淀：机构化“自上而下”与哑铃结构</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-bold text-[#0F172A]">天然具备穿越牛熊的“攻守兼备”资产池</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              原有<strong>“宏观定方向 → 行业找主线 → 盘面选个股”</strong>框架大局观极强，不易被日内分时洗盘带偏；且关注行业池天然构成了适配 A 股结构性行情的<strong>哑铃组合</strong>：
+            </p>
+          </div>
+
+          <!-- 哑铃行业池可视化 -->
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/70 space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 items-stretch">
+              <!-- 进攻端 -->
+              <div class="bg-white rounded-lg p-3 border border-amber-200/80 shadow-2xs">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-amber-700">进攻端 · 高弹性</span>
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">AI、半导体、机器人、头部科技、先进制造</p>
+              </div>
+              <!-- 情绪锚 -->
+              <div class="bg-white rounded-lg p-3 border border-slate-300 shadow-2xs flex flex-col justify-center">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-slate-800">情绪锚 · 放大器</span>
+                  <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">证券板块（验证量能与风险偏好真伪）</p>
+              </div>
+              <!-- 防御端 -->
+              <div class="bg-white rounded-lg p-3 border border-emerald-200/80 shadow-2xs">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-emerald-700">防御端 · 压舱石</span>
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">高股息红利、银行 / 金融、稳健消费</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右卡：两大核心摩擦点诊断 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm print-shadow-none print-break-avoid flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span>日常看盘诊断：两个核心摩擦点</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-bold text-[#0F172A]">直接用于每日看盘的“频次错配”与“定价缺失”</h3>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2 font-bold text-sm text-[#0F172A]">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0F172A] text-white text-xs tabular-nums">1</span>
+                <span>变量频次错配（慢变量消耗高频精力）</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                CPI、PPI、PMI 与利率政策属于<strong>月度/季度慢变量</strong>，若放在每日看盘第一步，日常信息增量极低，反而容易因执着于宏大叙事而对盘面资金切换反应滞后。
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2 font-bold text-sm text-[#0F172A]">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0F172A] text-white text-xs tabular-nums">2</span>
+                <span>缺少 A 股核心定价层（流动性与情绪周期）</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                A 股是典型的“流动性与情绪驱动”市场，原有流程跳过了<strong>全市场量能结构、市场广度/情绪水位、风格跷跷板</strong>，易在权重护盘时误判赚钱效应，或在盘中临时评估个股时受情绪干扰追高。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 六维度体系对比表 -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm print-shadow-none print-break-avoid overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50/60">
+          <h3 class="text-base font-bold text-[#0F172A]">六维度体系升级对比表</h3>
+          <span class="text-xs font-medium text-slate-500">核心原则：低频定仓位方向 · 高频盯资金执行</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[680px]">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50/40 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th class="py-3.5 px-5 w-32">评估维度</th>
+                <th class="py-3.5 px-5 w-1/3">现有单向线性做法</th>
+                <th class="py-3.5 px-5 w-1/3 text-[#0F172A]">进阶“双轨时间切片”体系</th>
+                <th class="py-3.5 px-5">升级价值</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-xs sm:text-sm">
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">整体架构</td>
+                <td class="py-3.5 px-5 text-slate-600">单向线性：<br><span class="text-slate-500">宏观 → 行业 → 盘面个股</span></td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">双轨并行：<br><span class="text-slate-600 font-normal">低频轨（周/月定仓位与风格）+ 高频轨（日内盯资金与执行）</span></td>
+                <td class="py-3.5 px-5 text-slate-600">避免用低频宏观研究消耗高频看盘精力</td>
+              </tr>
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">宏观与政策</td>
+                <td class="py-3.5 px-5 text-slate-600">每天最先看利率、CPI、PPI、PMI</td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">降频至周度/关键节点；日常改看<span class="text-amber-700 font-semibold">“4大高频宏观代理指标”</span></td>
+                <td class="py-3.5 px-5 text-slate-600">宏观数据每月仅发一次，日常预期已实时定价在汇率与美债中</td>
+              </tr>
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">资金与量能</td>
+                <td class="py-3.5 px-5 text-slate-600">未单独设立量化观测环节</td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">列为每日看盘第一优先级（成交额斜率、ETF托底、两融占比）</td>
+                <td class="py-3.5 px-5 text-slate-600">量能决定当天是“增量普涨市”还是“存量电风扇轮动”</td>
+              </tr>
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">市场情绪</td>
+                <td class="py-3.5 px-5 text-slate-600">主观观察大小盘涨跌趋势</td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">量化情绪温度计（涨跌家数比、涨跌停比、炸板率、中位数）</td>
+                <td class="py-3.5 px-5 text-slate-600">防止银行/红利拉指数掩盖绝大多数个股下跌的失真行情</td>
+              </tr>
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">行业与风格</td>
+                <td class="py-3.5 px-5 text-slate-600">看行业新闻、政策与头部公司</td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">增加<span class="text-amber-700 font-semibold">“主线共振 vs. 风格跷跷板”</span>及证券信号真伪辨别</td>
+                <td class="py-3.5 px-5 text-slate-600">看清资金在进攻（科技）还是避险（红利），及时做哑铃再平衡</td>
+              </tr>
+              <tr class="hover:bg-slate-50/70 transition-colors bg-amber-50/30">
+                <td class="py-3.5 px-5 font-bold text-[#0F172A]">个股评估</td>
+                <td class="py-3.5 px-5 text-slate-600">盘中看到异动股再临时做五维评估</td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">深度五维评估（位置/技术/基本面/情绪/估值）<span class="text-rose-600 font-semibold">全移至盘后</span></td>
+                <td class="py-3.5 px-5 font-medium text-[#0F172A]">严守“盘中不研究，研究不盘中”，盘中只做条件触发执行</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         模块二：每日高频代理指标与市场温度计
+    ===================================================================== -->
+    <section id="module-2" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">MODULE 02 · DAILY PROXIES & THERMOMETER</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">每日高频代理指标与市场温度计</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">开盘前 3 分钟定基调，收盘后 5 分钟测体温</p>
+      </div>
+
+      <!-- 4 大高频宏观代理指标 -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-4 rounded-full bg-[#0F172A]"></span>
+          <h3 class="text-base font-bold text-[#0F172A]">一、4 大高频宏观代理指标（取代每日盯 CPI / PPI / PMI）</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- 卡片 1 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid hover:border-slate-300 transition-colors">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>PROXY 01</span>
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">外资与汇率锚</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">离岸人民币汇率 & 美元指数</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              关注 <strong class="text-slate-800">USD/CNH</strong> 关键整数关口方向。汇率稳步升值或企稳时，外资风险偏好回升，核心资产与大消费/金融更易获得增量配置。
+            </p>
+          </div>
+
+          <!-- 卡片 2 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid hover:border-slate-300 transition-colors">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>PROXY 02</span>
+              <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700">科技估值锚</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">10 年期美债收益率</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              全球无风险利率定价基准。美债收益率快速冲高会压制 <strong class="text-slate-800">AI、半导体、机器人</strong>等远期现金流高估值板块的拔估值空间；回落则利好科技成长。
+            </p>
+          </div>
+
+          <!-- 卡片 3 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid hover:border-slate-300 transition-colors">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>PROXY 03</span>
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">外围领先指标</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">富时 A50 期指 & 恒生科技</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              盘前观察隔夜 <strong class="text-slate-800">A50 期指</strong> 预判开盘情绪；盘中盯紧<strong class="text-slate-800">恒生科技指数</strong>，其对流动性与海外映射敏感，往往领先 A 股科技主线半步反应。
+            </p>
+          </div>
+
+          <!-- 卡片 4 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid hover:border-slate-300 transition-colors">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>PROXY 04</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">股债跷跷板</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">国内 10Y / 30Y 国债期货</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              反映国内机构资金的风险偏好切换。若国债期货持续单边逼空大涨，往往对应股市防御心态占优（利好高股息红利）；国债高位回调则代表资金回流权益市场。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- A 股资金与情绪 4 大体温计 -->
+      <div class="space-y-3 pt-2">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-4 rounded-full bg-amber-600"></span>
+          <h3 class="text-base font-bold text-[#0F172A]">二、A 股资金与情绪 4 大体温计（防止权重股拉指数失真）</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- 体温计 1 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>GAUGE 01</span>
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">第一生命线</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">开盘 30 分钟预估成交额</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              对比前日同时段量能斜率。<strong class="text-emerald-700">明显放量</strong>代表增量入场，大容量科技/证券有持续性；<strong class="text-amber-700">持续缩量</strong>则为存量“电风扇轮动”，严禁日内追高。
+            </p>
+          </div>
+
+          <!-- 体温计 2 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>GAUGE 02</span>
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">真实赚钱效应</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">涨跌家数比 & 涨跌幅中位数</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              上证指数常受银行/石油权重影响而失真。结合<strong class="text-slate-800">全市场涨跌家数比</strong>与<strong class="text-slate-800">个股涨跌幅中位数</strong>，才能看清账户真实的盈利概率与回撤压力。
+            </p>
+          </div>
+
+          <!-- 体温计 3 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>GAUGE 03</span>
+              <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700">风控警戒线</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">涨跌停家数 & 日内炸板率</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              <strong class="text-rose-600">炸板率 &gt; 35%–40%</strong> 说明高位资金兑现意愿极强，严禁追高接力；<strong class="text-rose-600">跌停家数突增 &gt; 20 家</strong> 意味局部流动性退潮，须立即收紧风控。
+            </p>
+          </div>
+
+          <!-- 体温计 4 -->
+          <div class="bg-white rounded-xl border border-slate-200/90 p-5 shadow-sm print-shadow-none print-break-avoid">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-2">
+              <span>GAUGE 04</span>
+              <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700">风格与真伪</span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-[#0F172A] mb-2">黄白线剪刀差 & 证券真假信号</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              白线在上、红利领涨为护盘防守；黄线在上、AI/半导体领涨为进攻。证券拉升若伴随<strong class="text-emerald-700">放量+科技共振</strong>为真突破；若<strong class="text-rose-600">缩量独自脉冲</strong>则是抽血见顶信号。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         模块三：中长线周期定价与四阶段实战矩阵
+    ===================================================================== -->
+    <section id="module-3" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">MODULE 03 · CYCLE PRICING & ACTION MATRIX</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">中长线周期定价与四阶段实战矩阵</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">将主观“冰点/亢奋”盘感转化为客观定量阈值</p>
+      </div>
+
+      <!-- 两个中长线防坑重点提示 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-amber-50/70 border border-amber-200/90 rounded-xl p-5 print-break-avoid">
+          <div class="flex items-center gap-2 text-amber-800 font-bold text-sm mb-2">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>防坑提示一：警惕宏观硬数据滞后于股市底部</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            PMI、CPI、社融等宏观硬数据往往滞后股市见底 <strong>1–2 个季度</strong>。切忌等数据全面转暖才动手：应以<strong>“政策表态 + 流动性预期拐点 + 盘面地量企稳”</strong>用于左侧打底仓，以<strong>“宏观与企业盈利好转”</strong>用于右侧加仓确认。
+          </p>
+        </div>
+
+        <div class="bg-emerald-50/70 border border-emerald-200/90 rounded-xl p-5 print-break-avoid">
+          <div class="flex items-center gap-2 text-emerald-800 font-bold text-sm mb-2">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>防坑提示二：内部风格腾挪（哑铃再平衡）配合总仓位增减</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            A 股多为结构性震荡市。弱市刚企稳时，优先加仓<strong>红利 / 金融</strong>打底；流动性充裕、主线确立后，再切向 <strong>AI / 半导体 / 机器人</strong>进攻；情绪进入亢奋期时，优先兑现高弹性成长股回笼红利或现金。
+          </p>
+        </div>
+      </div>
+
+      <!-- 四阶段定量操作矩阵表 -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm print-shadow-none print-break-avoid overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200/80 bg-slate-50/60 flex items-center justify-between">
+          <h3 class="text-base font-bold text-[#0F172A]">市场四阶段定量状态与操作矩阵</h3>
+          <span class="text-xs text-slate-500 hidden sm:inline">严防“冰点接飞刀”与“亢奋坐过山车”</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[740px]">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50/40 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th class="py-3.5 px-5 w-44">市场阶段</th>
+                <th class="py-3.5 px-5 w-44">核心操作动作</th>
+                <th class="py-3.5 px-5 w-1/3">情绪与估值锚点</th>
+                <th class="py-3.5 px-5">量能与“支撑 / 见顶”确认信号</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-xs sm:text-sm">
+              <!-- 阶段 1 -->
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-4 px-5 font-bold text-slate-700">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    <span>情绪冰点 + 无支撑</span>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700">观望 / 极轻仓</span>
+                  <div class="text-[11px] text-rose-600 font-medium mt-1">严禁主观抄底接飞刀</div>
+                </td>
+                <td class="py-4 px-5 text-slate-600 leading-relaxed">
+                  跌停家数频发，破净率升高，市场极度悲观但估值仍在向下寻底。
+                </td>
+                <td class="py-4 px-5 text-slate-600 leading-relaxed">
+                  缩量阴跌过程中遇利空仍继续大跌；宽基指数跌破关键周均线且无资金承接。
+                </td>
+              </tr>
+
+              <!-- 阶段 2 -->
+              <tr class="hover:bg-emerald-50/30 transition-colors bg-emerald-50/20">
+                <td class="py-4 px-5 font-bold text-emerald-800">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    <span>情绪冰点 + 有支撑</span>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">分批加仓（左转右）</span>
+                  <div class="text-[11px] text-emerald-700 font-medium mt-1">先加红利/宽基打底</div>
+                </td>
+                <td class="py-4 px-5 text-slate-700 leading-relaxed">
+                  沪深 300 股债性价比（ERP）处于<strong>近 5 年 80% 分位</strong>以上，进入高赔率黄金区间。
+                </td>
+                <td class="py-4 px-5 text-slate-700 leading-relaxed">
+                  成交额较峰值<strong>萎缩超 50%</strong> 现阶段地量 + <strong>利空不跌</strong> + 沪深300/A500 ETF 放量托底 + <strong>周线收长下影或放量阳线</strong>。
+                </td>
+              </tr>
+
+              <!-- 阶段 3 -->
+              <tr class="hover:bg-slate-50/70 transition-colors">
+                <td class="py-4 px-5 font-bold text-[#0F172A]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                    <span>温和修复 / 主升中段</span>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-800">持股不动 / 内部轮动</span>
+                  <div class="text-[11px] text-slate-500 mt-1">切向高弹性科技主线</div>
+                </td>
+                <td class="py-4 px-5 text-slate-600 leading-relaxed">
+                  涨跌家数均衡，主线板块（AI/半导体/机器人）领涨，情绪温和升温但未过热。
+                </td>
+                <td class="py-4 px-5 text-slate-600 leading-relaxed">
+                  全市场成交额维持在健康中枢之上，上涨放量、回调缩量，板块良性轮动。
+                </td>
+              </tr>
+
+              <!-- 阶段 4 -->
+              <tr class="hover:bg-rose-50/30 transition-colors bg-rose-50/20">
+                <td class="py-4 px-5 font-bold text-rose-800">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+                    <span>亢奋过热区</span>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800">阶梯减仓 10%–15%/次</span>
+                  <div class="text-[11px] text-rose-700 font-medium mt-1">先兑现高弹性成长股</div>
+                </td>
+                <td class="py-4 px-5 text-slate-700 leading-relaxed">
+                  社媒热搜沸腾、非股民集中问股、低价垃圾股全面补涨、<strong>炸板率持续 &gt; 40%</strong>。
+                </td>
+                <td class="py-4 px-5 text-slate-700 leading-relaxed">
+                  成交额连续放出阶段天量但指数滞涨 + <strong>融资买入额占比突破 10%–11%</strong> + 核心龙头放巨量收长上影。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         模块四：交互式周末 10 分钟打分与目标仓位计算器（核心交互组件）
+    ===================================================================== -->
+    <section id="module-4" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">MODULE 04 · INTERACTIVE POSITION CALCULATOR</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">交互式周末 10 分钟打分与目标仓位计算器</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">每周末勾选本周客观信号，自动测算下周目标仓位与哑铃配比</p>
+      </div>
+
+      <!-- 快捷场景预设与重置工具栏 -->
+      <div class="no-print bg-white rounded-xl border border-slate-200/90 p-3.5 sm:p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>典型市场推演预设：</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="applyPreset('ice_no_support')" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer">
+            场景1：冰点无支撑（防飞刀）
+          </button>
+          <button type="button" onclick="applyPreset('ice_with_support')" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 transition-colors cursor-pointer">
+            场景2：冰点与支撑共振（分批加仓）
+          </button>
+          <button type="button" onclick="applyPreset('warm_overheated')" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200/80 transition-colors cursor-pointer">
+            场景3：宏观偏暖遇极度亢奋
+          </button>
+          <button type="button" onclick="applyPreset('reset')" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-50 text-slate-500 border border-slate-200 transition-colors cursor-pointer">
+            清空重置
+          </button>
+        </div>
+      </div>
+
+      <!-- 第一步：选定宏观与流动性周期基准中枢 -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <h3 class="text-base font-bold text-[#0F172A]">第一步：选定当前宏观与流动性周期基准中枢（月度校准 · 周末复核）</h3>
+          <span class="text-xs text-slate-500">基准仓位作为所有加减法的锚点</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5" role="radiogroup" aria-label="宏观与流动性周期">
+          <!-- 偏暖 -->
+          <label class="cursor-pointer group">
+            <input type="radio" name="macroRegime" value="warm" class="peer sr-only" onchange="recalculate()" />
+            <div class="h-full rounded-xl border-2 border-slate-200 peer-checked:border-amber-600 peer-checked:bg-amber-50/40 p-4 transition-all hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-sm font-bold text-[#0F172A]">偏暖 / 宽松复苏</span>
+                <span class="text-lg font-extrabold text-amber-600 tabular-nums">65%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">政策发力、宽信用预期明确、外围利率下行，基础风格倾向<strong class="text-slate-800">进攻（科技成长）为主</strong>。</p>
+            </div>
+          </label>
+
+          <!-- 中性 -->
+          <label class="cursor-pointer group">
+            <input type="radio" name="macroRegime" value="neutral" class="peer sr-only" checked onchange="recalculate()" />
+            <div class="h-full rounded-xl border-2 border-slate-200 peer-checked:border-[#0F172A] peer-checked:bg-slate-50 p-4 transition-all hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-sm font-bold text-[#0F172A]">中性 / 震荡拉锯</span>
+                <span class="text-lg font-extrabold text-[#0F172A] tabular-nums">50%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">政策温和托底、外围利率高位震荡、经济冷热不均，基础风格倾向<strong class="text-slate-800">进攻与防御均衡哑铃</strong>。</p>
+            </div>
+          </label>
+
+          <!-- 偏冷 -->
+          <label class="cursor-pointer group">
+            <input type="radio" name="macroRegime" value="cold" class="peer sr-only" onchange="recalculate()" />
+            <div class="h-full rounded-xl border-2 border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/40 p-4 transition-all hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-sm font-bold text-[#0F172A]">偏冷 / 紧缩下行</span>
+                <span class="text-lg font-extrabold text-emerald-700 tabular-nums">35%</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">流动性收紧、汇率持续承压、盈利预期下修，基础风格倾向<strong class="text-slate-800">防御（红利金融）为主</strong>。</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 第二步：A / B 双表并行勾选 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- A 表：情绪冰点 + 有支撑 加仓打分表 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-3.5">
+              <div>
+                <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md mb-1">
+                  <span>A 表 · 左侧转右侧加仓信号</span>
+                </div>
+                <h3 class="text-base font-bold text-[#0F172A]">「情绪冰点 + 有支撑」打分表</h3>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-xl font-extrabold text-emerald-700 tabular-nums"><span id="a-total-score">0</span><span class="text-xs font-normal text-slate-400"> / 10分</span></div>
+                <div class="text-[11px] text-slate-500 tabular-nums">冰点 <span id="a-ice-score" class="font-semibold text-slate-700">0</span>/4 · 支撑 <span id="a-sup-score" class="font-semibold text-emerald-700">0</span>/6</div>
+              </div>
+            </div>
+
+            <!-- 冰点赔率组 (4分) -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <span>一、冰点赔率组（共 4 分 · 衡量够不够便宜）</span>
+              </div>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="a_erp" class="signal-checkbox signal-checkbox-add sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-emerald-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">1. 股债性价比高（ERP 极值）</span>
+                      <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">沪深 300 股债性价比（ERP）处于近 5 年 <strong>75% 以上分位</strong>（查看：韭圈儿 / 理杏仁）。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="a_vol" class="signal-checkbox signal-checkbox-add sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-emerald-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">2. 市场极致缩量冷清</span>
+                      <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">本周出现单日涨停 <strong>&lt; 35 家</strong>，或全市场成交额较近 3 个月峰值<strong>萎缩超过 50%</strong>。</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- 支撑胜率组 (6分) -->
+            <div class="space-y-2 pt-1">
+              <div class="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center justify-between">
+                <span>二、支撑胜率组（共 6 分 · 防止接飞刀的核心前提）</span>
+              </div>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="a_news" class="signal-checkbox signal-checkbox-add sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-emerald-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">3. 利空不跌（抛压衰竭）</span>
+                      <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">本周遇宏观或外盘利空时低开高走、跌幅收窄，宽基指数不再创阶段新低。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="a_etf" class="signal-checkbox signal-checkbox-add sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-emerald-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">4. 宽基大资金托底</span>
+                      <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">沪深 300、中证 A500 等核心宽基 ETF 出现明显<strong>周度净申购</strong>或盘中放量承接。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="a_week" class="signal-checkbox signal-checkbox-add sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-emerald-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">5. 周线形态止跌确认</span>
+                      <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">宽基指数在 20/60 周线或前低密集成交区收出<strong>长下影线或温和放量阳线</strong>。</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-500 bg-slate-50 rounded-lg p-2.5 border border-slate-200/70">
+            <strong>规则：</strong>支撑项为 0 分强制不加仓；有支撑且总分 4–6 分 <strong>+10%</strong>，7–10 分 <strong>+20%</strong>。
+          </div>
+        </div>
+
+        <!-- B 表：市场亢奋过热 减仓打分表 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-3.5">
+              <div>
+                <div class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-md mb-1">
+                  <span>B 表 · 过热风控与止盈信号</span>
+                </div>
+                <h3 class="text-base font-bold text-[#0F172A]">「市场亢奋过热」减仓打分表</h3>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-xl font-extrabold text-rose-600 tabular-nums"><span id="b-total-score">0</span><span class="text-xs font-normal text-slate-400"> / 10分</span></div>
+                <div class="text-[11px] text-slate-500 tabular-nums">情绪 <span id="b-hype-score" class="font-semibold text-slate-700">0</span>/4 · 量价 <span id="b-top-score" class="font-semibold text-rose-600">0</span>/6</div>
+              </div>
+            </div>
+
+            <!-- 情绪预警组 (4分) -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <span>一、情绪预警组（共 4 分 · 衡量博弈拥挤度）</span>
+              </div>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="b_hype" class="signal-checkbox signal-checkbox-cut sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-rose-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">1. 场外舆论沸腾</span>
+                      <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">社交媒体热搜频现大涨、非股民开始集中问股票、开户与新基申购情绪急剧升温。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="b_trash" class="signal-checkbox signal-checkbox-cut sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-rose-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">2. 垃圾股补涨 & 高炸板率</span>
+                      <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">绩差微盘题材全面补涨，且本周多次出现日内<strong>炸板率高于 35%–40%</strong>。</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- 量价见顶组 (6分) -->
+            <div class="space-y-2 pt-1">
+              <div class="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center justify-between">
+                <span>二、量价见顶组（共 6 分 · 防止主升浪过早卖飞）</span>
+              </div>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="b_margin" class="signal-checkbox signal-checkbox-cut sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-rose-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">3. 杠杆资金过热</span>
+                      <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">两融余额急剧攀升，且<strong>融资买入额占 A 股总成交额突破 10%–11%</strong>。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="b_stall" class="signal-checkbox signal-checkbox-cut sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-rose-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">4. 天量滞涨或周线长上影</span>
+                      <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">全市场成交额连续创出阶段性天量，但宽基指数涨幅收窄或周线收<strong>放量长上影</strong>。</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="block cursor-pointer">
+                <input type="checkbox" id="b_leader" class="signal-checkbox signal-checkbox-cut sr-only" onchange="recalculate()" />
+                <div class="signal-card rounded-xl border border-slate-200 p-3.5 transition-all hover:border-slate-300 flex items-start gap-3">
+                  <div class="mt-0.5 w-4 h-4 rounded border border-slate-300 flex items-center justify-center shrink-0 bg-white">
+                    <span class="w-2 h-2 rounded-xs bg-rose-600 opacity-0 transition-opacity check-dot"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-xs sm:text-sm font-bold text-[#0F172A]">5. 龙头失血或证券脉冲抽血</span>
+                      <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded shrink-0 tabular-nums">+2 分</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">领涨科技主线龙头高位放量滞涨/破位，或证券独自冲高回落抽血其他板块。</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-500 bg-slate-50 rounded-lg p-2.5 border border-slate-200/70">
+            <strong>规则：</strong>0–3 分良性持股；4–6 分减仓 <strong>-15%</strong>；7–10 分强风控减仓 <strong>-25%</strong>（冲突时减仓优先）。
+          </div>
+        </div>
+      </div>
+
+      <!-- 实时计算输出看板 -->
+      <div class="bg-[#0F172A] text-white rounded-2xl p-6 sm:p-8 shadow-md print-shadow-none print-break-avoid space-y-6">
+        <!-- 顶部预警横幅（仅在“冰点有分但支撑为0”时激活） -->
+        <div id="anti-knife-alert" class="hidden rounded-xl bg-amber-500/20 border border-amber-400/60 px-4 py-3 text-amber-200 text-xs sm:text-sm font-medium flex items-center gap-2.5">
+          <span class="text-base">⚠️</span>
+          <span><strong>支撑项为 0 分：属于阴跌无支撑，严禁接飞刀！</strong> 系统已自动拦截加仓动作，维持当前基准仓位观望，等待“利空不跌 / 宽基 ETF 托底 / 周线止跌”至少一项出现后再动手。</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- 左侧核心数值 -->
+          <div class="lg:col-span-5 flex items-center gap-5 border-b lg:border-b-0 lg:border-r border-slate-700/80 pb-5 lg:pb-0 lg:pr-6">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">建议下周目标总仓位</div>
+              <div class="flex items-baseline gap-3 mt-1">
+                <span id="out-target-pos" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white tabular-nums">50%</span>
+                <span id="out-delta-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300 tabular-nums">基准 50% (持平 0%)</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1.5">总仓位安全限幅区间：15% – 90%</div>
+            </div>
+          </div>
+
+          <!-- 右侧状态判定与执行指令 -->
+          <div class="lg:col-span-7 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span id="out-status-pill" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700">
+                中性震荡观察期 · 维持基准仓位
+              </span>
+              <button
+                type="button"
+                onclick="copyWeeklyReport()"
+                class="no-print inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white text-[#0F172A] hover:bg-slate-100 active:scale-[0.99] text-xs font-bold shadow-sm transition-all cursor-pointer"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                <span>一键复制本周复盘结论</span>
+              </button>
+            </div>
+            <p id="out-action-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              当前未触发显著冰点共振或过热见顶信号，维持宏观基准仓位，保持进攻（科技成长）与防御（红利金融）的哑铃均衡配置，耐心等待周线级别信号。
+            </p>
+          </div>
+        </div>
+
+        <!-- 三段式可视化仓位条 -->
+        <div class="space-y-3 pt-2 border-t border-slate-800">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span class="font-semibold text-slate-300">哑铃再平衡：三类资产目标配比</span>
+            <span>单周调仓步长建议不超过 15%–20%</span>
+          </div>
+
+          <!-- 进度条容器 -->
+          <div class="h-4 w-full rounded-full bg-slate-800 overflow-hidden flex p-0.5 gap-0.5">
+            <div id="bar-offensive" style="width: 25%" class="h-full bg-amber-500 rounded-l-full transition-all duration-300" title="进攻端：科技成长"></div>
+            <div id="bar-defensive" style="width: 25%" class="h-full bg-emerald-500 transition-all duration-300" title="防御端：红利金融"></div>
+            <div id="bar-cash" style="width: 50%" class="h-full bg-slate-600 rounded-r-full transition-all duration-300" title="现金与货币缓冲"></div>
+          </div>
+
+          <!-- 图例明细卡 -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-sm bg-amber-500 shrink-0"></span>
+                <div>
+                  <div class="text-xs font-bold text-white">进攻 · 科技成长</div>
+                  <div class="text-[11px] text-slate-400">AI / 半导体 / 机器人</div>
+                </div>
+              </div>
+              <span id="val-offensive" class="text-lg font-extrabold text-amber-400 tabular-nums">25%</span>
+            </div>
+
+            <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-sm bg-emerald-500 shrink-0"></span>
+                <div>
+                  <div class="text-xs font-bold text-white">防御 · 红利金融</div>
+                  <div class="text-[11px] text-slate-400">红利 / 银行 / 稳健消费</div>
+                </div>
+              </div>
+              <span id="val-defensive" class="text-lg font-extrabold text-emerald-400 tabular-nums">25%</span>
+            </div>
+
+            <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-sm bg-slate-500 shrink-0"></span>
+                <div>
+                  <div class="text-xs font-bold text-white">现金 · 机动缓冲</div>
+                  <div class="text-[11px] text-slate-400">货币基金 / 逆回购子弹</div>
+                </div>
+              </div>
+              <span id="val-cash" class="text-lg font-extrabold text-slate-300 tabular-nums">50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         模块五：适配 2 周 – 2 个月节奏的三级日程与执行铁律
+    ===================================================================== -->
+    <section id="module-5" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">MODULE 05 · CADENCE & EXECUTION RULES</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">适配 2 周 – 2 个月节奏的三级日程与执行铁律</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">主动降频过滤日内噪音，用纪律锁定中长线胜率</p>
+      </div>
+
+      <!-- 三级时间切片日程表 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- 日度 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-md bg-slate-100 text-[#0F172A] text-xs font-bold">每日收盘后</span>
+            <span class="text-xs font-semibold text-slate-500 tabular-nums">耗时 5–10 分钟</span>
+          </div>
+          <h3 class="text-base font-bold text-[#0F172A]">盘中尽量不看分时，收盘只做数据归档</h3>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed list-disc pl-4">
+            <li><strong>只记 4 组核心数据：</strong>全市场成交额、风格指数涨跌（沪深300 / 中证1000 / 中证红利 / 恒生科技）、涨跌家数比、离岸人民币汇率。</li>
+            <li><strong>只做 1 项风控检查：</strong>核对持仓与观察股是否触及预设止损/止盈线或重大基本面公告，未触发直接关闭软件。</li>
+          </ul>
+        </div>
+
+        <!-- 周度 -->
+        <div class="bg-white rounded-2xl border-2 border-[#0F172A] p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid space-y-3 relative">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-md bg-[#0F172A] text-white text-xs font-bold">每周复盘（核心）</span>
+            <span class="text-xs font-semibold text-slate-600 tabular-nums">耗时 30–45 分钟</span>
+          </div>
+          <h3 class="text-base font-bold text-[#0F172A]">核心调仓决策日：周线定趋势、打分算仓位</h3>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed list-disc pl-4">
+            <li><strong>看周线定支撑：</strong>在周 K 线级别过滤日内洗盘，审视宽基与核心赛道均线承接。</li>
+            <li><strong>填写模块四打分表：</strong>客观勾选 A/B 表信号，算出下周目标总仓位与哑铃配比。</li>
+            <li><strong>追踪产业与资金：</strong>复盘行业催化、龙头财报与宽基/行业 ETF 周度净申赎方向。</li>
+          </ul>
+        </div>
+
+        <!-- 月度 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm print-shadow-none print-break-avoid space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 text-xs font-bold">每月 / 宏观节点</span>
+            <span class="text-xs font-semibold text-slate-500 tabular-nums">耗时约 1 小时</span>
+          </div>
+          <h3 class="text-base font-bold text-[#0F172A]">宏观与流动性校准，输出未来 1–2 个月边界</h3>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed list-disc pl-4">
+            <li><strong>关键节点推演：</strong>在美联储议息、国内社融/M1-M2、PMI、CPI/PPI 及重磅政策会议后深度复盘。</li>
+            <li><strong>校准两大硬边界：</strong>重设未来 1–2 个月的<strong>总仓位基准中枢（65%/50%/35%）</strong>及<strong>进攻与防御基础配比</strong>。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 三条落地执行铁律卡片 -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm print-shadow-none print-break-avoid space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-4 rounded-full bg-[#0F172A]"></span>
+          <h3 class="text-base font-bold text-[#0F172A]">三条落地执行铁律（交易纪律底线）</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+            <div class="text-xs font-extrabold text-amber-700">IRON RULE 01 · 冲突裁决</div>
+            <h4 class="text-sm font-bold text-[#0F172A]">短期仓位服从情绪，底仓方向服从宏观</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              当“宏观偏暖”遭遇“情绪极度亢奋”时，优先执行 B 表减仓 15%–25% 高弹性仓位锁定利润，但<strong>绝不清仓</strong>——保留核心底仓或切向红利防守，待情绪降温后再接回主线。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+            <div class="text-xs font-extrabold text-amber-700">IRON RULE 02 · 步长控制</div>
+            <h4 class="text-sm font-bold text-[#0F172A]">单周调仓步长上限为 15% – 20%</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              A 股的冰点筑底与亢奋见顶往往持续 1–3 周。通过分 2–3 次阶梯式完成目标仓位调整，可大幅降低一次性满仓踏空或过早卖飞的心理摩擦。
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+            <div class="text-xs font-extrabold text-amber-700">IRON RULE 03 · 冷却隔离</div>
+            <h4 class="text-sm font-bold text-[#0F172A]">建立 1 – 2 周调仓冷却期</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              每次按周末打分表执行完调仓后，除非持仓触发硬止损线或出现重大基本面证伪，否则未来 <strong>1–2 周内不再因日内涨跌二次微调</strong>，把节奏稳稳锁在舒适区内。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 页脚版权与免责声明 -->
+    <footer class="border-t border-slate-200 pt-6 pb-10 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>A 股中长线宏观与情绪双轨投研及仓位管理手册 · 个人投资体系标准化归档</div>
+      <div>注：本手册用于投研框架梳理与仓位纪律管理，不构成具体个股买卖建议。</div>
+    </footer>
+  </main>
+
+  <!-- 底部轻量提示框 (Toast Notification，替代 alert) -->
+  <div id="toast-box" role="status" aria-live="polite" class="no-print fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-200">
+    <div class="bg-[#0F172A] text-white text-xs sm:text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 flex items-center gap-2">
+      <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      <span id="toast-text">已复制本周复盘结论至剪贴板</span>
+    </div>
+  </div>
+
+  <!-- 核心交互计算与复制逻辑 -->
+  <script>
+    // 复选框视觉圆点联动样式
+    function syncCheckboxVisuals() {
+      document.querySelectorAll('.signal-checkbox').forEach(cb => {
+        const dot = cb.nextElementSibling?.querySelector('.check-dot');
+        if (dot) {
+          dot.style.opacity = cb.checked ? '1' : '0';
+        }
+      });
+    }
+
+    // 宏观周期配置字典
+    const MACRO_CONFIG = {
+      warm: { label: '偏暖 / 宽松复苏', basePos: 65, baseOffRatio: 0.65 },
+      neutral: { label: '中性 / 震荡拉锯', basePos: 50, baseOffRatio: 0.50 },
+      cold: { label: '偏冷 / 紧缩下行', basePos: 35, baseOffRatio: 0.35 }
+    };
+
+    // 全局状态缓存，供一键复制生成报告使用
+    let currentReportState = {};
+
+    // 核心仓位与哑铃配比计算引擎
+    function recalculate() {
+      syncCheckboxVisuals();
+
+      // 1. 获取宏观基准
+      const selectedMacro = document.querySelector('input[name="macroRegime"]:checked')?.value || 'neutral';
+      const macro = MACRO_CONFIG[selectedMacro];
+      const basePos = macro.basePos;
+
+      // 2. 计算 A 表得分（冰点 4 分 + 支撑 6 分）
+      const aErp = document.getElementById('a_erp').checked ? 2 : 0;
+      const aVol = document.getElementById('a_vol').checked ? 2 : 0;
+      const iceScore = aErp + aVol;
+
+      const aNews = document.getElementById('a_news').checked ? 2 : 0;
+      const aEtf = document.getElementById('a_etf').checked ? 2 : 0;
+      const aWeek = document.getElementById('a_week').checked ? 2 : 0;
+      const supportScore = aNews + aEtf + aWeek;
+
+      const addTotal = iceScore + supportScore;
+
+      // 3. 计算 B 表得分（情绪 4 分 + 量价 6 分）
+      const bHype = document.getElementById('b_hype').checked ? 2 : 0;
+      const bTrash = document.getElementById('b_trash').checked ? 2 : 0;
+      const hypeScore = bHype + bTrash;
+
+      const bMargin = document.getElementById('b_margin').checked ? 2 : 0;
+      const bStall = document.getElementById('b_stall').checked ? 2 : 0;
+      const bLeader = document.getElementById('b_leader').checked ? 2 : 0;
+      const topScore = bMargin + bStall + bLeader;
+
+      const cutTotal = hypeScore + topScore;
+
+      // 更新 A/B 表顶部实时分值
+      document.getElementById('a-total-score').textContent = addTotal;
+      document.getElementById('a-ice-score').textContent = iceScore;
+      document.getElementById('a-sup-score').textContent = supportScore;
+
+      document.getElementById('b-total-score').textContent = cutTotal;
+      document.getElementById('b-hype-score').textContent = hypeScore;
+      document.getElementById('b-top-score').textContent = topScore;
+
+      // 4. 计算加减仓调节幅度
+      let addAdj = 0;
+      const noSupportWarning = (iceScore > 0 && supportScore === 0);
+      if (supportScore > 0) {
+        if (addTotal >= 7) {
+          addAdj = 20;
+        } else if (addTotal >= 4) {
+          addAdj = 10;
+        }
+      }
+
+      let cutAdj = 0;
+      if (cutTotal >= 7) {
+        cutAdj = -25;
+      } else if (cutTotal >= 4) {
+        cutAdj = -15;
+      }
+
+      // 冲突裁决规则：A/B 同时触发有效调节时，优先执行风控减仓
+      let netAdj = 0;
+      let isConflict = false;
+      if (addAdj > 0 && cutAdj < 0) {
+        netAdj = cutAdj;
+        isConflict = true;
+      } else {
+        netAdj = addAdj + cutAdj;
+      }
+
+      // 限幅 15% - 90%
+      const targetPos = Math.min(90, Math.max(15, basePos + netAdj));
+      const actualDelta = targetPos - basePos;
+
+      // 5. 计算三类资产哑铃配比（进攻 / 防御 / 现金）
+      let offRatio = macro.baseOffRatio;
+      if (cutTotal >= 7) {
+        offRatio -= 0.20; // 极度亢奋时大幅削减高弹性科技，转向红利与现金
+      } else if (cutTotal >= 4) {
+        offRatio -= 0.10;
+      } else if (supportScore > 0 && addTotal >= 7) {
+        offRatio += 0.10; // 冰点与强支撑共振，底仓就位后向进攻主线倾斜
+      } else if (supportScore > 0 && addTotal >= 4) {
+        offRatio -= 0.05; // 弱支撑初现，优先加红利/金融打底
+      }
+      offRatio = Math.min(0.80, Math.max(0.20, offRatio));
+
+      const offensivePct = Math.round(targetPos * offRatio);
+      const defensivePct = targetPos - offensivePct;
+      const cashPct = 100 - targetPos;
+
+      // 6. 渲染输出看板 UI
+      const alertBox = document.getElementById('anti-knife-alert');
+      if (noSupportWarning) {
+        alertBox.classList.remove('hidden');
+      } else {
+        alertBox.classList.add('hidden');
+      }
+
+      document.getElementById('out-target-pos').textContent = `${targetPos}%`;
+
+      const deltaBadge = document.getElementById('out-delta-badge');
+      if (actualDelta > 0) {
+        deltaBadge.textContent = `基准 ${basePos}% (加仓 +${actualDelta}%)`;
+        deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 tabular-nums';
+      } else if (actualDelta < 0) {
+        deltaBadge.textContent = `基准 ${basePos}% (减仓 ${actualDelta}%)`;
+        deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 tabular-nums';
+      } else {
+        deltaBadge.textContent = `基准 ${basePos}% (持平 0%)`;
+        deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 tabular-nums';
+      }
+
+      const statusPill = document.getElementById('out-status-pill');
+      const actionDesc = document.getElementById('out-action-desc');
+
+      if (noSupportWarning && cutAdj === 0) {
+        statusPill.textContent = '⚠️ 冰点无支撑 · 按兵不动防飞刀';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        actionDesc.textContent = '估值与缩量虽已进入冰点区，但“利空不跌、宽基托底、周线止跌”三项支撑均为 0 分。严格执行防接飞刀纪律，保持当前基准仓位观望。';
+      } else if (isConflict) {
+        statusPill.textContent = '🛡️ 信号冲突 · 风控减仓优先';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        actionDesc.textContent = '同时出现局部底部与局部过热信号，遵循“风控减仓优先”原则，先兑现高弹性成长股利润，保留红利与现金底仓等待局势明朗。';
+      } else if (cutTotal >= 7) {
+        statusPill.textContent = '🔥 极度亢奋过热 · 强风控阶梯减仓';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        actionDesc.textContent = `情绪与量价见顶信号达 ${cutTotal} 分。短期仓位服从情绪，强制减仓 ${Math.abs(actualDelta)}%（单周步长控制在 15%–20%），优先卖出偏离均线过远的科技弹性仓位，保留底仓不赌最后一棒。`;
+      } else if (cutTotal >= 4) {
+        statusPill.textContent = '⚡ 情绪过热预警 · 适度兑现回笼';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        actionDesc.textContent = `市场出现过热预警（${cutTotal} 分），建议阶梯减仓 ${Math.abs(actualDelta)}%，把部分高波成长仓位落袋为现金或切回低估值红利防御。`;
+      } else if (supportScore > 0 && addTotal >= 7) {
+        statusPill.textContent = '🌱 冰点与强支撑共振 · 分批积极加仓';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        actionDesc.textContent = `冰点赔率与支撑胜率形成共振（${addTotal} 分），建议分 1–2 周阶梯加仓 +${actualDelta}%。底仓就位后，逐步向 AI、半导体、机器人等核心进攻主线倾斜。`;
+      } else if (supportScore > 0 && addTotal >= 4) {
+        statusPill.textContent = '🛡️ 冰点初现支撑 · 试探性加仓打底';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        actionDesc.textContent = `冰点区已出现初步支撑确认（${addTotal} 分），建议稳健加仓 +${actualDelta}%，优先配置红利、金融或宽基 ETF 打底，确认右侧放量后再切换进攻主线。`;
+      } else {
+        statusPill.textContent = '⚖️ 温和运行期 · 维持宏观基准仓位';
+        statusPill.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700';
+        actionDesc.textContent = '未触发显著冰点共振或亢奋过热阈值，维持当前宏观基准仓位与哑铃配比，执行 1–2 周调仓冷却期，避免被日内波动干扰。';
+      }
+
+      // 更新三色比例条与卡片数字
+      document.getElementById('bar-offensive').style.width = `${offensivePct}%`;
+      document.getElementById('bar-defensive').style.width = `${defensivePct}%`;
+      document.getElementById('bar-cash').style.width = `${cashPct}%`;
+
+      document.getElementById('val-offensive').textContent = `${offensivePct}%`;
+      document.getElementById('val-defensive').textContent = `${defensivePct}%`;
+      document.getElementById('val-cash').textContent = `${cashPct}%`;
+
+      // 保存当前状态以便一键复制
+      currentReportState = {
+        macroLabel: macro.label,
+        basePos,
+        iceScore,
+        supportScore,
+        addTotal,
+        hypeScore,
+        topScore,
+        cutTotal,
+        targetPos,
+        actualDelta,
+        offensivePct,
+        defensivePct,
+        cashPct,
+        statusText: statusPill.textContent.trim(),
+        actionText: actionDesc.textContent.trim()
+      };
+    }
+
+    // 快捷预设场景填充
+    function applyPreset(presetKey) {
+      // 先清空全部复选框
+      document.querySelectorAll('.signal-checkbox').forEach(cb => { cb.checked = false; });
+
+      if (presetKey === 'ice_no_support') {
+        document.querySelector('input[name="macroRegime"][value="neutral"]').checked = true;
+        document.getElementById('a_erp').checked = true;
+        document.getElementById('a_vol').checked = true;
+      } else if (presetKey === 'ice_with_support') {
+        document.querySelector('input[name="macroRegime"][value="neutral"]').checked = true;
+        document.getElementById('a_erp').checked = true;
+        document.getElementById('a_vol').checked = true;
+        document.getElementById('a_news').checked = true;
+        document.getElementById('a_etf').checked = true;
+      } else if (presetKey === 'warm_overheated') {
+        document.querySelector('input[name="macroRegime"][value="warm"]').checked = true;
+        document.getElementById('b_hype').checked = true;
+        document.getElementById('b_trash').checked = true;
+        document.getElementById('b_margin').checked = true;
+        document.getElementById('b_stall').checked = true;
+      } else {
+        document.querySelector('input[name="macroRegime"][value="neutral"]').checked = true;
+      }
+
+      recalculate();
+    }
+
+    // 一键复制结构化周度复盘结论（兼容 iframe 环境的 execCommand('copy')）
+    function copyWeeklyReport() {
+      const s = currentReportState;
+      const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      const deltaStr = s.actualDelta > 0 ? `+${s.actualDelta}%` : `${s.actualDelta}%`;
+
+      // 收集已勾选条目名称
+      const checkedLabels = [];
+      const labelMap = {
+        a_erp: '股债性价比高(ERP>75%分位)',
+        a_vol: '市场极致缩量冷清',
+        a_news: '利空不跌(抛压衰竭)',
+        a_etf: '宽基ETF大资金托底',
+        a_week: '周线形态止跌确认',
+        b_hype: '场外舆论沸腾',
+        b_trash: '垃圾股补涨&高炸板率',
+        b_margin: '杠杆资金过热(融资占比>10%)',
+        b_stall: '天量滞涨或周线长上影',
+        b_leader: '龙头失血或证券脉冲抽血'
+      };
+      Object.keys(labelMap).forEach(id => {
+        if (document.getElementById(id)?.checked) {
+          checkedLabels.push(labelMap[id]);
+        }
+      });
+
+      const summaryText = [
+        `【A股中长线周度仓位复盘归档 · ${today}】`,
+        `1. 宏观周期基准：${s.macroLabel}（基准仓位 ${s.basePos}%）`,
+        `2. 打分结果：A表冰点支撑 ${s.addTotal}/10分（冰点${s.iceScore}+支撑${s.supportScore}） | B表亢奋过热 ${s.cutTotal}/10分（情绪${s.hypeScore}+量价${s.topScore}）`,
+        `3. 触发信号：${checkedLabels.length > 0 ? checkedLabels.join('、') : '无显著极端信号'}`,
+        `4. 目标总仓位：${s.targetPos}%（较基准 ${deltaStr}）`,
+        `5. 哑铃资产配比：进攻科技成长 ${s.offensivePct}% | 防御红利金融 ${s.defensivePct}% | 现金缓冲 ${s.cashPct}%`,
+        `6. 执行策略：${s.statusText} —— ${s.actionText}`
+      ].join('\n');
+
+      try {
+        const tempInput = document.createElement('textarea');
+        tempInput.value = summaryText;
+        tempInput.setAttribute('readonly', '');
+        tempInput.style.position = 'fixed';
+        tempInput.style.opacity = '0';
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showToast('已复制本周复盘与仓位决策报告至剪贴板');
+      } catch (err) {
+        showToast('复制失败，请手动选中文本复制');
+      }
+    }
+
+    // 轻量 Toast 提示控制
+    let toastTimer = null;
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      box.classList.remove('opacity-0', 'translate-y-2');
+      box.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.classList.remove('opacity-100', 'translate-y-0');
+        box.classList.add('opacity-0', 'translate-y-2');
+      }, 2600);
+    }
+
+    // 页面初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      recalculate();
+    });
+  </script>
+</body>
+</html>
